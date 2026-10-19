@@ -31,7 +31,7 @@
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            margin: 0; color: var(--ink); font: 400 15px/1.7 'Montserrat', sans-serif; -webkit-font-smoothing: antialiased;
+            margin: 0; color: var(--ink); font: 400 16px/1.7 'Montserrat', sans-serif; -webkit-font-smoothing: antialiased;
             background:
                 radial-gradient(70vmax 50vmax at 100% 0%, rgba(229, 143, 132, .14), transparent 60%),
                 radial-gradient(70vmax 60vmax at 0% 100%, rgba(109, 47, 87, .28), transparent 60%),
@@ -84,7 +84,13 @@
         .clause li { margin: .3rem 0; }
         .clause li::marker { color: var(--rose); font-weight: 700; }
         strong { color: #fff; }
-        .fund { margin: .55rem 0 0 !important; font-size: .78rem; line-height: 1.5; color: var(--muted); padding-left: .8rem; border-left: 2px solid rgba(229, 143, 132, .45); }
+        .clause.destaque { position: relative; padding: .9rem 1rem .9rem 1.1rem; border-radius: 14px; background: rgba(229, 143, 132, .08); border: 1px solid rgba(229, 143, 132, .35); }
+        .clause.destaque::before { content: "Limita direitos · destaque"; display: block; margin-bottom: .35rem; font: 700 .68rem/1.2 'Montserrat', sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--rose); }
+        .notice-destaque { background: rgba(229, 143, 132, .08); border-color: rgba(229, 143, 132, .4); }
+        .notice .tag { flex: none; padding: .25rem .6rem; border-radius: 999px; font: 700 .68rem/1.2 'Montserrat', sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #2a1325; background: linear-gradient(90deg, var(--champagne), var(--rose)); }
+        .choice { margin: .6rem 0 0 !important; line-height: 2; }
+        .choice .box { display: inline-block; width: 1em; height: 1em; margin-right: .5rem; vertical-align: -.12em; border: 1.5px solid var(--champagne); border-radius: 3px; }
+        .fund { margin: .55rem 0 0 !important; font-size: .85rem; line-height: 1.5; color: var(--muted); padding-left: .8rem; border-left: 2px solid rgba(229, 143, 132, .45); }
         .fund b { color: var(--peach); font-weight: 600; letter-spacing: .04em; }
         .fund a, .refs a { color: var(--champagne); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(241, 214, 164, .35); }
         .fund a::after, .refs a::after { content: " ↗"; font-size: .85em; }
@@ -110,7 +116,6 @@
         .foot b { color: var(--champagne); }
 
         @media (max-width: 600px) {
-            body { font-size: 14px; }
             .fields, .signs { grid-template-columns: 1fr; }
             .brand b { letter-spacing: .2em; }
             .actions .pill span { display: none; }
@@ -126,7 +131,8 @@
         @page { size: A4; margin: 16mm 15mm 18mm; }
         @media print {
             :root { --ink: #2a1b3d; --muted: #6f6080; --card: transparent; }
-            body { background: #fff; color: #2a1b3d; font-size: 10.5pt; line-height: 1.55; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            /* Contrato de adesão: letra nunca menor que corpo 12 (art. 54, § 3º, do CDC) */
+            body { background: #fff; color: #2a1b3d; font-size: 12pt; line-height: 1.5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             a { color: #6d2f57; }
             .bar, .no-print { display: none !important; }
             .wrap { max-width: none; padding: 0; }
@@ -153,13 +159,21 @@
             .clause { break-inside: avoid; }
             .clause .num { color: #a8742e; }
             .clause li::marker { color: #c0655a; }
-            .fund { color: #6f6080; border-left-color: #e58f84; }
+            .fund { color: #4f4160; border-left-color: #e58f84; }
+            .fund, .refs, .notice, .field small, .meta, .eyebrow, .clause.destaque::before, .notice .tag, .signs div, .signs b, .foot, .clause .num, h3 { font-size: 12pt !important; }
+            .fund a::after, .refs a::after { font-size: 1em; }
+            .field small, .eyebrow { letter-spacing: .08em; }
+            .clause.destaque { background: #fdf0ee; border-color: #e58f84; break-inside: avoid; }
+            .clause.destaque::before { color: #c0655a; }
+            .notice-destaque { background: #fdf0ee; border-color: #e58f84; }
+            .choice .box { border-color: #2a1b3d; }
             .fund b { color: #b0675e; }
             .fund a, .refs a { color: #6d2f57; border-bottom-color: #d9b6c6; }
             .field span, .blank { color: #2a1b3d; border-bottom-color: #c9a46a; }
             .blank.filled, .field span.filled { color: #6d2f57; }
             .field small { color: #6f6080; }
             .party + .party { border-top-color: #ecd6b4; }
+            .party { break-inside: avoid; }
             .signs { break-inside: avoid; }
             .signs div { border-top-color: #2a1b3d; }
             .signs b { color: #2a1b3d; }
@@ -209,12 +223,17 @@
             <span class="eyebrow">Harmonia do Altar · Música ao vivo para casamentos</span>
             <h1>Contrato de <span>Prestação de Serviços Musicais</span></h1>
             <p class="sub">Para o seu grande dia, tudo combinado com clareza.</p>
-            <p class="meta">Versão 2.0 · outubro de 2026 · Angélica/MS</p>
+            <p class="meta">Angélica/MS · outubro de 2026</p>
         </section>
 
         <div class="notice no-print">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
             <p style="margin:0">Estes são os termos que valem para a contratação. Os dados de identificação e os valores são preenchidos na via final, enviada para assinatura eletrônica depois que a equipe confirma o seu orçamento pelo WhatsApp. Os links de cada fundamento abrem o texto oficial da lei no site do Planalto.</p>
+        </div>
+
+        <div class="notice notice-destaque">
+            <span class="tag">Atenção</span>
+            <p style="margin:0">As cláusulas marcadas com esta faixa limitam algum direito da CONTRATANTE (multas, juros, despesas ou suspensão do serviço) e por isso aparecem em destaque, conforme o <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=As%20cl%C3%A1usulas%20que%20implicarem%20limita%C3%A7%C3%A3o%20de%20direito%20do%20consumidor" target="_blank" rel="noopener noreferrer">art. 54, § 4º, do CDC</a>. Em caso de dúvida, as cláusulas são interpretadas de maneira mais favorável à CONTRATANTE (<a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=As%20cl%C3%A1usulas%20contratuais%20ser%C3%A3o%20interpretadas%20de%20maneira%20mais%20favor%C3%A1vel%20ao%20consumidor" target="_blank" rel="noopener noreferrer">art. 47 do CDC</a>).</p>
         </div>
 
         <section class="card" aria-labelledby="partes">
@@ -262,20 +281,15 @@
                 <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=a%20educa%C3%A7%C3%A3o%20e%20divulga%C3%A7%C3%A3o%20sobre%20o%20consumo%20adequado" target="_blank" rel="noopener noreferrer">art. 6º, II, do CDC</a> — liberdade de escolha e igualdade nas contratações.</p>
             </div>
             <div class="clause">
-                <p><span class="num">1.3.</span>A duração estimada da apresentação musical será de <span class="blank"></span> minutos, podendo ser ajustada para mais ou para menos conforme o andamento do roteiro da cerimônia, respeitando sempre o limite razoável e o acordo entre as partes. Eventuais alterações que impliquem tempo extra deverão ser negociadas e formalizadas em aditivo contratual.</p>
-                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=a%20modifica%C3%A7%C3%A3o%20das%20cl%C3%A1usulas%20contratuais%20que%20estabele%C3%A7am%20presta%C3%A7%C3%B5es%20desproporcionais" target="_blank" rel="noopener noreferrer">art. 6º, V, do CDC</a> — modificação de cláusulas com prestações desproporcionais ou revisão por fatos supervenientes que as tornem excessivamente onerosas.</p>
+                <p><span class="num">1.3.</span>A duração estimada da apresentação musical será de <span class="blank"></span> minutos, podendo variar conforme o andamento do roteiro da cerimônia definido pela CONTRATANTE e pela celebração. O CONTRATADO não poderá reduzir a apresentação por decisão própria. Eventuais alterações que impliquem tempo extra deverão ser negociadas e formalizadas em aditivo contratual.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=autorizem%20o%20fornecedor%20a%20modificar%20unilateralmente%20o%20conte%C3%BAdo" target="_blank" rel="noopener noreferrer">art. 51, XIII, do CDC</a> — é nula a cláusula que autorize o fornecedor a modificar unilateralmente o conteúdo ou a qualidade do contrato.</p>
             </div>
             <div class="clause">
                 <p><span class="num">1.4.</span>Este contrato refere-se exclusivamente à prestação de serviços musicais para um único casal (CONTRATANTE) na cerimônia descrita, não sendo válido para eventos múltiplos ou cerimônias coletivas. Qualquer ampliação do objeto somente ocorrerá mediante aditivo contratual específico, com definição de nova remuneração.</p>
                 <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=a%20prote%C3%A7%C3%A3o%20contra%20a%20publicidade%20enganosa%20e%20abusiva" target="_blank" rel="noopener noreferrer">art. 6º, IV, do CDC</a> — proteção contra práticas e cláusulas abusivas.</p>
             </div>
-            <div class="clause">
-                <p><span class="num">1.5.</span>Caso durante o evento seja constatada prestação para mais de um casal ou cerimônia coletiva não previstas, o CONTRATADO poderá:</p>
-                <ol>
-                    <li>suspender a execução até acordo expresso sobre nova remuneração;</li>
-                    <li>limitar a prestação ao casal originalmente contratado.</li>
-                </ol>
-                <p style="margin-top:.4rem">Em ambos os casos, mantém-se o direito ao recebimento do valor originalmente contratado.</p>
+            <div class="clause destaque">
+                <p><span class="num">1.5.</span>Caso durante o evento seja solicitada prestação para mais de um casal ou cerimônia coletiva não previstas, o CONTRATADO poderá limitar a prestação ao casal originalmente contratado, ou atender aos demais somente mediante acordo expresso sobre nova remuneração. Em qualquer caso, o serviço contratado para a CONTRATANTE será prestado integralmente, sem interrupção.</p>
                 <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=Uma%20vez%20aprovado%20pelo%20consumidor%2C%20o%20or%C3%A7amento%20obriga" target="_blank" rel="noopener noreferrer">art. 40, § 2º, do CDC</a> — o orçamento aprovado obriga as partes e só pode ser alterado mediante livre negociação.</p>
             </div>
         </section>
@@ -313,16 +327,17 @@
                 <p><span class="num">4.1.</span>O deslocamento da equipe tem condição especial para eventos em Angélica/MS e Ivinhema/MS. Para os demais municípios, será cobrado o valor de R$ <span class="blank"></span> por quilômetro, calculado pela rota de carro a partir de Angélica/MS, conforme informado no orçamento.</p>
                 <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=A%20oferta%20e%20apresenta%C3%A7%C3%A3o%20de%20produtos%20ou%20servi%C3%A7os%20devem" target="_blank" rel="noopener noreferrer">art. 31 do CDC</a> — informação clara e precisa sobre o preço.</p>
             </div>
-            <div class="clause">
-                <p><span class="num">4.2.</span>Despesas com hospedagem, alimentação e estacionamento, se necessárias, serão de responsabilidade da CONTRATANTE, mediante apresentação de comprovantes.</p>
-                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=a%20efetiva%20preven%C3%A7%C3%A3o%20e%20repara%C3%A7%C3%A3o%20de%20danos%20patrimoniais%20e%20morais" target="_blank" rel="noopener noreferrer">art. 6º, VI, do CDC</a> — efetiva prevenção e reparação de danos.</p>
+            <div class="clause destaque">
+                <p><span class="num">4.2.</span>Despesas com hospedagem, alimentação e estacionamento, se necessárias, serão de responsabilidade da CONTRATANTE somente quando previstas e estimadas no orçamento aprovado, mediante apresentação de comprovantes. Despesas não previstas no orçamento não poderão ser cobradas da CONTRATANTE.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=O%20consumidor%20n%C3%A3o%20responde%20por%20quaisquer%20%C3%B4nus%20ou%20acr%C3%A9scimos" target="_blank" rel="noopener noreferrer">art. 40, § 3º, do CDC</a> — o consumidor não responde por ônus ou acréscimos não previstos no orçamento prévio.</p>
             </div>
         </section>
 
         <section class="card" aria-labelledby="c5">
             <h2 id="c5"><span class="n">05</span> Pagamento</h2>
             <div class="clause">
-                <p><span class="num">5.1.</span>O valor global do serviço, incluindo apresentação e instrumentos extras, será de R$ <span class="blank"></span> (<span class="blank" style="min-width:12em"></span>), conforme discriminado no orçamento enviado pelo CONTRATADO.</p>
+                <p><span class="num">5.1.</span>O valor global do serviço, incluindo apresentação e instrumentos extras, será de R$ <span class="blank"></span> (<span class="blank" style="min-width:12em"></span>), conforme discriminado no orçamento enviado pelo CONTRATADO, que, salvo outro prazo nele indicado, tem validade de 10 (dez) dias a partir do recebimento.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=o%20valor%20or%C3%A7ado%20ter%C3%A1%20validade%20pelo%20prazo%20de%20dez%20dias" target="_blank" rel="noopener noreferrer">art. 40, § 1º, do CDC</a> — validade do orçamento.</p>
             </div>
             <div class="clause">
                 <p><span class="num">5.2.</span>O pagamento será efetuado da seguinte forma:</p>
@@ -333,22 +348,23 @@
                 <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=No%20fornecimento%20de%20produtos%20ou%20servi%C3%A7os%20que%20envolva%20outorga%20de%20cr%C3%A9dito" target="_blank" rel="noopener noreferrer">art. 52 do CDC</a> — informação prévia e adequada sobre preço, juros, acréscimos, número e periodicidade das prestações e soma total a pagar.</p>
             </div>
             <div class="clause">
-                <p><span class="num">5.3.</span>Formas de pagamento aceitas: Pix (isento de tarifas), dinheiro, boleto bancário (até 5x, conforme taxas) e cartão de crédito (até 12x, conforme taxas). Forma escolhida no pedido: <span class="blank" data-campo="pagamento"></span>.</p>
-                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=a%20informa%C3%A7%C3%A3o%20adequada%20e%20clara%20sobre%20os%20diferentes%20produtos%20e%20servi%C3%A7os" target="_blank" rel="noopener noreferrer">art. 6º, III, do CDC</a> — direito à informação adequada e clara.</p>
+                <p><span class="num">5.3.</span>Formas de pagamento aceitas: Pix (isento de tarifas), dinheiro, boleto bancário (até 5x, conforme taxas) e cartão de crédito (até 12x, conforme taxas). Forma escolhida no pedido: <span class="blank" data-campo="pagamento"></span>. Nos pagamentos parcelados diretamente com o CONTRATADO, é assegurada a quitação antecipada, total ou parcial, com redução proporcional dos juros e demais acréscimos.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=a%20informa%C3%A7%C3%A3o%20adequada%20e%20clara%20sobre%20os%20diferentes%20produtos%20e%20servi%C3%A7os" target="_blank" rel="noopener noreferrer">art. 6º, III, do CDC</a> — direito à informação adequada e clara; e <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=liquida%C3%A7%C3%A3o%20antecipada%20do%20d%C3%A9bito" target="_blank" rel="noopener noreferrer">art. 52, § 2º, do CDC</a> — liquidação antecipada do débito.</p>
             </div>
             <div class="clause">
                 <p><span class="num">5.4.</span>Taxas de boleto ou cartão não são retidas pelo CONTRATADO, sendo repassadas integralmente à instituição financeira.</p>
             </div>
-            <div class="clause">
-                <p><span class="num">5.5.</span>O não pagamento integral do saldo até a data acordada poderá resultar na suspensão dos serviços contratados, caracterizando descumprimento contratual por parte da CONTRATANTE, sujeitando-se ainda às penalidades abaixo:</p>
+            <div class="clause destaque">
+                <p><span class="num">5.5.</span>O não pagamento integral do saldo até a data acordada, depois de avisada a CONTRATANTE e mantido o atraso, poderá resultar na suspensão dos serviços contratados, caracterizando descumprimento contratual por parte da CONTRATANTE, sujeitando-se ainda às penalidades abaixo:</p>
                 <ol>
                     <li>Multa moratória de até 2% (dois por cento) sobre o valor da parcela ou boleto em atraso, nos termos do <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=As%20multas%20de%20mora%20decorrentes%20do%20inadimplemento" target="_blank" rel="noopener noreferrer">art. 52, § 1º, do CDC</a>;</li>
-                    <li>Juros de mora de 1% (um por cento) ao mês, proporcionais aos dias de atraso (aproximadamente 0,033% ao dia), aqui convencionados entre as partes, nos termos do <a href="https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm#:~:text=Quando%20n%C3%A3o%20forem%20convencionados%2C%20ou%20quando%20o%20forem%20sem%20taxa%20estipulada" target="_blank" rel="noopener noreferrer">art. 406 do Código Civil</a>, com a redação da Lei nº 14.905/2024;</li>
+                    <li>Juros de mora pela taxa legal (taxa Selic, deduzida a inflação medida pelo IPCA), proporcionais aos dias de atraso, nos termos do <a href="https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm#:~:text=Quando%20n%C3%A3o%20forem%20convencionados%2C%20ou%20quando%20o%20forem%20sem%20taxa%20estipulada" target="_blank" rel="noopener noreferrer">art. 406 do Código Civil</a>, com a redação da Lei nº 14.905/2024;</li>
                     <li>Em caso de boletos bancários não pagos no vencimento, o nome do CONTRATANTE poderá ser encaminhado a protesto, conforme a <a href="https://www.planalto.gov.br/ccivil_03/leis/l9492.htm" target="_blank" rel="noopener noreferrer">Lei nº 9.492/1997 (Lei do Protesto de Títulos)</a>, sem prejuízo das demais medidas cabíveis.</li>
                 </ol>
             </div>
-            <div class="clause">
-                <p><span class="num">5.6.</span>Estas penalidades são de direito do fornecedor, não vinculadas à instituição financeira, e aplicam-se independentemente das tarifas ou encargos bancários.</p>
+            <div class="clause destaque">
+                <p><span class="num">5.6.</span>Estas penalidades são de direito do fornecedor, não vinculadas à instituição financeira, e aplicam-se independentemente das tarifas ou encargos bancários. Elas não se acumulam com outras multas deste contrato pelo mesmo atraso.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=estabele%C3%A7am%20obriga%C3%A7%C3%B5es%20consideradas%20in%C3%ADquas%2C%20abusivas" target="_blank" rel="noopener noreferrer">art. 51, IV, do CDC</a> — vedação de obrigações que coloquem o consumidor em desvantagem exagerada.</p>
             </div>
         </section>
 
@@ -370,7 +386,7 @@
                     <li>manter equipamentos em perfeito estado de conservação;</li>
                     <li>cumprir o repertório ajustado, ressalvadas situações de força maior.</li>
                 </ol>
-                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=A%20oferta%20e%20apresenta%C3%A7%C3%A3o%20de%20produtos%20ou%20servi%C3%A7os%20devem" target="_blank" rel="noopener noreferrer">art. 31 do CDC</a> — informações corretas sobre características e qualidades do serviço.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=O%20fornecedor%20de%20servi%C3%A7os%20responde%20pelos%20v%C3%ADcios%20de%20qualidade" target="_blank" rel="noopener noreferrer">art. 20 do CDC</a> — o fornecedor responde pelos vícios de qualidade do serviço, podendo o consumidor exigir reexecução, restituição ou abatimento do preço.</p>
             </div>
         </section>
 
@@ -381,23 +397,32 @@
                 <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm#art7" target="_blank" rel="noopener noreferrer">art. 7º da LGPD</a> — tratamento de dados necessário à execução do contrato.</p>
             </div>
             <div class="clause">
-                <p><span class="num">7.2.</span>O CONTRATADO está autorizado a registrar e utilizar fotos, áudios e vídeos do evento para divulgação de portfólio, salvo manifestação expressa e por escrito da CONTRATANTE.</p>
-                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=a%20informa%C3%A7%C3%A3o%20adequada%20e%20clara%20sobre%20os%20diferentes%20produtos%20e%20servi%C3%A7os" target="_blank" rel="noopener noreferrer">art. 6º, III, do CDC</a> — direito à informação adequada; e <a href="https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm#:~:text=Salvo%20se%20autorizadas%2C%20ou%20se%20necess%C3%A1rias%20%C3%A0%20administra%C3%A7%C3%A3o%20da%20justi%C3%A7a" target="_blank" rel="noopener noreferrer">art. 20 do Código Civil</a> — uso de imagem mediante autorização.</p>
+                <p><span class="num">7.2.</span>O registro e o uso de fotos, áudios e vídeos do evento para divulgação de portfólio do CONTRATADO dependem da escolha da CONTRATANTE abaixo, que pode ser revogada a qualquer momento, por escrito, sem custo:</p>
+                <p class="choice"><span class="box"></span> Autorizo o uso de imagem e som do evento para divulgação de portfólio.<br><span class="box"></span> Não autorizo.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm#:~:text=Salvo%20se%20autorizadas%2C%20ou%20se%20necess%C3%A1rias%20%C3%A0%20administra%C3%A7%C3%A3o%20da%20justi%C3%A7a" target="_blank" rel="noopener noreferrer">art. 20 do Código Civil</a> — uso de imagem mediante autorização; e <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm#art7" target="_blank" rel="noopener noreferrer">art. 7º da LGPD</a> — tratamento de dados com consentimento do titular.</p>
             </div>
         </section>
 
         <section class="card" aria-labelledby="c8">
             <h2 id="c8"><span class="n">08</span> Cancelamento, força maior e multas</h2>
             <div class="clause">
-                <p><span class="num">8.1.</span>Contratação feita pela internet, por WhatsApp ou de outra forma fora do estabelecimento: a CONTRATANTE pode desistir em até 7 (sete) dias contados da assinatura, com devolução imediata e integral dos valores pagos.</p>
-                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=O%20consumidor%20pode%20desistir%20do%20contrato%2C%20no%20prazo%20de%207%20dias" target="_blank" rel="noopener noreferrer">art. 49 do CDC</a> — direito de arrependimento.</p>
+                <p><span class="num">8.1.</span>Contratação feita pela internet, por WhatsApp ou de outra forma fora do estabelecimento: a CONTRATANTE pode desistir em até 7 (sete) dias contados da assinatura, sem multa e sem precisar justificar, com devolução imediata dos valores pagos, a qualquer título, monetariamente atualizados.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=O%20consumidor%20pode%20desistir%20do%20contrato%2C%20no%20prazo%20de%207%20dias" target="_blank" rel="noopener noreferrer">art. 49 do CDC</a> — direito de arrependimento; e <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=Se%20o%20consumidor%20exercitar%20o%20direito%20de%20arrependimento" target="_blank" rel="noopener noreferrer">art. 49, parágrafo único</a> — devolução imediata e atualizada.</p>
+            </div>
+            <div class="clause destaque">
+                <p><span class="num">8.2.</span>Fora do prazo do item 8.1, a desistência pela CONTRATANTE até 7 (sete) dias antes do evento ocorre sem multa. Após esse prazo, aplica-se multa rescisória de 20% do valor contratado. Em qualquer caso, os valores já pagos que excederem a multa serão devolvidos à CONTRATANTE.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=subtraiam%20ao%20consumidor%20a%20op%C3%A7%C3%A3o%20de%20reembolso%20da%20quantia%20j%C3%A1%20paga" target="_blank" rel="noopener noreferrer">art. 51, II, do CDC</a> — é nula a cláusula que retire do consumidor o reembolso da quantia já paga.</p>
             </div>
             <div class="clause">
-                <p><span class="num">8.2.</span>Fora do prazo do item 8.1, a desistência pela CONTRATANTE até 7 (sete) dias antes do evento ocorre sem multa. Após esse prazo, aplica-se multa rescisória de 20% do valor contratado.</p>
-                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=a%20modifica%C3%A7%C3%A3o%20das%20cl%C3%A1usulas%20contratuais%20que%20estabele%C3%A7am%20presta%C3%A7%C3%B5es%20desproporcionais" target="_blank" rel="noopener noreferrer">art. 6º, V, do CDC</a> — equilíbrio entre as prestações das partes.</p>
+                <p><span class="num">8.3.</span>Se o CONTRATADO cancelar ou deixar de comparecer sem justificativa de força maior, a CONTRATANTE poderá, à sua escolha: exigir o cumprimento do contrato; aceitar outra prestação equivalente; ou rescindir o contrato, com devolução integral dos valores pagos, monetariamente atualizados, acrescida de multa de 20% do valor contratado, sem prejuízo de perdas e danos.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=Se%20o%20fornecedor%20de%20produtos%20ou%20servi%C3%A7os%20recusar%20cumprimento%20%C3%A0%20oferta" target="_blank" rel="noopener noreferrer">art. 35 do CDC</a> — opções do consumidor quando o fornecedor recusa cumprir o que ofereceu.</p>
+            </div>
+            <div class="clause destaque">
+                <p><span class="num">8.4.</span>O não comparecimento injustificado da CONTRATANTE ao evento sujeita-a a multa de 20% do valor total contratado, limitada ao montante pago, devolvendo-se o que exceder.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=subtraiam%20ao%20consumidor%20a%20op%C3%A7%C3%A3o%20de%20reembolso%20da%20quantia%20j%C3%A1%20paga" target="_blank" rel="noopener noreferrer">art. 51, II, do CDC</a> — reembolso da quantia já paga.</p>
             </div>
             <div class="clause">
-                <p><span class="num">8.3.</span>O não comparecimento injustificado sujeita a parte faltosa a multa de 20% do valor total contratado, limitada ao montante pago. Em caso de força maior ou caso fortuito, as partes envidarão esforços para remarcar o evento, sem aplicação de multa.</p>
+                <p><span class="num">8.5.</span>Em caso de força maior ou caso fortuito, as partes envidarão esforços para remarcar o evento, sem aplicação de multa. Não sendo possível remarcar, os valores pagos serão devolvidos integralmente à CONTRATANTE, monetariamente atualizados.</p>
                 <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=a%20efetiva%20preven%C3%A7%C3%A3o%20e%20repara%C3%A7%C3%A3o%20de%20danos%20patrimoniais%20e%20morais" target="_blank" rel="noopener noreferrer">art. 6º, VI, do CDC</a> — efetiva prevenção e reparação de danos.</p>
             </div>
         </section>
@@ -414,6 +439,14 @@
             <div class="clause">
                 <p><span class="num">9.3.</span>Se preferir, a CONTRATANTE poderá propor eventual ação nos foros das comarcas de Angélica/MS ou Ivinhema/MS. Essa opção é exclusivamente dela: não é presumida por este contrato, não pode ser imposta pelo CONTRATADO e só produz efeito quando manifestada de forma expressa pela CONTRATANTE.</p>
                 <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=estabele%C3%A7am%20obriga%C3%A7%C3%B5es%20consideradas%20in%C3%ADquas%2C%20abusivas" target="_blank" rel="noopener noreferrer">art. 51, IV, do CDC</a> — são nulas as cláusulas que coloquem o consumidor em desvantagem exagerada.</p>
+            </div>
+            <div class="clause">
+                <p><span class="num">9.4.</span>As cláusulas deste contrato serão interpretadas de maneira mais favorável à CONTRATANTE.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=As%20cl%C3%A1usulas%20contratuais%20ser%C3%A3o%20interpretadas%20de%20maneira%20mais%20favor%C3%A1vel%20ao%20consumidor" target="_blank" rel="noopener noreferrer">art. 47 do CDC</a>.</p>
+            </div>
+            <div class="clause">
+                <p><span class="num">9.5.</span>A CONTRATANTE declara que teve acesso prévio ao inteiro teor deste contrato, inclusive no site da Harmonia do Altar, com possibilidade de leitura, impressão e download, e que ele está redigido em termos claros e com letra de tamanho não inferior ao corpo doze.</p>
+                <p class="fund"><b>Fundamento:</b> <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#:~:text=redigidos%20em%20termos%20claros%20e%20com%20caracteres%20ostensivos%20e%20leg%C3%ADveis" target="_blank" rel="noopener noreferrer">art. 54, § 3º, do CDC</a> — clareza e tamanho mínimo da letra nos contratos de adesão.</p>
             </div>
 
             <p class="place">Angélica/MS, <span class="blank" style="min-width:3em"></span> de <span class="blank" style="min-width:8em"></span> de 20<span class="blank" style="min-width:2.5em"></span>.</p>
