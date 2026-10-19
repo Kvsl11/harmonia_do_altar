@@ -1342,6 +1342,8 @@
         .sim-row-stack { flex-direction: column; align-items: flex-start; gap: .55rem; }
         /* Momentos com música: cada momento marcado conta uma música */
         .sim-default-songs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .35rem 1rem; margin: .6rem 0 0; padding: .85rem 1rem .85rem 2.2rem; border-radius: 14px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .09); font-size: .85rem; color: var(--ink); }
+        .sim-rite-note { margin-top: .6rem; padding: .7rem .9rem; border-radius: 12px; background: rgba(241, 214, 164, .06); border: 1px solid rgba(241, 214, 164, .16); }
+        .sim-rite-note i { color: var(--champagne); margin-right: .2rem; }
         .sim-default-songs li::marker { color: var(--champagne); font-weight: 700; }
         .sim-extra-head { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; margin-top: 1.1rem; font-size: .9rem; font-weight: 600; color: #fff; }
         .sim-extra-head small { display: block; font-weight: 400; font-size: .76rem; color: var(--muted); }
@@ -2246,7 +2248,7 @@
                 <!-- ABA 1: DESLOCAMENTO -->
                 <div id="deslocamento-tab" class="tab-content active" role="tabpanel">
                     <h4 class="sim-step-title">Onde será a cerimônia?</h4>
-                    <p class="sim-step-text">Informe o endereço da igreja para incluirmos o deslocamento no seu orçamento. Condições especiais para Angélica e Ivinhema (MS).</p>
+                    <p class="sim-step-text">Informe o endereço da igreja. O deslocamento não está incluso no plano: ele é cobrado à parte, pelo custo real, e vem no seu orçamento.</p>
                     <div class="modal-input-group">
                         <label for="modal-destination-address">Endereço completo</label>
                         <div class="sim-input-row">
@@ -2303,8 +2305,9 @@
                     </div>
                     <div class="modal-input-group sim-moments">
                         <label>Músicas da cerimônia</label>
-                        <p class="sim-hint">O plano já inclui as <strong>músicas do ritual, até 12 músicas</strong>, com uma entrada especial prevista (por exemplo, a da Sagrada Família). O repertório de cada momento é combinado com a equipe depois.</p>
+                        <p class="sim-hint">O plano já inclui as <strong>músicas do ritual, até 12 músicas</strong>, com uma entrada especial prevista (por exemplo, florista ou Sagrada Família). O repertório de cada momento é combinado com a equipe depois.</p>
                         <ol class="sim-default-songs" id="default-songs"></ol>
+                        <p class="sim-hint sim-rite-note"><i class="fas fa-church"></i> <strong>Casamento com missa?</strong> Ofertório, santo e comunhão são combinados à parte, no orçamento. Em casamento católico, o repertório segue as orientações da paróquia e da diocese, e as músicas podem ser encurtadas a pedido do celebrante.</p>
                         <div class="sim-extra-head">
                             <span>Músicas extras <small>Opcional: além das 12 ou mais de uma entrada especial. O valor de cada uma, se houver, vem discriminado no orçamento.</small></span>
                             <button type="button" class="pill ghost" id="add-extra-song"><i class="fas fa-plus"></i> Adicionar música extra</button>
@@ -2516,12 +2519,13 @@
         // Músicas: o plano inclui as do ritual, até 12, com uma entrada especial prevista.
         // Além disso (ou mais de uma entrada especial), cada música extra pode ter valor adicional, combinado no orçamento.
         const SONGS_INCLUDED = 12;
+        // Momentos do rito do casamento (sem missa). Missa é exceção: ofertório, santo e comunhão são combinados à parte.
         const DEFAULT_SONGS = [
-            'Entrada do noivo', 'Entrada dos padrinhos', 'Entrada especial (ex.: Sagrada Família)', 'Entrada da noiva', 'Aclamação ao Evangelho',
-            'Entrada das alianças', 'Ofertório', 'Santo', 'Comunhão', 'Assinaturas', 'Saída dos noivos', 'Outro momento do ritual'
+            'Entrada do noivo', 'Entrada dos padrinhos', 'Entrada especial (ex.: florista, Sagrada Família)', 'Entrada da noiva',
+            'Aclamação ao Evangelho', 'Entrada das alianças', 'Assinaturas', 'Saída dos noivos', 'Outros momentos do rito (até completar 12)'
         ];
         const EXTRA_MOMENT_SUGGESTIONS = [
-            'Entrada das daminhas e pajens', 'Entrada dos pais', 'Entrada da Bíblia', 'Entrada do terço/rosário', 'Ato penitencial',
+            'Entrada das daminhas e pajens', 'Entrada da florista', 'Entrada dos pais', 'Ofertório (missa)', 'Santo (missa)', 'Comunhão (missa)', 'Entrada da Bíblia', 'Entrada do terço/rosário', 'Ato penitencial',
             'Glória', 'Salmo', 'Momento do beijo', 'Homenagem', 'Pós-comunhão', 'Cumprimentos'
         ];
 
@@ -2840,12 +2844,6 @@
             };
         }
 
-        function isFixedCity(place) {
-            const city = normalizeText(place.city);
-            const state = normalizeText(place.state);
-            return FIXED_CITIES.includes(city) && (state.includes('mato grosso do sul') || state === 'ms');
-        }
-
         function mapsSearchUrl(lat, lng) {
             return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
         }
@@ -2873,7 +2871,7 @@
             deslocamentoPendente = !fixed;
             currentDistanceText = '';
             modalDistanceDisplay.textContent = fixed ? 'Angélica/Ivinhema (MS)' : 'a confirmar';
-            modalCalculatedDeslocamentoDisplay.textContent = fixed ? 'Condição especial' : 'A combinar pelo WhatsApp';
+            modalCalculatedDeslocamentoDisplay.textContent = fixed ? 'À parte, no orçamento' : 'À parte, a combinar pelo WhatsApp';
             setRouteLink(null);
             modalDeslocamentoResultsDiv.classList.remove('hidden');
             modalDeslocamentoError.classList.add('hidden');
@@ -2910,7 +2908,7 @@
                 deslocamentoPendente = false;
                 currentDistanceText = `${distanceInKm.toFixed(1).replace('.', ',')} km`;
                 modalDistanceDisplay.textContent = currentDistanceText;
-                modalCalculatedDeslocamentoDisplay.textContent = isFixedCity(place) ? 'Condição especial' : 'Incluído no orçamento';
+                modalCalculatedDeslocamentoDisplay.textContent = 'À parte, no orçamento';
                 setRouteLink(mapsRouteUrl(place.lat, place.lng));
                 modalDeslocamentoResultsDiv.classList.remove('hidden');
                 drawRoute(route.geometry);
