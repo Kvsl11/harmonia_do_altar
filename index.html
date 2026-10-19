@@ -1341,8 +1341,9 @@
         .sim-note.warn { background: rgba(229, 143, 132, .1); border-color: rgba(229, 143, 132, .3); margin-top: 1rem; }
         .sim-row-stack { flex-direction: column; align-items: flex-start; gap: .55rem; }
         /* Momentos com música: cada momento marcado conta uma música */
-        .sim-default-songs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .35rem 1rem; margin: .6rem 0 0; padding: .85rem 1rem .85rem 2.2rem; border-radius: 14px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .09); font-size: .85rem; color: var(--ink); }
-        .sim-default-songs li::marker { color: var(--champagne); font-weight: 700; }
+        .sim-songs-included { margin: .5rem 0 0; padding: .85rem 1rem; border-radius: 14px; font-size: .9rem; line-height: 1.55; color: var(--ink); background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .09); }
+        .sim-songs-included i { color: var(--champagne); margin-right: .25rem; }
+        .sim-songs-included strong { color: var(--champagne); }
         .sim-extra-head { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; margin-top: 1.1rem; font-size: .9rem; font-weight: 600; color: #fff; }
         .sim-extra-head small { display: block; font-weight: 400; font-size: .76rem; color: var(--muted); }
         .sim-extra-head .pill { padding: .55rem .95rem; font-size: .8rem; }
@@ -1377,7 +1378,6 @@
         .sim-extra-summary { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: .3rem; color: #fff; font-size: .86rem; text-align: left; }
         .sim-extra-summary a { color: var(--champagne); margin-left: .35rem; font-size: .78rem; }
         @media (max-width: 640px) {
-            .sim-default-songs { grid-template-columns: 1fr; }
             .sim-extra-fields { grid-template-columns: 1fr; }
             .sim-yt-result img, .sim-yt-chosen img { width: 88px; }
         }
@@ -2246,7 +2246,7 @@
                 <!-- ABA 1: DESLOCAMENTO -->
                 <div id="deslocamento-tab" class="tab-content active" role="tabpanel">
                     <h4 class="sim-step-title">Onde será a cerimônia?</h4>
-                    <p class="sim-step-text">Informe o endereço da igreja para incluirmos o deslocamento no seu orçamento. Condições especiais para Angélica e Ivinhema (MS).</p>
+                    <p class="sim-step-text">Informe o endereço da igreja. O deslocamento não está incluso no plano: ele é cobrado à parte, pelo custo real, e vem no seu orçamento.</p>
                     <div class="modal-input-group">
                         <label for="modal-destination-address">Endereço completo</label>
                         <div class="sim-input-row">
@@ -2303,8 +2303,8 @@
                     </div>
                     <div class="modal-input-group sim-moments">
                         <label>Músicas da cerimônia</label>
-                        <p class="sim-hint">O plano já inclui as <strong>músicas do ritual, até 12 músicas</strong>, com uma entrada especial prevista (por exemplo, a da Sagrada Família). O repertório de cada momento é combinado com a equipe depois.</p>
-                        <ol class="sim-default-songs" id="default-songs"></ol>
+                        <p class="sim-songs-included"><i class="fas fa-music"></i> O plano inclui <strong>até 12 músicas</strong> do ritual da cerimônia, já contando <strong>uma entrada especial</strong> (por exemplo, florista ou Sagrada Família). As músicas de cada momento são escolhidas com a equipe depois.</p>
+                        <p class="sim-hint sim-rite-note"><i class="fas fa-church"></i> <strong>Casamento com missa?</strong> Ofertório, santo e comunhão são combinados à parte, no orçamento. Em casamento católico, o repertório segue as orientações da paróquia e da diocese, e as músicas podem ser encurtadas a pedido do celebrante.</p>
                         <div class="sim-extra-head">
                             <span>Músicas extras <small>Opcional: além das 12 ou mais de uma entrada especial. O valor de cada uma, se houver, vem discriminado no orçamento.</small></span>
                             <button type="button" class="pill ghost" id="add-extra-song"><i class="fas fa-plus"></i> Adicionar música extra</button>
@@ -2516,12 +2516,10 @@
         // Músicas: o plano inclui as do ritual, até 12, com uma entrada especial prevista.
         // Além disso (ou mais de uma entrada especial), cada música extra pode ter valor adicional, combinado no orçamento.
         const SONGS_INCLUDED = 12;
-        const DEFAULT_SONGS = [
-            'Entrada do noivo', 'Entrada dos padrinhos', 'Entrada especial (ex.: Sagrada Família)', 'Entrada da noiva', 'Aclamação ao Evangelho',
-            'Entrada das alianças', 'Ofertório', 'Santo', 'Comunhão', 'Assinaturas', 'Saída dos noivos', 'Outro momento do ritual'
-        ];
+        // Missa é exceção: ofertório, santo e comunhão são combinados à parte (por isso aparecem só nas sugestões de extras).
+        const INCLUDED_SONGS_TEXT = `até ${SONGS_INCLUDED} músicas do ritual, com 1 entrada especial`;
         const EXTRA_MOMENT_SUGGESTIONS = [
-            'Entrada das daminhas e pajens', 'Entrada dos pais', 'Entrada da Bíblia', 'Entrada do terço/rosário', 'Ato penitencial',
+            'Entrada das daminhas e pajens', 'Entrada da florista', 'Entrada dos pais', 'Ofertório (missa)', 'Santo (missa)', 'Comunhão (missa)', 'Entrada da Bíblia', 'Entrada do terço/rosário', 'Ato penitencial',
             'Glória', 'Salmo', 'Momento do beijo', 'Homenagem', 'Pós-comunhão', 'Cumprimentos'
         ];
 
@@ -2602,7 +2600,7 @@
             const total = SONGS_INCLUDED + extras.length;
             let text = `Músicas do ritual, até ${SONGS_INCLUDED} (incluídas)`;
             if (extras.length) text = `Até ${total} músicas · ${SONGS_INCLUDED} incluídas + ${extras.length} ${extras.length > 1 ? 'extras' : 'extra'} (valor combinado no orçamento)`;
-            return { defaults: DEFAULT_SONGS, extras, total, text };
+            return { extras, total, text };
         }
 
         function renderSongsCount() {
@@ -2726,13 +2724,7 @@
         }
 
         function setupMoments() {
-            const listEl = document.getElementById('default-songs');
-            if (!listEl) return;
-            DEFAULT_SONGS.forEach((name) => {
-                const li = document.createElement('li');
-                li.textContent = name;
-                listEl.appendChild(li);
-            });
+            if (!document.getElementById('add-extra-song')) return;
             const suggestions = document.getElementById('extra-moment-suggestions');
             EXTRA_MOMENT_SUGGESTIONS.forEach((name) => {
                 const opt = document.createElement('option');
@@ -2840,12 +2832,6 @@
             };
         }
 
-        function isFixedCity(place) {
-            const city = normalizeText(place.city);
-            const state = normalizeText(place.state);
-            return FIXED_CITIES.includes(city) && (state.includes('mato grosso do sul') || state === 'ms');
-        }
-
         function mapsSearchUrl(lat, lng) {
             return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
         }
@@ -2873,7 +2859,7 @@
             deslocamentoPendente = !fixed;
             currentDistanceText = '';
             modalDistanceDisplay.textContent = fixed ? 'Angélica/Ivinhema (MS)' : 'a confirmar';
-            modalCalculatedDeslocamentoDisplay.textContent = fixed ? 'Condição especial' : 'A combinar pelo WhatsApp';
+            modalCalculatedDeslocamentoDisplay.textContent = fixed ? 'À parte, no orçamento' : 'À parte, a combinar pelo WhatsApp';
             setRouteLink(null);
             modalDeslocamentoResultsDiv.classList.remove('hidden');
             modalDeslocamentoError.classList.add('hidden');
@@ -2910,7 +2896,7 @@
                 deslocamentoPendente = false;
                 currentDistanceText = `${distanceInKm.toFixed(1).replace('.', ',')} km`;
                 modalDistanceDisplay.textContent = currentDistanceText;
-                modalCalculatedDeslocamentoDisplay.textContent = isFixedCity(place) ? 'Condição especial' : 'Incluído no orçamento';
+                modalCalculatedDeslocamentoDisplay.textContent = 'À parte, no orçamento';
                 setRouteLink(mapsRouteUrl(place.lat, place.lng));
                 modalDeslocamentoResultsDiv.classList.remove('hidden');
                 drawRoute(route.geometry);
@@ -3239,7 +3225,7 @@
             if (o.reference) parts.push(`• *Referência:* ${o.reference}`);
             if (o.distance) parts.push(`• *Distância de Angélica:* ${o.distance}`);
             if (o.mapsUrl) parts.push(`• *Mapa:* ${o.mapsUrl}`);
-            parts.push('', `*MÚSICAS*`, `• *Total:* ${o.songs.text}`, `• *Incluídas:* ${o.songs.defaults.join(', ')}`);
+            parts.push('', `*MÚSICAS*`, `• *Total:* ${o.songs.text}`, `• *Incluídas:* ${INCLUDED_SONGS_TEXT}`);
             if (o.songs.extras.length) {
                 parts.push(`• *Extras:*`);
                 o.songs.extras.forEach((x, i) => {
