@@ -1676,6 +1676,7 @@
         .gallery figure { position: relative; margin: 0; border-radius: 22px; overflow: hidden; aspect-ratio: 3 / 4; background: var(--night-2); border: 1px solid rgba(241, 214, 164, .12); }
         .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2, .8, .2, 1); }
         .gallery figure:hover img { transform: scale(1.05); }
+        .gallery figure.featured { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
         .gallery figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2.5rem 1rem 1rem; font-weight: 600; font-size: .9rem; color: #fff; background: linear-gradient(180deg, transparent, rgba(17, 13, 28, .88)); }
         .insta-mention { margin-top: 1.6rem; text-align: center; color: var(--muted); font-size: .88rem; }
         .insta-mention a { color: var(--champagne); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(241, 214, 164, .35); }
@@ -1694,6 +1695,7 @@
             .steps { grid-template-columns: 1fr 1fr; }
             .gallery { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 72%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: .5rem; overscroll-behavior-x: contain; }
             .gallery figure { scroll-snap-align: start; }
+            .gallery figure.featured { grid-column: auto; grid-row: auto; aspect-ratio: 3 / 4; }
         }
         @media (max-width: 520px) {
             .steps { grid-template-columns: 1fr; }
@@ -2060,6 +2062,7 @@
                     <p>Momentos reais do grupo nas cerimônias.</p>
                 </div>
                 <div class="gallery">
+                    <figure class="featured"><img src="img/grupo-violino-violoes.jpg" alt="O grupo com violino, violões e vozes em uma cerimônia de casamento" loading="lazy" decoding="async" style="object-position: 50% 60%"><figcaption>Violino, violões e vozes ao vivo</figcaption></figure>
                     <figure><img src="img/dueto-vozes.jpg" alt="Dois cantores do grupo em dueto durante a cerimônia" loading="lazy" decoding="async"><figcaption>Vozes em dueto</figcaption></figure>
                     <figure><img src="img/voz-e-teclado.jpg" alt="Solista e tecladista durante a cerimônia" loading="lazy" decoding="async"><figcaption>Voz e teclado ao vivo</figcaption></figure>
                     <figure><img src="img/cantor-louvor.jpg" alt="Cantor do grupo durante o louvor na igreja" loading="lazy" decoding="async"><figcaption>Louvor na cerimônia</figcaption></figure>
@@ -4369,8 +4372,11 @@
             }
             [['.gallery figure', '.gallery'], ['.steps > li', '.steps'], ['.plans-grid > .plan-slide', '.plans-grid']].forEach(([items, trigger]) => {
                 if (!$(trigger)) return;
+                // A transição de CSS do hover brigaria com a entrada; volta ao normal quando a entrada termina
+                gsap.set(items, { transition: 'none' });
                 gsap.from(items, { x: () => Math.min(window.innerWidth * 0.6, 420), rotate: 4, opacity: 0, duration: 1, stagger: 0.12, ease: 'power3.out',
-                    scrollTrigger: { trigger, start: 'top 85%', toggleActions: 'play none none none' } });
+                    clearProps: 'transform,opacity,transition',
+                    scrollTrigger: { trigger, start: 'top 98%', toggleActions: 'play none none none' } });
             });
         }
 
