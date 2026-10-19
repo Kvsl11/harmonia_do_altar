@@ -4420,7 +4420,7 @@
                 if (tween) tween.kill();
                 gsap.set(items, { ...hidden, transition: 'none' });
             };
-            ScrollTrigger.create({ trigger: el, start: 'top 98%', end: 'bottom 2%',
+            ScrollTrigger.create({ trigger: el, start: 'top bottom', end: 'bottom top',
                 onEnter: show, onEnterBack: show, onLeave: hide, onLeaveBack: hide });
         }
         // Cards que chegam pela direita, um depois do outro
