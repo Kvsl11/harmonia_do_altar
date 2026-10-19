@@ -1356,19 +1356,30 @@
         .sim-extra-fields label, .sim-extra-yt label { display: flex; flex-direction: column; gap: .25rem; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
         .sim-modal .sim-extra-song input { width: 100%; padding: .6rem .75rem; font: 500 .9rem 'Montserrat', sans-serif; letter-spacing: normal; text-transform: none; color: #fff; border-radius: 10px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14); }
         .sim-modal .sim-extra-song input::placeholder { color: rgba(185, 173, 196, .7); }
-        .sim-extra-yt { display: flex; align-items: flex-end; gap: .55rem; margin-top: .6rem; }
-        .sim-extra-yt label { flex: 1; min-width: 0; }
-        .sim-extra-yt .pill { flex: none; padding: .6rem .9rem; font-size: .78rem; }
-        .sim-extra-yt .pill i { color: #ff4e45; }
-        .sim-yt-preview { display: flex; align-items: center; gap: .7rem; margin-top: .6rem; padding: .45rem; border-radius: 12px; text-decoration: none; color: var(--ink); background: rgba(255, 255, 255, .05); font-size: .8rem; }
-        .sim-yt-preview img { width: 96px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; }
-        .sim-yt-preview i { color: #ff4e45; margin-right: .3rem; }
+        .sim-yt-search { display: flex; gap: .5rem; margin-top: .65rem; }
+        .sim-modal .sim-yt-search input { flex: 1; min-width: 0; }
+        .sim-yt-search .pill { flex: none; padding: .6rem .9rem; font-size: .8rem; }
+        .sim-yt-search .pill i, .sim-yt-chosen i.fa-youtube { color: #ff4e45; }
+        .sim-yt-status { margin: .5rem 0 0; font-size: .8rem; color: var(--muted); }
+        .sim-yt-results { display: flex; flex-direction: column; gap: .4rem; margin-top: .55rem; max-height: 330px; overflow-y: auto; overscroll-behavior: contain; }
+        .sim-yt-result { display: flex; align-items: center; gap: .7rem; width: 100%; padding: .4rem; border-radius: 12px; text-align: left; cursor: pointer; color: var(--ink); background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08); transition: background .2s ease, border-color .2s ease; }
+        .sim-yt-result:hover, .sim-yt-result:focus-visible { background: rgba(241, 214, 164, .1); border-color: rgba(241, 214, 164, .35); outline: none; }
+        .sim-yt-result img, .sim-yt-chosen img { flex: none; width: 104px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; background: var(--night); }
+        .sim-yt-result span, .sim-yt-chosen .info { min-width: 0; display: flex; flex-direction: column; gap: .15rem; }
+        .sim-yt-result b, .sim-yt-chosen b { font-size: .82rem; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .sim-yt-result small, .sim-yt-chosen small { font-size: .74rem; color: var(--muted); }
+        .sim-yt-chosen { margin-top: .65rem; padding: .5rem; border-radius: 14px; background: rgba(241, 214, 164, .08); border: 1px solid rgba(241, 214, 164, .3); }
+        .sim-yt-chosen .row { display: flex; align-items: center; gap: .7rem; }
+        .sim-yt-chosen .actions { display: flex; gap: .4rem; margin-top: .5rem; }
+        .sim-yt-chosen .actions button { flex: 1; padding: .45rem .6rem; border-radius: 999px; cursor: pointer; font: 600 .76rem 'Montserrat', sans-serif; color: var(--ink); background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .16); }
+        .sim-yt-player { margin-top: .5rem; border-radius: 10px; overflow: hidden; aspect-ratio: 16 / 9; background: #000; }
+        .sim-yt-player iframe { width: 100%; height: 100%; border: 0; display: block; }
         .sim-extra-summary { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: .3rem; color: #fff; font-size: .86rem; text-align: left; }
         .sim-extra-summary a { color: var(--champagne); margin-left: .35rem; font-size: .78rem; }
         @media (max-width: 640px) {
             .sim-default-songs { grid-template-columns: 1fr; }
             .sim-extra-fields { grid-template-columns: 1fr; }
-            .sim-extra-yt { flex-direction: column; align-items: stretch; }
+            .sim-yt-result img, .sim-yt-chosen img { width: 88px; }
         }
         .sim-songs-count { margin-top: .9rem; padding: .75rem 1rem; border-radius: 14px; font-size: .88rem; color: var(--ink); background: rgba(241, 214, 164, .07); border: 1px solid rgba(241, 214, 164, .2); }
         .sim-songs-count strong { color: var(--champagne); }
@@ -1963,7 +1974,7 @@
                 <span class="eyebrow">Configurações sugeridas</span>
                 <h2 class="display mt-3">Nossos Planos</h2>
                 <p>
-                    Nossa formação padrão inclui <strong>3 vozes e teclado</strong>, com a flexibilidade de adicionar outros instrumentos para personalizar sua sonoridade. Escolha a formação, informe o local, a data e a forma de pagamento e <strong>receba o seu orçamento personalizado pelo WhatsApp</strong>. Todos os planos incluem <strong>as 10 músicas principais da cerimônia</strong>; músicas extras entram em pacotes de +5. Atendemos <strong>Angélica, Ivinhema (MS) e outras localidades</strong>.
+                    Nossa formação padrão inclui <strong>3 vozes e teclado</strong>, com a flexibilidade de adicionar outros instrumentos para personalizar sua sonoridade. Escolha a formação, informe o local, a data e a forma de pagamento e <strong>receba o seu orçamento personalizado pelo WhatsApp</strong>. Todos os planos incluem <strong>as músicas do ritual da cerimônia, até 12 músicas</strong>, com uma entrada especial já prevista. Atendemos <strong>Angélica, Ivinhema (MS) e outras localidades</strong>.
                 </p>
             </div>
 
@@ -1980,7 +1991,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>10 músicas incluídas</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Essência Clássica e Sublime', ['3 Vozes + Teclado/Piano'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -1994,7 +2005,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="violao"></i>Violão</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>10 músicas incluídas</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Harmonia Delicada e Acústica', ['3 Vozes + Teclado/Piano', 'Violão'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -2008,7 +2019,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="baixo"></i>Contrabaixo</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>10 músicas incluídas</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Sofisticação e Envolvimento', ['3 Vozes + Teclado/Piano', 'Contrabaixo'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -2022,7 +2033,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="baixo"></i>Contrabaixo</span><span><i class="mini-inst" data-art="violao"></i>Violão</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>10 músicas incluídas</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Violão', 'Contrabaixo'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -2036,7 +2047,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="violao"></i>Violão</span><span><i class="mini-inst" data-art="guitarra"></i>Guitarra</span><span><i class="mini-inst" data-art="baixo"></i>Contrabaixo</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>10 músicas incluídas</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Versatilidade e Brilho Acústica', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -2097,7 +2108,7 @@
                 <span class="eyebrow">Sob medida</span>
                 <h2 class="display mt-3 mb-4">Crie o Seu Plano Personalizado</h2>
                 <p class="max-w-3xl mx-auto text-lg mb-10" style="color: var(--muted)">
-                    Adicione instrumentos à nossa formação padrão para criar a sonoridade perfeita para o seu dia. O plano inclui as 10 músicas principais da cerimônia; músicas extras entram em pacotes de +5.
+                    Adicione instrumentos à nossa formação padrão para criar a sonoridade perfeita para o seu dia. O plano inclui as músicas do ritual da cerimônia, até 12 músicas, com uma entrada especial já prevista.
                 </p>
                 <div class="max-w-2xl mx-auto text-left">
                     <div class="base-row mb-6">
@@ -2292,10 +2303,10 @@
                     </div>
                     <div class="modal-input-group sim-moments">
                         <label>Músicas da cerimônia</label>
-                        <p class="sim-hint">O plano já inclui as <strong>10 músicas principais da cerimônia</strong>. O repertório de cada momento é combinado com a equipe depois. Em celebração sem missa, os momentos que não acontecem podem ser trocados por outros, sem custo.</p>
+                        <p class="sim-hint">O plano já inclui as <strong>músicas do ritual, até 12 músicas</strong>, com uma entrada especial prevista (por exemplo, a da Sagrada Família). O repertório de cada momento é combinado com a equipe depois.</p>
                         <ol class="sim-default-songs" id="default-songs"></ol>
                         <div class="sim-extra-head">
-                            <span>Músicas extras <small>Opcional: além das 10, entram em pacotes de +5.</small></span>
+                            <span>Músicas extras <small>Opcional: além das 12 ou mais de uma entrada especial. O valor, se houver, vem no orçamento.</small></span>
                             <button type="button" class="pill ghost" id="add-extra-song"><i class="fas fa-plus"></i> Adicionar música extra</button>
                         </div>
                         <div class="sim-extra-list" id="extra-songs-list"></div>
@@ -2502,30 +2513,83 @@
         let modalDestinationAddressInput, modalDeslocamentoError, modalDeslocamentoResultsDiv, modalDistanceDisplay, modalCalculatedDeslocamentoDisplay, referenceLocationInput, nextToSummaryBtn, boletoDateWarningModal, warningDueDateSpan, warningCeremonyDateSpan, ceremonyDateInput, ceremonyTimeInput, confirmedAddressDisplay, modalEventDetailsError, paymentMethodRadios, installmentOptionsDiv, installmentsSelect, boletoDueDateOptionsDiv, boletoDueDateSelect, modalBoletoDateError, summaryPlanNameEl, summaryEventDateEl, summaryEventAddressEl, summaryReferenceLocationDisplay, summaryReferenceLocationEl, summaryPaymentMethodEl, summaryInstallmentDetailsDiv, summaryInstallmentsEl, summaryBoletoDueDateDetailsDiv, summaryBoletoDueDateEl, mainSimulationModal, closeMainModalButton, tabButtons, tabContents, simulateBtnCustom, bandOptionsContainer, guestOptionsContainer, boletoNotificationModal, closeBoletoModalButton, okBoletoModalButton, unlockedTabs;
 
         let termsAcceptInput = null;
-        // Músicas: as 10 principais da cerimônia já estão incluídas; extras entram em pacotes de +5
-        const SONGS_INCLUDED = 10;
-        const SONGS_PACK = 5;
+        // Músicas: o plano inclui as do ritual, até 12, com uma entrada especial prevista.
+        // Além disso (ou mais de uma entrada especial), cada música extra pode ter valor adicional, combinado no orçamento.
+        const SONGS_INCLUDED = 12;
         const DEFAULT_SONGS = [
-            'Entrada do noivo', 'Entrada dos padrinhos', 'Entrada da noiva', 'Aclamação ao Evangelho', 'Entrada das alianças',
-            'Ofertório', 'Santo', 'Comunhão', 'Assinaturas', 'Saída dos noivos'
+            'Entrada do noivo', 'Entrada dos padrinhos', 'Entrada especial (ex.: Sagrada Família)', 'Entrada da noiva', 'Aclamação ao Evangelho',
+            'Entrada das alianças', 'Ofertório', 'Santo', 'Comunhão', 'Assinaturas', 'Saída dos noivos', 'Outro momento do ritual'
         ];
         const EXTRA_MOMENT_SUGGESTIONS = [
             'Entrada das daminhas e pajens', 'Entrada dos pais', 'Entrada da Bíblia', 'Entrada do terço/rosário', 'Ato penitencial',
             'Glória', 'Salmo', 'Momento do beijo', 'Homenagem', 'Pós-comunhão', 'Cumprimentos'
         ];
 
-        // Aceita links do YouTube (watch, youtu.be, shorts, embed) e devolve o id do vídeo
-        function youtubeId(url) {
-            const m = String(url || '').trim().match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})/i);
-            return m ? m[1] : '';
+        // Busca de vídeos do YouTube dentro do site, para a pessoa escolher a referência sem sair da página.
+        // Com uma chave da YouTube Data API v3 (restrita ao domínio do site) a busca usa a API oficial;
+        // sem chave, usa servidores públicos do Piped, um de cada vez, até um responder.
+        const YT_API_KEY = '';
+        const PIPED_INSTANCES = ['https://api.piped.private.coffee', 'https://pipedapi.ducks.party', 'https://pipedapi.kavin.rocks'];
+
+        function decodeEntities(text) {
+            const el = document.createElement('textarea');
+            el.innerHTML = text;
+            return el.value;
+        }
+
+        function formatDuration(seconds) {
+            if (!seconds || seconds < 0) return '';
+            const m = Math.floor(seconds / 60), s = Math.floor(seconds % 60);
+            return `${m}:${String(s).padStart(2, '0')}`;
+        }
+
+        async function searchYoutube(query) {
+            if (YT_API_KEY) {
+                try {
+                    const params = new URLSearchParams({ part: 'snippet', type: 'video', maxResults: '8', regionCode: 'BR', relevanceLanguage: 'pt', q: query, key: YT_API_KEY });
+                    const data = await fetchJSON(`https://www.googleapis.com/youtube/v3/search?${params}`);
+                    const items = (data.items || []).filter((it) => it.id && it.id.videoId).map((it) => ({
+                        id: it.id.videoId, title: decodeEntities(it.snippet.title), channel: decodeEntities(it.snippet.channelTitle), duration: ''
+                    }));
+                    if (items.length) return items;
+                } catch (error) {
+                    console.warn('Busca oficial do YouTube indisponível; tentando os servidores públicos.', error);
+                }
+            }
+            for (const base of PIPED_INSTANCES) {
+                try {
+                    const data = await fetchJSON(`${base}/search?q=${encodeURIComponent(query)}&filter=videos`);
+                    const items = (data.items || []).filter((it) => it.type === 'stream' && !it.isShort).map((it) => {
+                        const m = String(it.url || '').match(/v=([\w-]{11})/);
+                        return m ? { id: m[1], title: it.title || '', channel: it.uploaderName || '', duration: formatDuration(it.duration) } : null;
+                    }).filter(Boolean).slice(0, 8);
+                    if (items.length) return items;
+                } catch (error) {
+                    console.warn(`Busca do YouTube indisponível em ${base}.`, error);
+                }
+            }
+            throw new Error('busca indisponível');
+        }
+
+        // "Cantor - Música [Official Video]" → { song: 'Música', artist: 'Cantor' }
+        function splitVideoTitle(title, channel) {
+            const clean = String(title || '')
+                .replace(/\s*[\[(][^\])]*(official|oficial|v[ií]deo|clipe|lyric|letra|legendad|[aá]udio|ao vivo|live|hd|4k|visualizer|cover)[^\])]*[\])]/gi, '')
+                .replace(/\s*\|.*$/, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+            const channelName = String(channel || '').replace(/\s*(vevo|- topic|oficial|official)\s*$/i, '').trim();
+            const parts = clean.split(/\s+[-–—]\s+/);
+            if (parts.length >= 2) return { artist: parts[0].trim(), song: parts.slice(1).join(' - ').trim() };
+            return { song: clean, artist: channelName };
         }
 
         function getExtraSongs() {
             return [...document.querySelectorAll('#extra-songs-list .sim-extra-song')].map((row) => {
                 const get = (name) => row.querySelector(`[data-field="${name}"]`).value.trim();
-                const id = youtubeId(get('link'));
-                return { moment: get('moment'), song: get('song'), artist: get('artist'), link: id ? `https://youtu.be/${id}` : get('link') };
-            }).filter((x) => x.moment || x.song || x.artist || x.link);
+                const video = row.dataset.videoId ? { id: row.dataset.videoId, title: row.dataset.videoTitle, channel: row.dataset.videoChannel } : null;
+                return { moment: get('moment'), song: get('song'), artist: get('artist'), video, link: video ? `https://youtu.be/${video.id}` : '' };
+            }).filter((x) => x.moment || x.song || x.artist || x.video);
         }
 
         function describeExtra(x) {
@@ -2535,32 +2599,91 @@
 
         function getSongsInfo() {
             const extras = getExtraSongs();
-            const packs = Math.ceil(extras.length / SONGS_PACK);
             const total = SONGS_INCLUDED + extras.length;
-            let text = `${SONGS_INCLUDED} músicas principais da cerimônia (incluídas)`;
-            if (extras.length) text = `${total} músicas · ${SONGS_INCLUDED} incluídas + ${extras.length} ${extras.length > 1 ? 'extras' : 'extra'} (${packs} ${packs > 1 ? 'pacotes' : 'pacote'} de +${SONGS_PACK})`;
-            return { defaults: DEFAULT_SONGS, extras, total, packs, text };
+            let text = `Músicas do ritual, até ${SONGS_INCLUDED} (incluídas)`;
+            if (extras.length) text = `Até ${total} músicas · ${SONGS_INCLUDED} incluídas + ${extras.length} ${extras.length > 1 ? 'extras' : 'extra'} (valor combinado no orçamento)`;
+            return { defaults: DEFAULT_SONGS, extras, total, text };
         }
 
         function renderSongsCount() {
             const box = document.getElementById('songs-count');
             if (!box) return;
-            const info = getSongsInfo();
-            const n = info.extras.length;
+            const n = getExtraSongs().length;
             box.classList.toggle('over', n > 0);
-            if (!n) {
-                box.innerHTML = `<strong>${SONGS_INCLUDED} músicas incluídas</strong> no plano. Nenhuma música extra.`;
-            } else {
-                const room = info.packs * SONGS_PACK - n;
-                box.innerHTML = `<strong>${info.total} músicas</strong>: ${SONGS_INCLUDED} incluídas + ${n} ${n > 1 ? 'extras' : 'extra'} = <strong>${info.packs} ${info.packs > 1 ? 'pacotes' : 'pacote'} de +${SONGS_PACK}</strong>`
-                    + (room ? ` (ainda ${room > 1 ? 'cabem' : 'cabe'} ${room} ${room > 1 ? 'músicas' : 'música'} sem outro pacote)` : '') + '. O valor vem no orçamento.';
-            }
+            box.innerHTML = n
+                ? `<strong>${SONGS_INCLUDED} músicas incluídas + ${n} ${n > 1 ? 'extras' : 'extra'}</strong>. O valor adicional, se houver, depende de cada música e vem no orçamento; algumas podem não ter custo.`
+                : `<strong>Até ${SONGS_INCLUDED} músicas incluídas</strong> no plano. Nenhuma música extra.`;
         }
 
         function renumberExtras() {
             document.querySelectorAll('#extra-songs-list .sim-extra-song').forEach((row, i) => {
                 row.querySelector('.sim-extra-top b').textContent = `Música extra ${i + 1}`;
             });
+        }
+
+        function chooseVideo(row, video) {
+            const chosen = row.querySelector('.sim-yt-chosen');
+            const results = row.querySelector('.sim-yt-results');
+            const status = row.querySelector('.sim-yt-status');
+            if (!video) {
+                delete row.dataset.videoId; delete row.dataset.videoTitle; delete row.dataset.videoChannel;
+                chosen.classList.add('hidden');
+                chosen.querySelector('.sim-yt-player').innerHTML = '';
+                renderSongsCount();
+                return;
+            }
+            row.dataset.videoId = video.id;
+            row.dataset.videoTitle = video.title;
+            row.dataset.videoChannel = video.channel;
+            chosen.querySelector('img').src = `https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`;
+            chosen.querySelector('b').textContent = video.title;
+            chosen.querySelector('.channel').textContent = video.channel;
+            chosen.querySelector('.sim-yt-player').innerHTML = '';
+            chosen.querySelector('.sim-yt-player').classList.add('hidden');
+            chosen.classList.remove('hidden');
+            results.innerHTML = '';
+            status.classList.add('hidden');
+            // Se a pessoa ainda não escreveu a música e o cantor, usa o vídeo escolhido como ponto de partida
+            const song = row.querySelector('[data-field="song"]');
+            const artist = row.querySelector('[data-field="artist"]');
+            const guess = splitVideoTitle(video.title, video.channel);
+            if (!song.value.trim()) song.value = guess.song;
+            if (!artist.value.trim()) artist.value = guess.artist;
+            renderSongsCount();
+        }
+
+        async function runYoutubeSearch(row) {
+            const input = row.querySelector('[data-field="search"]');
+            const results = row.querySelector('.sim-yt-results');
+            const status = row.querySelector('.sim-yt-status');
+            const get = (name) => row.querySelector(`[data-field="${name}"]`).value.trim();
+            const query = input.value.trim() || [get('song'), get('artist')].filter(Boolean).join(' ') || (get('moment') ? `${get('moment')} música casamento` : '');
+            if (!query) { input.focus(); return; }
+            input.value = query;
+            const seq = String(Date.now());
+            row.dataset.searchSeq = seq;
+            results.innerHTML = '';
+            status.textContent = 'Buscando no YouTube…';
+            status.classList.remove('hidden');
+            try {
+                const items = await searchYoutube(query);
+                if (row.dataset.searchSeq !== seq) return;
+                status.textContent = 'Toque no vídeo para escolher:';
+                items.forEach((video) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'sim-yt-result';
+                    btn.innerHTML = '<img alt="" loading="lazy"><span><b></b><small></small></span>';
+                    btn.querySelector('img').src = `https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`;
+                    btn.querySelector('b').textContent = video.title;
+                    btn.querySelector('small').textContent = [video.channel, video.duration].filter(Boolean).join(' · ');
+                    btn.addEventListener('click', () => chooseVideo(row, video));
+                    results.appendChild(btn);
+                });
+            } catch (error) {
+                if (row.dataset.searchSeq !== seq) return;
+                status.textContent = 'A busca do YouTube não respondeu agora. Tente de novo em instantes; se preferir, siga só com o nome da música e o cantor.';
+            }
         }
 
         function addExtraSong() {
@@ -2571,27 +2694,29 @@
                 <div class="sim-extra-top"><b></b><button type="button" aria-label="Remover música extra"><i class="fas fa-times"></i> Remover</button></div>
                 <div class="sim-extra-fields">
                     <label>Momento<input type="text" data-field="moment" list="extra-moment-suggestions" placeholder="Ex.: Entrada das daminhas" maxlength="60"></label>
-                    <label>Música<input type="text" data-field="song" placeholder="Nome da música" maxlength="80"></label>
+                    <label>Música<input type="text" data-field="song" placeholder="Nome da música" maxlength="100"></label>
                     <label>Cantor<input type="text" data-field="artist" placeholder="Quem canta a versão de referência" maxlength="60"></label>
                 </div>
-                <div class="sim-extra-yt">
-                    <label>Vídeo de referência <em style="text-transform:none;letter-spacing:0">(opcional)</em><input type="url" data-field="link" placeholder="Cole o link do YouTube" inputmode="url"></label>
-                    <button type="button" class="pill ghost" data-yt-search><i class="fab fa-youtube"></i> Buscar no YouTube</button>
+                <div class="sim-yt-search">
+                    <input type="search" data-field="search" placeholder="Buscar a música no YouTube" enterkeyhint="search" aria-label="Buscar a música no YouTube">
+                    <button type="button" class="pill ghost" data-yt-search><i class="fab fa-youtube"></i> Buscar</button>
                 </div>
-                <a class="sim-yt-preview hidden" target="_blank" rel="noopener noreferrer"><img alt=""><span><i class="fab fa-youtube"></i>Ver o vídeo de referência</span></a>`;
-            const linkInput = row.querySelector('[data-field="link"]');
-            const preview = row.querySelector('.sim-yt-preview');
-            const syncPreview = () => {
-                const id = youtubeId(linkInput.value);
-                preview.classList.toggle('hidden', !id);
-                if (id) { preview.href = `https://youtu.be/${id}`; preview.querySelector('img').src = `https://i.ytimg.com/vi/${id}/mqdefault.jpg`; }
-            };
-            row.querySelectorAll('input').forEach((input) => input.addEventListener('input', () => { if (input === linkInput) syncPreview(); renderSongsCount(); }));
-            row.querySelector('[data-yt-search]').addEventListener('click', () => {
-                const get = (name) => row.querySelector(`[data-field="${name}"]`).value.trim();
-                const query = [get('song'), get('artist')].filter(Boolean).join(' ') || (get('moment') ? `${get('moment')} música casamento` : '');
-                if (!query) { row.querySelector('[data-field="song"]').focus(); return; }
-                window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank', 'noopener');
+                <p class="sim-yt-status hidden" role="status"></p>
+                <div class="sim-yt-results"></div>
+                <div class="sim-yt-chosen hidden">
+                    <div class="row"><img alt=""><div class="info"><small style="color:var(--champagne);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.66rem">Vídeo de referência</small><b></b><small class="channel"></small></div></div>
+                    <div class="actions"><button type="button" data-yt-play><i class="fas fa-play"></i> Ouvir aqui</button><button type="button" data-yt-clear><i class="fas fa-exchange-alt"></i> Trocar</button></div>
+                    <div class="sim-yt-player hidden"></div>
+                </div>`;
+            row.querySelectorAll('.sim-extra-fields input').forEach((input) => input.addEventListener('input', renderSongsCount));
+            const searchInput = row.querySelector('[data-field="search"]');
+            searchInput.addEventListener('keydown', (event) => { if (event.key === 'Enter') { event.preventDefault(); runYoutubeSearch(row); } });
+            row.querySelector('[data-yt-search]').addEventListener('click', () => runYoutubeSearch(row));
+            row.querySelector('[data-yt-clear]').addEventListener('click', () => { chooseVideo(row, null); searchInput.focus(); });
+            row.querySelector('[data-yt-play]').addEventListener('click', () => {
+                const player = row.querySelector('.sim-yt-player');
+                const open = player.classList.toggle('hidden') === false;
+                player.innerHTML = open ? `<iframe src="https://www.youtube-nocookie.com/embed/${row.dataset.videoId}?autoplay=1&rel=0" title="Vídeo de referência" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>` : '';
             });
             row.querySelector('.sim-extra-top button').addEventListener('click', () => { row.remove(); renumberExtras(); renderSongsCount(); });
             list.appendChild(row);
