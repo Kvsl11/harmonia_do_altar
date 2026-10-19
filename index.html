@@ -1346,6 +1346,35 @@
         .sim-shot { display: flex; align-items: center; gap: 1rem; margin: 0 0 1rem; padding: .8rem; border-radius: 18px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .09); }
         .sim-shot img { flex: none; width: 92px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; background: var(--night-2); box-shadow: 0 10px 24px -10px rgba(0, 0, 0, .7); transition: opacity .3s ease; }
         .sim-shot.is-loading img { opacity: .35; }
+        /* Aceite do contrato (obrigatório para enviar) */
+        .sim-terms { margin: 1rem 0 0; padding: 1rem 1.1rem; border-radius: 16px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(241, 214, 164, .22); transition: border-color .3s ease, background .3s ease; }
+        .sim-terms.is-error { border-color: rgba(255, 154, 154, .7); background: rgba(229, 143, 132, .08); animation: terms-shake .4s ease; }
+        .sim-terms.is-ok { border-color: rgba(241, 214, 164, .55); }
+        @keyframes terms-shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        html[data-experience="lofi"] .sim-terms.is-error { animation: none; }
+        .sim-terms-check { position: relative; display: flex; gap: .8rem; align-items: flex-start; cursor: pointer; font-size: .9rem; line-height: 1.45; color: var(--ink); }
+        .sim-terms-check input { position: absolute; opacity: 0; width: 1.4rem; height: 1.4rem; margin: 0; cursor: pointer; }
+        .sim-terms-box { flex: none; width: 1.4rem; height: 1.4rem; margin-top: .05rem; border-radius: 7px; display: grid; place-items: center; font-size: .7rem; color: transparent; border: 1.5px solid rgba(241, 214, 164, .55); transition: background .25s ease, border-color .25s ease, color .25s ease; }
+        .sim-terms-check input:checked + .sim-terms-box { color: #2a1325; border-color: transparent; background: linear-gradient(135deg, var(--champagne), var(--rose)); }
+        .sim-terms-check input:focus-visible + .sim-terms-box { box-shadow: 0 0 0 4px rgba(241, 214, 164, .25); }
+        .sim-terms-text strong { color: #fff; }
+        .sim-terms-links { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; margin: .65rem 0 0 2.2rem; }
+        .sim-terms-link { display: inline-flex; align-items: center; gap: .4rem; padding: 0; background: none; border: 0; cursor: pointer; font: 600 .82rem 'Montserrat', sans-serif; color: var(--champagne); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(241, 214, 164, .4); }
+        .sim-terms-link:hover { text-decoration-color: var(--champagne); }
+        .sim-terms .sim-error { margin: .6rem 0 0 2.2rem; }
+        #confirm-simulation-btn.is-locked { opacity: .55; }
+        /* Janela do contrato */
+        .sim-modal .notification-modal-content.sim-dialog.sim-contract { max-width: 860px; height: min(88vh, 900px); display: flex; flex-direction: column; padding: 1.6rem 1.6rem 1.25rem; }
+        .sim-contract .notification-modal-title { margin-bottom: .8rem; }
+        .sim-contract-frame { flex: 1; width: 100%; min-height: 0; border: 1px solid rgba(255, 255, 255, .1); border-radius: 16px; background: var(--night); }
+        .sim-contract-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .5rem; margin-top: 1rem; }
+        .sim-contract-actions .pill.ghost { padding: .65rem 1rem; font-size: .82rem; }
+        @media (max-width: 860px) {
+            .sim-modal .notification-modal-content.sim-dialog.sim-contract { height: 92vh; height: 92dvh; padding: 1.4rem .9rem 1rem; }
+            .sim-contract-actions { justify-content: stretch; }
+            .sim-contract-actions > * { flex: 1 1 auto; justify-content: center; }
+            .sim-contract-actions .btn-primary { flex-basis: 100%; }
+        }
         .sim-sent-body { display: flex; gap: 1rem; align-items: flex-start; margin: .5rem 0 1rem; text-align: left; }
         .sim-sent-body img { flex: none; width: 96px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; box-shadow: 0 10px 24px -10px rgba(0, 0, 0, .7); }
         .sim-sent-body .notification-modal-text { margin: 0; }
@@ -2305,6 +2334,18 @@
                         </div>
                     </div>
                     <div class="sim-note"><i class="fas fa-info-circle"></i><p>Os valores do plano, do deslocamento e da forma de pagamento escolhida são enviados pela nossa equipe no WhatsApp.</p></div>
+                    <div class="sim-terms" id="terms-box">
+                        <label class="sim-terms-check">
+                            <input type="checkbox" id="terms-accept" aria-describedby="terms-error">
+                            <span class="sim-terms-box" aria-hidden="true"><i class="fas fa-check"></i></span>
+                            <span class="sim-terms-text">Li e concordo com os <strong>termos do contrato de prestação de serviços</strong> da Harmonia do Altar.</span>
+                        </label>
+                        <div class="sim-terms-links">
+                            <button type="button" class="sim-terms-link" id="open-contract-btn"><i class="fas fa-file-contract"></i> Ler o contrato</button>
+                            <a class="sim-terms-link" href="contrato-harmonia-do-altar.pdf" download><i class="fas fa-download"></i> Baixar PDF</a>
+                        </div>
+                        <p id="terms-error" class="sim-error hidden" role="alert">Para enviar, marque que você leu e concorda com os termos do contrato.</p>
+                    </div>
                     <div class="modal-footer-buttons">
                         <button class="btn-secondary pill ghost lg" data-navigate-tab="payment-method-tab"><i class="fas fa-arrow-left"></i> Voltar</button>
                         <button id="confirm-simulation-btn" class="btn-primary pill lg"><i class="fab fa-whatsapp"></i> Enviar pelo WhatsApp</button>
@@ -2326,6 +2367,21 @@
                 <button type="button" class="sim-map-expand" id="map-expand-btn" aria-pressed="false" aria-label="Ver mapa em tela cheia"><i class="fas fa-expand"></i><span>Tela cheia</span></button>
             </div>
             <button id="confirm-map-location-btn" class="btn-primary pill lg notification-modal-button">Confirmar localização</button>
+        </div>
+    </div>
+
+    <!-- Contrato: leitura dentro do site, com download e aceite -->
+    <div id="contract-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="contract-title">
+        <div class="notification-modal-content sim-dialog sim-contract">
+            <button type="button" class="close-button modal-close-button icon-btn" id="close-contract-button" aria-label="Fechar contrato"><i class="fas fa-times"></i></button>
+            <span class="eyebrow">Termos de contratação</span>
+            <h3 class="notification-modal-title" id="contract-title">Contrato de prestação de serviços</h3>
+            <iframe id="contract-frame" class="sim-contract-frame" title="Contrato de prestação de serviços musicais"></iframe>
+            <div class="sim-contract-actions">
+                <a class="pill ghost" href="contrato-harmonia-do-altar.pdf" download><i class="fas fa-download"></i> Baixar PDF</a>
+                <a class="pill ghost" href="contrato.html" target="_blank" rel="noopener" id="contract-newtab"><i class="fas fa-external-link-alt"></i> Abrir em nova aba</a>
+                <button type="button" id="contract-accept-btn" class="btn-primary pill lg"><i class="fas fa-check"></i> Li e concordo</button>
+            </div>
         </div>
     </div>
 
@@ -2398,6 +2454,8 @@
         // Variáveis de Elementos DOM - declaradas globalmente, atribuídas em DOMContentLoaded
         let modalDestinationAddressInput, modalDeslocamentoError, modalDeslocamentoResultsDiv, modalDistanceDisplay, modalCalculatedDeslocamentoDisplay, referenceLocationInput, nextToSummaryBtn, boletoDateWarningModal, warningDueDateSpan, warningCeremonyDateSpan, ceremonyDateInput, ceremonyTimeInput, confirmedAddressDisplay, modalEventDetailsError, paymentMethodRadios, installmentOptionsDiv, installmentsSelect, boletoDueDateOptionsDiv, boletoDueDateSelect, modalBoletoDateError, summaryPlanNameEl, summaryEventDateEl, summaryEventAddressEl, summaryReferenceLocationDisplay, summaryReferenceLocationEl, summaryPaymentMethodEl, summaryInstallmentDetailsDiv, summaryInstallmentsEl, summaryBoletoDueDateDetailsDiv, summaryBoletoDueDateEl, mainSimulationModal, closeMainModalButton, tabButtons, tabContents, simulateBtnCustom, bandOptionsContainer, guestOptionsContainer, boletoNotificationModal, closeBoletoModalButton, okBoletoModalButton, unlockedTabs;
 
+        const CONTRACT_VERSION = 'versão 2.0, out/2026';
+        let termsAcceptInput = null;
         const PAYMENT_LABELS = { pix: 'Pix', dinheiro: 'Dinheiro', boleto: 'Boleto', cartao: 'Cartão de crédito' };
 
         // --- DEFINIÇÕES DE FUNÇÕES GLOBAIS ---
@@ -2856,7 +2914,8 @@
                 reference: referenceLocationInput.value.trim(),
                 payment: PAYMENT_LABELS[selectedPaymentMethod] || selectedPaymentMethod,
                 condition,
-                boletoDay: selectedPaymentMethod === 'boleto' ? `Todo dia ${selectedBoletoDueDate}` : ''
+                boletoDay: selectedPaymentMethod === 'boleto' ? `Todo dia ${selectedBoletoDueDate}` : '',
+                termsAccepted: !!(termsAcceptInput && termsAcceptInput.checked)
             };
         }
 
@@ -2889,6 +2948,8 @@
             if (o.mapsUrl) parts.push(`• *Mapa:* ${o.mapsUrl}`);
             parts.push('', `*PAGAMENTO*`, `• *Forma:* ${o.payment}`, `• *Condição:* ${o.condition}`);
             if (o.boletoDay) parts.push(`• *Vencimento:* ${o.boletoDay}`);
+            parts.push('', `*CONTRATO*`, `• Li e concordo com os termos do contrato de prestação de serviços (${CONTRACT_VERSION}).`);
+            if (/^https?:/.test(location.protocol)) parts.push(`• *Termos:* ${new URL('contrato.html', location.href).href}`);
             parts.push(
                 line,
                 `Segue a imagem com o resumo do plano.`,
@@ -3031,7 +3092,8 @@
                 ['LOCAL', o.address],
                 o.reference ? ['REFERÊNCIA', o.reference] : null,
                 o.distance ? ['DISTÂNCIA', `${o.distance} de Angélica (MS)`] : null,
-                ['PAGAMENTO', `${o.payment} · ${o.condition}${o.boletoDay ? ` · vencimento ${o.boletoDay.toLowerCase()}` : ''}`]
+                ['PAGAMENTO', `${o.payment} · ${o.condition}${o.boletoDay ? ` · vencimento ${o.boletoDay.toLowerCase()}` : ''}`],
+                o.termsAccepted ? ['CONTRATO', `Termos aceitos em ${new Date().toLocaleDateString('pt-BR')} · ${CONTRACT_VERSION}`] : null
             ].filter(Boolean);
             const cardX = P - 20, cardW = W - (P - 20) * 2, labelW = 230, valueW = cardW - labelW - 64;
             ctx.font = '500 28px Montserrat, sans-serif';
@@ -3417,6 +3479,10 @@
             document.getElementById('ceremony-date-br').value = '';
             document.getElementById('ceremony-time-br').value = '';
             referenceLocationInput.value = '';
+            if (termsAcceptInput && termsAcceptInput.checked) {
+                termsAcceptInput.checked = false;
+                termsAcceptInput.dispatchEvent(new Event('change'));
+            }
             const today = new Date().toISOString().split('T')[0];
             ceremonyDateInput.setAttribute('min', today);
             closeSuggestions();
@@ -3725,7 +3791,46 @@
                     updatePaymentDetailsDisplay();
                     validateBoletoDueDate(); // Re-valida quando a data de vencimento muda
                 });
-                document.getElementById('confirm-simulation-btn').addEventListener('click', () => {
+                // Contrato: o aceite é obrigatório; ler e baixar é opcional
+                termsAcceptInput = document.getElementById('terms-accept');
+                const termsBox = document.getElementById('terms-box');
+                const termsError = document.getElementById('terms-error');
+                const confirmBtn = document.getElementById('confirm-simulation-btn');
+                const contractModal = document.getElementById('contract-modal');
+                const syncTerms = () => {
+                    const ok = termsAcceptInput.checked;
+                    termsBox.classList.toggle('is-ok', ok);
+                    confirmBtn.classList.toggle('is-locked', !ok);
+                    confirmBtn.setAttribute('aria-disabled', String(!ok));
+                    if (ok) { termsBox.classList.remove('is-error'); termsError.classList.add('hidden'); }
+                };
+                termsAcceptInput.addEventListener('change', () => { syncTerms(); refreshSummaryShot(); });
+                document.getElementById('open-contract-btn').addEventListener('click', () => {
+                    const o = getOrderSummary();
+                    const params = new URLSearchParams({
+                        embed: '1', plano: o.name, formacao: o.instruments.join(', '),
+                        data: o.date ? `${o.date} (${o.weekday})` : '', horario: o.time, local: o.address, pagamento: `${o.payment} · ${o.condition}`
+                    });
+                    document.getElementById('contract-frame').src = `contrato.html?${params}`;
+                    document.getElementById('contract-newtab').href = `contrato.html?${params}`.replace('embed=1&', '');
+                    showAnimatedModal(contractModal);
+                });
+                document.getElementById('close-contract-button').addEventListener('click', () => hideAnimatedModal(contractModal));
+                document.getElementById('contract-accept-btn').addEventListener('click', () => {
+                    termsAcceptInput.checked = true;
+                    termsAcceptInput.dispatchEvent(new Event('change'));
+                    hideAnimatedModal(contractModal);
+                });
+                window.addEventListener('click', (event) => { if (event.target === contractModal) hideAnimatedModal(contractModal); });
+                syncTerms();
+
+                confirmBtn.addEventListener('click', () => {
+                    if (!termsAcceptInput.checked) {
+                        termsError.classList.remove('hidden');
+                        termsBox.classList.remove('is-error'); void termsBox.offsetWidth; termsBox.classList.add('is-error');
+                        termsBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return;
+                    }
                     const copying = copySummaryShot();
                     sendWhatsAppMessage();
                     showSentNotice(copying);
