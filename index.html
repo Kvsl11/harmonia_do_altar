@@ -1289,6 +1289,7 @@
         .sim-modal .tab-content { transition: none; transform: none; }
         .sim-modal .tab-content.active { opacity: 1; animation: sim-step-in .45s cubic-bezier(.2, .8, .2, 1) both; }
         .sim-modal .tab-content.active.step-back { animation-name: sim-step-back; }
+        html[data-experience="hifi"] .sim-modal .tab-content.active { animation: none; }
         @keyframes sim-step-in { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
         @keyframes sim-step-back { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
         html[data-experience="lofi"] .sim-modal .tab-content.active { animation: none; }
@@ -2062,7 +2063,6 @@
                     <p>Momentos reais do grupo nas cerimônias.</p>
                 </div>
                 <div class="gallery">
-                    <figure class="featured"><img src="img/grupo-violino-violoes.jpg" alt="O grupo com violino, violões e vozes em uma cerimônia de casamento" loading="lazy" decoding="async" style="object-position: 50% 60%"><figcaption>Violino, violões e vozes ao vivo</figcaption></figure>
                     <figure><img src="img/dueto-vozes.jpg" alt="Dois cantores do grupo em dueto durante a cerimônia" loading="lazy" decoding="async"><figcaption>Vozes em dueto</figcaption></figure>
                     <figure><img src="img/voz-e-teclado.jpg" alt="Solista e tecladista durante a cerimônia" loading="lazy" decoding="async"><figcaption>Voz e teclado ao vivo</figcaption></figure>
                     <figure><img src="img/cantor-louvor.jpg" alt="Cantor do grupo durante o louvor na igreja" loading="lazy" decoding="async"><figcaption>Louvor na cerimônia</figcaption></figure>
@@ -2175,7 +2175,7 @@
 
         <!-- Construtor de Planos Personalizados -->
         <div class="builder-wrap">
-            <section id="custom-plan-builder" data-reveal>
+            <section id="custom-plan-builder">
                 <span class="eyebrow">Sob medida</span>
                 <h2 class="display mt-3 mb-4">Crie o Seu Plano Personalizado</h2>
                 <p class="max-w-3xl mx-auto text-lg mb-10" style="color: var(--muted)">
@@ -3666,6 +3666,7 @@
             target.classList.toggle('step-back', !!back);
             target.classList.add('active');
             if (current !== target) {
+                document.dispatchEvent(new CustomEvent('hda:sim-step', { detail: { tab: target, back: !!back } }));
                 const scroller = target.closest('.sim-main');
                 const panel = target.closest('.sim-panel');
                 if (scroller) scroller.scrollTop = 0;
@@ -3791,6 +3792,7 @@
 
             unlockedTabs = ['deslocamento-tab'];
             showTab('deslocamento-tab');
+            document.dispatchEvent(new CustomEvent('hda:sim-open'));
         }
 
         function updateInstallmentOptions() {
@@ -4307,7 +4309,7 @@
         function buildScrollScenes() {
             $$('[data-reveal]').forEach((el) => {
                 gsap.from(el, {
-                    y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
+                    x: 70, opacity: 0, duration: 0.9, ease: 'power3.out',
                     scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
                 });
             });
@@ -4361,6 +4363,40 @@
             if (!narrow) tl.to('.cinema-frame', { xPercent: -45, duration: 0.15 }, 0.78);
         }
 
+        // Cards que chegam pela direita, um depois do outro, quando o bloco aparece na tela.
+        // Os itens só são buscados nessa hora (os cards de instrumentos são montados depois) e, até lá, ficam visíveis.
+        // A transição de CSS do hover brigaria com a entrada; volta ao normal quando a entrada termina.
+        function enterFromRight(items, trigger) {
+            if (!$(trigger)) return;
+            ScrollTrigger.create({ trigger, start: 'top 98%', once: true, onEnter: () => {
+                const els = $$(items);
+                if (!els.length || !ctx) return;
+                ctx.add(() => gsap.fromTo(els,
+                    { x: () => Math.min(window.innerWidth * 0.6, 420), rotate: 4, opacity: 0, transition: 'none' },
+                    { x: 0, rotate: 0, opacity: 1, duration: 1, stagger: 0.1, ease: 'power3.out', clearProps: 'transform,opacity,transition' }));
+            } });
+        }
+
+        // ---------- Simulador: a janela se abre de dentro para fora e cada etapa entra campo a campo ----------
+        function stepIn(tab, back, delay = 0) {
+            if (experience !== 'hifi' || !tab) return;
+            const items = $$(':scope > :not(.hidden)', tab);
+            gsap.fromTo(items, { x: back ? -70 : 70, opacity: 0, transition: 'none' },
+                { x: 0, opacity: 1, duration: 0.6, delay, stagger: 0.07, ease: 'power3.out', overwrite: true, clearProps: 'transform,opacity,transition' });
+        }
+        document.addEventListener('hda:sim-step', (e) => stepIn(e.detail.tab, e.detail.back));
+        document.addEventListener('hda:sim-open', () => {
+            if (experience !== 'hifi') return;
+            const modal = $('#main-simulation-modal');
+            if (!modal) return;
+            gsap.fromTo($('.sim-panel', modal), { clipPath: 'inset(32% 34% 32% 34% round 26px)' },
+                { clipPath: 'inset(0% 0% 0% 0% round 26px)', duration: 0.9, ease: 'power3.inOut', clearProps: 'clipPath' });
+            gsap.fromTo($('.sim-aside-img', modal), { scale: 1.4, transition: 'none' }, { scale: 1, duration: 1.4, ease: 'power3.out', clearProps: 'transform,transition' });
+            gsap.fromTo($$('.sim-aside-body > *, .tab-button', modal), { x: 60, opacity: 0, transition: 'none' },
+                { x: 0, opacity: 1, duration: 0.7, delay: 0.3, stagger: 0.06, ease: 'power3.out', clearProps: 'transform,opacity,transition' });
+            stepIn($('.tab-content.active', modal), false, 0.45);
+        });
+
         // Fotos que se abrem de dentro para fora e cards que vêm da direita, ao longo do feed
         function buildFeedMotion() {
             const photo = $('.about-photo');
@@ -4370,13 +4406,16 @@
                 gsap.fromTo($('img', photo), { scale: 1.35 }, { scale: 1, ease: 'none',
                     scrollTrigger: { trigger: photo, start: 'top 95%', end: 'bottom 40%', scrub: 0.6 } });
             }
-            [['.gallery figure', '.gallery'], ['.steps > li', '.steps'], ['.plans-grid > .plan-slide', '.plans-grid']].forEach(([items, trigger]) => {
-                if (!$(trigger)) return;
-                // A transição de CSS do hover brigaria com a entrada; volta ao normal quando a entrada termina
-                gsap.set(items, { transition: 'none' });
-                gsap.from(items, { x: () => Math.min(window.innerWidth * 0.6, 420), rotate: 4, opacity: 0, duration: 1, stagger: 0.12, ease: 'power3.out',
-                    clearProps: 'transform,opacity,transition',
-                    scrollTrigger: { trigger, start: 'top 98%', toggleActions: 'play none none none' } });
+            [['.gallery figure', '.gallery'], ['.steps > li', '.steps'], ['.plans-grid > .plan-slide', '.plans-grid'],
+             ['#custom-plan-builder > .eyebrow, #custom-plan-builder > h2, #custom-plan-builder > p', '#custom-plan-builder'],
+             ['.base-row', '.base-row'], ['#band-instrument-options > *', '#band-instrument-options'],
+             ['#guest-instrument-options > *', '#guest-instrument-options'], ['.socials a', '.socials']
+            ].forEach(([items, trigger]) => enterFromRight(items, trigger));
+            // Total da formação e botão de orçamento: abrem de dentro para fora
+            ['#custom-total', '#simulate-btn-custom'].forEach((sel) => {
+                if (!$(sel)) return;
+                ScrollTrigger.create({ trigger: sel, start: 'top 98%', once: true, onEnter: () => ctx && ctx.add(() =>
+                    gsap.fromTo(sel, { clipPath: 'inset(0% 50% 0% 50% round 999px)', opacity: 0 }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', opacity: 1, duration: 0.9, ease: 'power3.inOut', clearProps: 'clipPath,opacity' })) });
             });
         }
 
