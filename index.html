@@ -2306,7 +2306,7 @@
                         <p class="sim-hint">O plano já inclui as <strong>músicas do ritual, até 12 músicas</strong>, com uma entrada especial prevista (por exemplo, a da Sagrada Família). O repertório de cada momento é combinado com a equipe depois.</p>
                         <ol class="sim-default-songs" id="default-songs"></ol>
                         <div class="sim-extra-head">
-                            <span>Músicas extras <small>Opcional: além das 12 ou mais de uma entrada especial. O valor, se houver, vem no orçamento.</small></span>
+                            <span>Músicas extras <small>Opcional: além das 12 ou mais de uma entrada especial. O valor de cada uma, se houver, vem discriminado no orçamento.</small></span>
                             <button type="button" class="pill ghost" id="add-extra-song"><i class="fas fa-plus"></i> Adicionar música extra</button>
                         </div>
                         <div class="sim-extra-list" id="extra-songs-list"></div>
@@ -2611,7 +2611,7 @@
             const n = getExtraSongs().length;
             box.classList.toggle('over', n > 0);
             box.innerHTML = n
-                ? `<strong>${SONGS_INCLUDED} músicas incluídas + ${n} ${n > 1 ? 'extras' : 'extra'}</strong>. O valor adicional, se houver, depende de cada música e vem no orçamento; algumas podem não ter custo.`
+                ? `<strong>${SONGS_INCLUDED} músicas incluídas + ${n} ${n > 1 ? 'extras' : 'extra'}</strong>. O valor de cada extra, se houver, vem discriminado no orçamento; algumas podem não ter custo, e você pode retirar qualquer uma antes de confirmar.`
                 : `<strong>Até ${SONGS_INCLUDED} músicas incluídas</strong> no plano. Nenhuma música extra.`;
         }
 
@@ -3246,6 +3246,7 @@
                     parts.push(`   ${i + 1}. ${describeExtra(x)}`);
                     if (x.link) parts.push(`      Referência: ${x.link}`);
                 });
+                parts.push(`• Peço que o orçamento traga o valor de cada música extra (ou se ela não terá custo).`);
             }
             parts.push('', `*PAGAMENTO*`, `• *Forma:* ${o.payment}`, `• *Condição:* ${o.condition}`);
             if (o.boletoDay) parts.push(`• *Vencimento:* ${o.boletoDay}`);
