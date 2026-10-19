@@ -1716,7 +1716,11 @@
            emenda nos próximos e os cards entram pela direita. A rolagem continua sendo a normal. */
         .cinema { display: none; }
         html[data-experience="hifi"] .cinema { display: block; position: relative; height: 440vh; background: var(--night); }
-        .cinema-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+        .cinema-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; isolation: isolate; background: var(--night); }
+        /* A foto da cena entra só como um tom suave, que some nas bordas: o fundo segue o mesmo degradê do resto do site */
+        .cinema-bgs { position: absolute; inset: 0; opacity: .3;
+            -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%); }
         .cinema-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; will-change: opacity; }
         .cinema-bg.b1 { opacity: 1; }
         .cinema-stage::after { content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -1766,6 +1770,7 @@
         html[data-experience="hifi"] .plans-section::before,
         html[data-experience="hifi"] .story-section::before,
         html[data-experience="hifi"] .builder-wrap::before,
+        html[data-experience="hifi"] .cinema-stage::before,
         html[data-experience="hifi"] #contato::after {
             content: ""; position: absolute; top: 0; bottom: 0; left: -12vmax; right: -12vmax; z-index: -1; pointer-events: none; will-change: transform;
             background-image:
@@ -1787,6 +1792,7 @@
             html[data-experience="hifi"] .plans-section::before,
             html[data-experience="hifi"] .story-section::before,
             html[data-experience="hifi"] .builder-wrap::before,
+            html[data-experience="hifi"] .cinema-stage::before,
             html[data-experience="hifi"] #contato::after,
             html[data-experience="hifi"] #contato::before { animation: none; }
         }
@@ -2018,9 +2024,11 @@
         <!-- CINEMA: o grupo ao vivo, em vídeo (só com o movimento ligado) -->
         <section class="cinema" id="cinema" aria-label="O grupo ao vivo">
             <div class="cinema-stage">
-                <div class="cinema-bg b1" style="background-image: url('video/grupo-ao-vivo-fundo.jpg')" aria-hidden="true"></div>
-                <div class="cinema-bg b2" style="background-image: url('video/vozes-fundo.jpg')" aria-hidden="true"></div>
-                <div class="cinema-bg b3" style="background-image: url('video/teclado-fundo.jpg')" aria-hidden="true"></div>
+                <div class="cinema-bgs" aria-hidden="true">
+                    <div class="cinema-bg b1" style="background-image: url('video/grupo-ao-vivo-fundo.jpg')"></div>
+                    <div class="cinema-bg b2" style="background-image: url('video/vozes-fundo.jpg')"></div>
+                    <div class="cinema-bg b3" style="background-image: url('video/teclado-fundo.jpg')"></div>
+                </div>
                 <div class="cinema-frame">
                     <video class="cv" data-src="video/cena.mp4" poster="video/cena.jpg" muted playsinline preload="none" aria-label="O grupo cantando e tocando ao vivo em cerimônias"></video>
                     <div class="cinema-dim" aria-hidden="true"></div>
