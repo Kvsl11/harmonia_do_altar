@@ -30,6 +30,18 @@
         }
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
+        /* Barra de rolagem igual à do site: degradê champanhe → rosé com um brilho no meio */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-image:
+                linear-gradient(180deg, transparent 0%, transparent 40%, rgba(255, 255, 255, .55) 50%, transparent 60%, transparent 100%),
+                linear-gradient(180deg, #f1d6a4 0%, #e8958a 25%, #f3b98a 50%, #e8958a 75%, #f1d6a4 100%);
+            background-size: 100% 300%, 100% 200%;
+        }
+        ::-webkit-scrollbar-thumb:hover { box-shadow: inset 0 0 0 20px rgba(255, 255, 255, .15); }
+        @supports not selector(::-webkit-scrollbar) { html { scrollbar-color: #e8958a transparent; } }
         body {
             margin: 0; color: var(--ink); font: 400 16px/1.7 'Montserrat', sans-serif; -webkit-font-smoothing: antialiased;
             background:

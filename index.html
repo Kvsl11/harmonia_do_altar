@@ -4312,12 +4312,7 @@
         // ---------- Entradas suaves ao rolar (somente no modo completo) ----------
         // A página rola como um feed: nenhuma cena prende a rolagem nem exige arrastar para liberar o conteúdo.
         function buildScrollScenes() {
-            $$('[data-reveal]').forEach((el) => {
-                gsap.from(el, {
-                    x: 70, opacity: 0, duration: 0.9, ease: 'power3.out',
-                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
-                });
-            });
+            $$('[data-reveal]').forEach((el) => revealOnView(el, () => [el], { x: 70, opacity: 0 }, { x: 0, opacity: 1, duration: 0.9 }));
         }
 
         // ---------- Cena de cinema: o vídeo anda junto com a rolagem (para a frente e para trás) ----------
@@ -4403,18 +4398,36 @@
             return true;
         }
 
-        // Cards que chegam pela direita, um depois do outro, quando o bloco aparece na tela.
-        // Os itens só são buscados nessa hora (os cards de instrumentos são montados depois) e, até lá, ficam visíveis.
-        // A transição de CSS do hover brigaria com a entrada; volta ao normal quando a entrada termina.
+        // Entrada que se repete nos dois sentidos: o bloco entra quando aparece na tela (descendo ou subindo)
+        // e volta ao estado escondido quando sai dela, pronto para entrar de novo. Os itens só são buscados na hora
+        // (os cards de instrumentos são montados depois) e, até a primeira entrada, ficam visíveis.
+        // A transição de CSS do hover brigaria com a entrada; ela volta quando a entrada termina.
+        const REVEAL_PROPS = 'transform,opacity,transition,clipPath';
+        function revealOnView(trigger, getItems, hidden, shown) {
+            const el = typeof trigger === 'string' ? $(trigger) : trigger;
+            if (!el) return;
+            let tween = null;
+            const show = () => {
+                const items = getItems();
+                if (!items.length || !ctx) return;
+                if (tween) tween.kill();
+                ctx.add(() => { tween = gsap.fromTo(items, { ...hidden, transition: 'none' },
+                    { ease: 'power3.out', ...shown, clearProps: REVEAL_PROPS }); });
+            };
+            const hide = () => {
+                const items = getItems();
+                if (!items.length) return;
+                if (tween) tween.kill();
+                gsap.set(items, { ...hidden, transition: 'none' });
+            };
+            ScrollTrigger.create({ trigger: el, start: 'top 98%', end: 'bottom 2%',
+                onEnter: show, onEnterBack: show, onLeave: hide, onLeaveBack: hide });
+        }
+        // Cards que chegam pela direita, um depois do outro
         function enterFromRight(items, trigger) {
-            if (!$(trigger)) return;
-            ScrollTrigger.create({ trigger, start: 'top 98%', once: true, onEnter: () => {
-                const els = $$(items);
-                if (!els.length || !ctx) return;
-                ctx.add(() => gsap.fromTo(els,
-                    { x: () => Math.min(window.innerWidth * 0.6, 420), rotate: 4, opacity: 0, transition: 'none' },
-                    { x: 0, rotate: 0, opacity: 1, duration: 1, stagger: 0.1, ease: 'power3.out', clearProps: 'transform,opacity,transition' }));
-            } });
+            revealOnView(trigger, () => $$(items),
+                { x: () => Math.min(window.innerWidth * 0.6, 420), rotate: 4, opacity: 0 },
+                { x: 0, rotate: 0, opacity: 1, duration: 1, stagger: 0.1 });
         }
 
         // ---------- Simulador: a janela se abre de dentro para fora e cada etapa entra campo a campo ----------
@@ -4453,11 +4466,11 @@
              ['#guest-instrument-options > *', '#guest-instrument-options'], ['.socials a', '.socials']
             ].forEach(([items, trigger]) => enterFromRight(items, trigger));
             // Total da formação e botão de orçamento: abrem de dentro para fora
-            ['#custom-total', '#simulate-btn-custom'].forEach((sel) => {
-                if (!$(sel)) return;
-                ScrollTrigger.create({ trigger: sel, start: 'top 98%', once: true, onEnter: () => ctx && ctx.add(() =>
-                    gsap.fromTo(sel, { clipPath: 'inset(0% 50% 0% 50% round 999px)', opacity: 0 }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', opacity: 1, duration: 0.9, ease: 'power3.inOut', clearProps: 'clipPath,opacity' })) });
-            });
+            ['#custom-total', '#simulate-btn-custom'].forEach((sel) => revealOnView(sel, () => $$(sel),
+                { clipPath: 'inset(0% 50% 0% 50% round 999px)', opacity: 0 },
+                { clipPath: 'inset(0% 0% 0% 0% round 0px)', opacity: 1, duration: 0.9, ease: 'power3.inOut' }));
+            // Ao voltar para o topo, as fotos e o título fazem a entrada de novo
+            if ($('#topo')) ScrollTrigger.create({ trigger: '#topo', start: 'top top', end: 'bottom top', onEnterBack: () => heroEntrance(0) });
         }
 
         function enableMotion() {
@@ -4504,8 +4517,10 @@
         // ---------- Entrada do hero (sem intro ou depois dela) ----------
         function heroEntrance(delay = 0) {
             if (experience !== 'hifi') return;
-            gsap.from('#keyart', { scale: 0.86, opacity: 0, duration: 1.4, ease: 'power3.out', delay });
-            gsap.from(['#hero-title > *', '#hero-meta > *'], { y: 30, opacity: 0, duration: 1, stagger: 0.08, ease: 'power3.out', delay: delay + 0.35 });
+            // Valores de início e fim explícitos: a entrada pode se repetir (ao voltar ao topo) sem herdar um estado no meio
+            gsap.fromTo('#keyart', { scale: 0.86, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.4, ease: 'power3.out', delay, overwrite: true, clearProps: 'transform,opacity' });
+            gsap.fromTo(['#hero-title > *', '#hero-meta > *'], { y: 30, opacity: 0, transition: 'none' },
+                { y: 0, opacity: 1, duration: 1, stagger: 0.08, ease: 'power3.out', delay: delay + 0.35, overwrite: true, clearProps: 'transform,opacity,transition' });
             $$('[data-kenburns]').forEach((img, i) => gsap.fromTo(img, { scale: 1.12 }, { scale: 1, duration: 2.2 + i * 0.15, ease: 'power2.out', delay }));
         }
 
