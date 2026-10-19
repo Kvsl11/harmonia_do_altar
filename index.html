@@ -4397,7 +4397,8 @@
             gsap.to(gallery, {
                 x: () => -distance(), ease: 'none',
                 scrollTrigger: {
-                    trigger: section, pin: true, scrub: 0.5, invalidateOnRefresh: true,
+                    // Calculada antes das outras: o trecho em que a galeria fica parada empurra tudo o que vem depois
+                    trigger: section, pin: true, scrub: 0.5, invalidateOnRefresh: true, refreshPriority: 1,
                     start: () => (section.offsetHeight > window.innerHeight ? 'top top' : 'center center'),
                     end: () => '+=' + Math.round(distance() * 1.6),
                     onUpdate: (self) => fillStoryBars(self.progress)
