@@ -1145,6 +1145,20 @@
             .h-scroller:not(.h-native) .plan-slide .ps-body > p { font-size: .84rem; }
         }
         .h-native .h-pin { height: auto; padding: 1rem 0 4rem; }
+        /* Tablet em pé: cards mais largos e altos, para a lista de instrumentos caber sem ficar escondida atrás do rodapé */
+        @media (min-width: 600px) and (max-width: 1180px) and (orientation: portrait) {
+            .h-scroller:not(.h-native) .h-track { padding: 0 8vw; gap: 1.25rem; }
+            .h-scroller:not(.h-native) .plan-slide { flex-basis: min(46vw, 440px); height: min(calc(100svh - 230px), 740px); }
+            .h-scroller:not(.h-native) .plan-slide .ps-img { height: 32%; min-height: 150px; }
+            .h-scroller:not(.h-native) .plan-slide .ps-body { padding: 1.1rem 1.5rem .75rem; }
+            .h-scroller:not(.h-native) .plan-slide h3 { font-size: 1.6rem; }
+            .h-scroller:not(.h-native) .plan-slide .ps-body > p { font-size: .92rem; line-height: 1.55; }
+            .h-scroller:not(.h-native) .ps-instruments { margin-top: 1rem; gap: .45rem; }
+            .h-scroller:not(.h-native) .ps-instruments span { font-size: .78rem; padding: .4rem .75rem; }
+            .h-scroller:not(.h-native) .plan-slide .ps-foot { padding: 1rem 1.5rem 1.3rem; }
+            .h-native .plan-slide { flex-basis: min(60vw, 440px); }
+        }
+        .ps-price { white-space: nowrap; }
         .h-native .h-track { overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1.5rem; -webkit-overflow-scrolling: touch; }
         .h-native .plan-slide { scroll-snap-align: center; flex-basis: min(84vw, 380px); height: auto; min-height: 560px; }
         .h-native .h-progress { display: none; }
