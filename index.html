@@ -1340,6 +1340,25 @@
         .sim-note i { color: var(--champagne); margin-top: .2rem; }
         .sim-note.warn { background: rgba(229, 143, 132, .1); border-color: rgba(229, 143, 132, .3); margin-top: 1rem; }
         .sim-row-stack { flex-direction: column; align-items: flex-start; gap: .55rem; }
+        /* Momentos com música: cada momento marcado conta uma música */
+        .sim-moment-grid { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .4rem; }
+        .sim-moment {
+            display: inline-flex; align-items: center; gap: .4rem; padding: .5rem .85rem; border-radius: 999px; cursor: pointer;
+            font: 600 .8rem 'Montserrat', sans-serif; color: var(--ink); background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14);
+            transition: background .25s ease, border-color .25s ease, color .25s ease;
+        }
+        .sim-moment i { font-size: .7rem; color: var(--champagne); transition: transform .25s ease; }
+        .sim-moment[aria-pressed="true"] { color: #2a1325; border-color: transparent; background: linear-gradient(90deg, var(--champagne), var(--rose)); }
+        .sim-moment[aria-pressed="true"] i { color: #2a1325; transform: rotate(45deg); }
+        .sim-moment-extra { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .9rem; font-size: .88rem; color: var(--ink); }
+        .sim-moment-extra small { display: block; color: var(--muted); font-size: .75rem; }
+        .sim-stepper { display: inline-flex; align-items: center; border-radius: 999px; border: 1px solid rgba(241, 214, 164, .3); overflow: hidden; }
+        .sim-stepper button { width: 2.3rem; height: 2.1rem; background: rgba(255, 255, 255, .05); border: 0; color: var(--champagne); font-size: 1.1rem; cursor: pointer; }
+        .sim-stepper button:hover { background: rgba(241, 214, 164, .15); }
+        .sim-stepper output { min-width: 2.2rem; text-align: center; font-weight: 700; color: #fff; }
+        .sim-songs-count { margin-top: .9rem; padding: .75rem 1rem; border-radius: 14px; font-size: .88rem; color: var(--ink); background: rgba(241, 214, 164, .07); border: 1px solid rgba(241, 214, 164, .2); }
+        .sim-songs-count strong { color: var(--champagne); }
+        .sim-songs-count.over { background: rgba(229, 143, 132, .1); border-color: rgba(229, 143, 132, .35); }
         .sim-row-stack .sim-plan-instruments { margin-top: 0; }
         .sim-row-stack .sim-plan-instruments li { color: #fff; background: rgba(241, 214, 164, .08); border-color: rgba(241, 214, 164, .22); }
         /* Imagem do resumo: miniatura + botão para salvar/compartilhar */
@@ -1930,7 +1949,7 @@
                 <span class="eyebrow">Configurações sugeridas</span>
                 <h2 class="display mt-3">Nossos Planos</h2>
                 <p>
-                    Nossa formação padrão inclui <strong>3 vozes e teclado</strong>, com a flexibilidade de adicionar outros instrumentos para personalizar sua sonoridade. Escolha a formação, informe o local, a data e a forma de pagamento e <strong>receba o seu orçamento personalizado pelo WhatsApp</strong>. Atendemos <strong>Angélica, Ivinhema (MS) e outras localidades</strong>.
+                    Nossa formação padrão inclui <strong>3 vozes e teclado</strong>, com a flexibilidade de adicionar outros instrumentos para personalizar sua sonoridade. Escolha a formação, informe o local, a data e a forma de pagamento e <strong>receba o seu orçamento personalizado pelo WhatsApp</strong>. Todos os planos incluem <strong>até 10 músicas da cerimônia</strong>, com pacotes adicionais de +5 músicas. Atendemos <strong>Angélica, Ivinhema (MS) e outras localidades</strong>.
                 </p>
             </div>
 
@@ -1947,7 +1966,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>Valores</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 10 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Essência Clássica e Sublime', ['3 Vozes + Teclado/Piano'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -1961,7 +1980,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="violao"></i>Violão</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>Valores</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 10 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Harmonia Delicada e Acústica', ['3 Vozes + Teclado/Piano', 'Violão'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -1975,7 +1994,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="baixo"></i>Contrabaixo</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>Valores</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 10 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Sofisticação e Envolvimento', ['3 Vozes + Teclado/Piano', 'Contrabaixo'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -1989,7 +2008,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="baixo"></i>Contrabaixo</span><span><i class="mini-inst" data-art="violao"></i>Violão</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>Valores</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 10 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Violão', 'Contrabaixo'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -2003,7 +2022,7 @@
                                 <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="violao"></i>Violão</span><span><i class="mini-inst" data-art="guitarra"></i>Guitarra</span><span><i class="mini-inst" data-art="baixo"></i>Contrabaixo</span></div>
                             </div>
                             <div class="ps-foot">
-                                <div class="ps-price"><small>Valores</small>Sob consulta</div>
+                                <div class="ps-price"><small>Até 10 músicas</small>Sob consulta</div>
                                 <button onclick="handleSimular('Versatilidade e Brilho Acústica', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'])" class="pill">Ver orçamento</button>
                             </div>
                         </article>
@@ -2064,7 +2083,7 @@
                 <span class="eyebrow">Sob medida</span>
                 <h2 class="display mt-3 mb-4">Crie o Seu Plano Personalizado</h2>
                 <p class="max-w-3xl mx-auto text-lg mb-10" style="color: var(--muted)">
-                    Adicione instrumentos à nossa formação padrão para criar a sonoridade perfeita para o seu dia.
+                    Adicione instrumentos à nossa formação padrão para criar a sonoridade perfeita para o seu dia. O plano inclui até 10 músicas da cerimônia, com pacotes adicionais de +5 músicas.
                 </p>
                 <div class="max-w-2xl mx-auto text-left">
                     <div class="base-row mb-6">
@@ -2257,6 +2276,20 @@
                         <label for="reference-location">Local de referência <em>(opcional)</em></label>
                         <input type="text" id="reference-location" placeholder="Ex: Próximo à praça central">
                     </div>
+                    <div class="modal-input-group sim-moments">
+                        <label>Momentos com música <em>(opcional, dá para ajustar depois)</em></label>
+                        <p class="sim-hint">Marque os momentos da cerimônia que terão música. Cada momento conta uma música; o plano inclui até 10 e, acima disso, entram pacotes de +5 músicas.</p>
+                        <div class="sim-moment-grid" id="moment-options"></div>
+                        <div class="sim-moment-extra">
+                            <span>Outras músicas <small>(ex.: mais de uma música no mesmo momento)</small></span>
+                            <div class="sim-stepper">
+                                <button type="button" data-extra-step="-1" aria-label="Menos uma música">−</button>
+                                <output id="extra-songs" aria-live="polite">0</output>
+                                <button type="button" data-extra-step="1" aria-label="Mais uma música">+</button>
+                            </div>
+                        </div>
+                        <div class="sim-songs-count" id="songs-count" aria-live="polite"></div>
+                    </div>
                     <div class="sim-note"><i class="fas fa-map-pin"></i><p><strong>Endereço confirmado:</strong> <span id="confirmed-address-display"></span></p></div>
                     <p id="modal-event-details-error" class="sim-error hidden">Por favor, preencha a data e o horário.</p>
                     <div class="modal-footer-buttons">
@@ -2315,6 +2348,8 @@
                     <div class="modal-summary-box sim-receipt">
                         <p class="modal-summary-item sim-row"><span>Plano</span><span id="summary-plan-name"></span></p>
                         <div class="modal-summary-item sim-row sim-row-stack"><span>Formação</span><ul class="sim-plan-instruments" id="summary-instruments"></ul></div>
+                        <p class="modal-summary-item sim-row"><span>Músicas</span><span id="summary-songs" class="sim-gold"></span></p>
+                        <div class="modal-summary-item sim-row sim-row-stack" id="summary-moments-row"><span>Momentos com música</span><ul class="sim-plan-instruments" id="summary-moments"></ul></div>
                         <hr class="sim-divider">
                         <p class="modal-summary-item sim-row"><span>Data e horário</span><span id="summary-event-date"></span></p>
                         <p class="modal-summary-item sim-row"><span>Local</span><span id="summary-event-address"></span></p>
@@ -2455,6 +2490,76 @@
         let modalDestinationAddressInput, modalDeslocamentoError, modalDeslocamentoResultsDiv, modalDistanceDisplay, modalCalculatedDeslocamentoDisplay, referenceLocationInput, nextToSummaryBtn, boletoDateWarningModal, warningDueDateSpan, warningCeremonyDateSpan, ceremonyDateInput, ceremonyTimeInput, confirmedAddressDisplay, modalEventDetailsError, paymentMethodRadios, installmentOptionsDiv, installmentsSelect, boletoDueDateOptionsDiv, boletoDueDateSelect, modalBoletoDateError, summaryPlanNameEl, summaryEventDateEl, summaryEventAddressEl, summaryReferenceLocationDisplay, summaryReferenceLocationEl, summaryPaymentMethodEl, summaryInstallmentDetailsDiv, summaryInstallmentsEl, summaryBoletoDueDateDetailsDiv, summaryBoletoDueDateEl, mainSimulationModal, closeMainModalButton, tabButtons, tabContents, simulateBtnCustom, bandOptionsContainer, guestOptionsContainer, boletoNotificationModal, closeBoletoModalButton, okBoletoModalButton, unlockedTabs;
 
         let termsAcceptInput = null;
+        // Músicas: todos os planos incluem até 10; acima disso, pacotes de +5
+        const SONGS_INCLUDED = 10;
+        const SONGS_PACK = 5;
+        const CEREMONY_MOMENTS = [
+            'Entrada do noivo', 'Entrada dos padrinhos', 'Entrada das daminhas e pajens', 'Entrada da noiva',
+            'Entrada da Bíblia', 'Entrada das alianças', 'Entrada do terço/rosário', 'Comunhão', 'Assinaturas',
+            'Momento do beijo', 'Saída dos noivos'
+        ];
+        let selectedMoments = new Set();
+        let extraSongs = 0;
+
+        function getSongsInfo() {
+            const moments = CEREMONY_MOMENTS.filter((m) => selectedMoments.has(m));
+            const total = moments.length + extraSongs;
+            const packs = Math.max(0, Math.ceil((total - SONGS_INCLUDED) / SONGS_PACK));
+            let text = `A definir (o plano inclui até ${SONGS_INCLUDED} músicas)`;
+            if (total > 0 && packs === 0) text = `${total} ${total > 1 ? 'músicas' : 'música'} · dentro das ${SONGS_INCLUDED} incluídas`;
+            if (packs > 0) text = `${total} músicas · ${SONGS_INCLUDED} incluídas + ${packs} ${packs > 1 ? 'pacotes' : 'pacote'} de +${SONGS_PACK}`;
+            return { moments, extra: extraSongs, total, packs, text };
+        }
+
+        function renderSongsCount() {
+            const box = document.getElementById('songs-count');
+            const out = document.getElementById('extra-songs');
+            if (!box) return;
+            const info = getSongsInfo();
+            out.textContent = String(extraSongs);
+            box.classList.toggle('over', info.packs > 0);
+            if (info.total === 0) {
+                box.innerHTML = `Nenhum momento marcado ainda. O plano inclui <strong>até ${SONGS_INCLUDED} músicas</strong>.`;
+            } else if (info.packs === 0) {
+                box.innerHTML = `<strong>${info.total} de ${SONGS_INCLUDED}</strong> músicas incluídas no plano.`;
+            } else {
+                box.innerHTML = `<strong>${info.total} músicas</strong>: ${SONGS_INCLUDED} incluídas + <strong>${info.packs} ${info.packs > 1 ? 'pacotes' : 'pacote'} de +${SONGS_PACK} músicas</strong> (o valor vem no orçamento).`;
+            }
+        }
+
+        function setupMoments() {
+            const grid = document.getElementById('moment-options');
+            if (!grid) return;
+            CEREMONY_MOMENTS.forEach((name) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'sim-moment';
+                btn.setAttribute('aria-pressed', 'false');
+                btn.innerHTML = '<i class="fas fa-plus" aria-hidden="true"></i><span></span>';
+                btn.querySelector('span').textContent = name;
+                btn.addEventListener('click', () => {
+                    const on = !selectedMoments.has(name);
+                    on ? selectedMoments.add(name) : selectedMoments.delete(name);
+                    btn.setAttribute('aria-pressed', String(on));
+                    renderSongsCount();
+                });
+                grid.appendChild(btn);
+            });
+            document.querySelectorAll('[data-extra-step]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    extraSongs = Math.min(30, Math.max(0, extraSongs + Number(btn.dataset.extraStep)));
+                    renderSongsCount();
+                });
+            });
+            renderSongsCount();
+        }
+
+        function resetMoments() {
+            selectedMoments = new Set();
+            extraSongs = 0;
+            document.querySelectorAll('.sim-moment').forEach((btn) => btn.setAttribute('aria-pressed', 'false'));
+            renderSongsCount();
+        }
         const PAYMENT_LABELS = { pix: 'Pix', dinheiro: 'Dinheiro', boleto: 'Boleto', cartao: 'Cartão de crédito' };
 
         // --- DEFINIÇÕES DE FUNÇÕES GLOBAIS ---
@@ -2914,7 +3019,8 @@
                 payment: PAYMENT_LABELS[selectedPaymentMethod] || selectedPaymentMethod,
                 condition,
                 boletoDay: selectedPaymentMethod === 'boleto' ? `Todo dia ${selectedBoletoDueDate}` : '',
-                termsAccepted: !!(termsAcceptInput && termsAcceptInput.checked)
+                termsAccepted: !!(termsAcceptInput && termsAcceptInput.checked),
+                songs: getSongsInfo()
             };
         }
 
@@ -2945,6 +3051,9 @@
             if (o.reference) parts.push(`• *Referência:* ${o.reference}`);
             if (o.distance) parts.push(`• *Distância de Angélica:* ${o.distance}`);
             if (o.mapsUrl) parts.push(`• *Mapa:* ${o.mapsUrl}`);
+            parts.push('', `*MÚSICAS*`, `• *Total:* ${o.songs.text}`);
+            if (o.songs.moments.length) parts.push(`• *Momentos:* ${o.songs.moments.join(', ')}`);
+            if (o.songs.extra) parts.push(`• *Outras músicas:* ${o.songs.extra}`);
             parts.push('', `*PAGAMENTO*`, `• *Forma:* ${o.payment}`, `• *Condição:* ${o.condition}`);
             if (o.boletoDay) parts.push(`• *Vencimento:* ${o.boletoDay}`);
             parts.push('', `*CONTRATO*`, `• Li e concordo com os termos do contrato de prestação de serviços.`);
@@ -3089,6 +3198,8 @@
                 ['DATA', `${o.date}${o.weekday ? ` · ${o.weekday}` : ''}`],
                 ['HORÁRIO', o.time],
                 ['LOCAL', o.address],
+                ['MÚSICAS', o.songs.text],
+                o.songs.moments.length ? ['MOMENTOS', o.songs.moments.join(', ') + (o.songs.extra ? ` + ${o.songs.extra} ${o.songs.extra > 1 ? 'outras' : 'outra'}` : '')] : null,
                 o.reference ? ['REFERÊNCIA', o.reference] : null,
                 o.distance ? ['DISTÂNCIA', `${o.distance} de Angélica (MS)`] : null,
                 ['PAGAMENTO', `${o.payment} · ${o.condition}${o.boletoDay ? ` · vencimento ${o.boletoDay.toLowerCase()}` : ''}`],
@@ -3096,7 +3207,7 @@
             ].filter(Boolean);
             const cardX = P - 20, cardW = W - (P - 20) * 2, labelW = 230, valueW = cardW - labelW - 64;
             ctx.font = '500 28px Montserrat, sans-serif';
-            const laidOut = rows.map(([label, value]) => ({ label, lines: wrapText(ctx, value, valueW, label === 'LOCAL' ? 3 : 2) }));
+            const laidOut = rows.map(([label, value]) => ({ label, lines: wrapText(ctx, value, valueW, label === 'MOMENTOS' ? 4 : label === 'LOCAL' ? 3 : 2) }));
             const cardH = laidOut.reduce((sum, r) => sum + r.lines.length * 38 + 34, 0) + 30;
             const cardTop = y;
             roundRect(ctx, cardX, cardTop, cardW, cardH, 30);
@@ -3478,6 +3589,7 @@
             document.getElementById('ceremony-date-br').value = '';
             document.getElementById('ceremony-time-br').value = '';
             referenceLocationInput.value = '';
+            resetMoments();
             if (termsAcceptInput && termsAcceptInput.checked) {
                 termsAcceptInput.checked = false;
                 termsAcceptInput.dispatchEvent(new Event('change'));
@@ -3555,6 +3667,10 @@
             const o = getOrderSummary();
             summaryPlanNameEl.textContent = o.name;
             renderInstrumentList(document.getElementById('summary-instruments'), o.instruments);
+            document.getElementById('summary-songs').textContent = o.songs.text;
+            const momentsList = o.songs.extra ? [...o.songs.moments, `+ ${o.songs.extra} ${o.songs.extra > 1 ? 'outras músicas' : 'outra música'}`] : o.songs.moments;
+            renderInstrumentList(document.getElementById('summary-moments'), momentsList);
+            document.getElementById('summary-moments-row').style.display = momentsList.length ? '' : 'none';
             summaryEventDateEl.textContent = `${o.date} às ${o.time}`;
             summaryEventAddressEl.textContent = o.address;
             document.getElementById('summary-distance').textContent = o.distance;
@@ -3703,6 +3819,7 @@
                     navigateToTab('event-details-tab');
                 });
                 setupBrDateTime();
+                setupMoments();
                 document.getElementById('next-to-payment-method-btn').addEventListener('click', () => {
                     ceremonyDate = ceremonyDateInput.value;
                     ceremonyTime = ceremonyTimeInput.value;
@@ -3808,7 +3925,8 @@
                     const o = getOrderSummary();
                     const params = new URLSearchParams({
                         embed: '1', plano: o.name, formacao: o.instruments.join(', '),
-                        data: o.date ? `${o.date} (${o.weekday})` : '', horario: o.time, local: o.address, pagamento: `${o.payment} · ${o.condition}`
+                        data: o.date ? `${o.date} (${o.weekday})` : '', horario: o.time, local: o.address, pagamento: `${o.payment} · ${o.condition}`,
+                        musicas: o.songs.total ? o.songs.text : ''
                     });
                     document.getElementById('contract-frame').src = `contrato.html?${params}`;
                     document.getElementById('contract-newtab').href = `contrato.html?${params}`.replace('embed=1&', '');
