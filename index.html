@@ -1753,6 +1753,18 @@
             .cinema-copy { bottom: 14vh; bottom: 14svh; }
         }
 
+        /* --- Textos justificados ---
+           Parágrafos e descrições ficam justificados, com hifenização em português. Títulos, botões, legendas e as
+           frases grandes da cena de vídeo continuam como estão; nos blocos centralizados a última linha segue centralizada. */
+        p, li, .inst-card small, .ps-body p, .ccard p {
+            text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; text-wrap: pretty;
+        }
+        .text-center p, .feed-head p, #custom-plan-builder > p, #contato p, .hero p, .sim-error, .story-bars,
+        .about-copy p, .steps p, .contact-pill p { text-align-last: center; }
+        .about-copy p, .steps p { text-align-last: auto; }
+        .cc, .eyebrow, .legal, .insta-mention, .sim-plan-instruments li, .ps-instruments, .menu-links li, nav li,
+        .tab-header li, .sim-row, figcaption, .ps-price, .sim-plan-price, .custom-total small { text-align: inherit; hyphens: manual; }
+
         /* --- Fundo em movimento (só no modo com movimento): as mesmas cores do tema (rosé, vinho e champanhe)
                derivam devagar sobre o fundo noturno. Os blocos se repetem em mosaico, então o deslocamento de um
                bloco inteiro fecha o ciclo sem emenda; o topo e a base somem no fundo para manter as transições. --- */
