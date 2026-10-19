@@ -192,7 +192,7 @@
         @property --sb-flow { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
         @keyframes sb-flow { to { --sb-flow: 200%; } }
         * { --sb-flow: 0%; }
-        html, body, .tab-header, .modal-content, .story-body, .story-panel, .sim-main, .sim-suggestions, .h-track { animation: sb-flow 7s linear infinite; }
+        .tab-header, .modal-content, .sim-main, .sim-suggestions { animation: sb-flow 7s linear infinite; }
         html[data-experience="lofi"], html[data-experience="lofi"] body, html[data-experience="lofi"] .tab-header, html[data-experience="lofi"] .modal-content, html[data-experience="lofi"] .story-body, html[data-experience="lofi"] .story-panel, html[data-experience="lofi"] .sim-main, html[data-experience="lofi"] .sim-suggestions, html[data-experience="lofi"] .h-track { animation: none; }
         @media (prefers-reduced-motion: reduce) { html, body, .tab-header, .modal-content, .story-body, .story-panel, .sim-main, .sim-suggestions, .h-track { animation: none; } }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -693,6 +693,7 @@
         #navbar > * { pointer-events: auto; }
         #navbar.with-strip { top: 1.85rem; }
         #navbar.navbar-scrolled { top: 0; background: rgba(17, 13, 28, .55); backdrop-filter: blur(14px); padding-block: .7rem; }
+        @media (max-width: 767px) { #navbar.navbar-scrolled { background: rgba(17, 13, 28, .92); backdrop-filter: none; } }
         .brand-mark { display: flex; align-items: center; gap: .6rem; color: #fff; }
         .brand-mark img { height: 2.4rem; width: auto; }
         .brand-mark span { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; }
@@ -1098,7 +1099,7 @@
         .legal { margin-top: 2.5rem; font-size: .75rem; color: #7f7590; }
 
         /* Revelações genéricas (controladas pelo GSAP) */
-        [data-reveal] { will-change: transform, opacity, filter; }
+        [data-reveal] { will-change: transform, opacity; }
 
         /* ---------- Responsivo / "lofi" ---------- */
         @media (max-width: 860px) {
@@ -1704,7 +1705,7 @@
         .cinema { display: none; }
         html[data-experience="hifi"] .cinema { display: block; position: relative; height: 340vh; background: var(--night); }
         .cinema-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
-        .cinema-bg { position: absolute; inset: -10%; background-size: cover; background-position: center; filter: blur(48px) brightness(.38) saturate(1.2); opacity: 0; }
+        .cinema-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; will-change: opacity; }
         .cinema-bg.b1 { opacity: 1; }
         .cinema-stage::after { content: ''; position: absolute; inset: 0; pointer-events: none;
             background: radial-gradient(ellipse at center, transparent 40%, rgba(17, 13, 28, .85) 100%); }
@@ -1712,6 +1713,7 @@
             clip-path: inset(34% 26% 22% 26% round 999px 999px 24px 24px); background: #000;
             box-shadow: 0 60px 120px -40px rgba(0, 0, 0, .9); }
         .cinema-frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .cinema-dim { position: absolute; inset: 0; z-index: 1; background: #000; opacity: 0; pointer-events: none; }
         .cinema-frame .cv-2 { clip-path: inset(0 0 0 100%); }
         .cinema-frame .cv-3 { clip-path: inset(50% 50% 50% 50% round 999px); }
         .cinema-frame::after { content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -1723,14 +1725,14 @@
         .cc strong em { font-style: normal; background: linear-gradient(90deg, var(--champagne), var(--rose)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .cinema-cards { position: absolute; z-index: 3; right: clamp(1rem, 5vw, 4rem); top: 50%; transform: translateY(-50%);
             display: grid; gap: 1rem; width: min(380px, calc(100vw - 2rem)); }
-        .ccard { padding: 1.2rem 1.3rem; border-radius: 20px; background: rgba(23, 17, 38, .72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+        .ccard { padding: 1.2rem 1.3rem; border-radius: 20px; background: rgba(23, 17, 38, .92);
             border: 1px solid rgba(241, 214, 164, .18); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .9); transform: translateX(120vw); }
         .ccard i { color: var(--champagne); font-size: 1.15rem; }
         .ccard h3 { font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; margin: .5rem 0 .25rem; color: var(--ink); }
         .ccard p { color: var(--muted); font-size: .92rem; line-height: 1.45; }
         .ccard .pill { margin-top: .8rem; display: inline-flex; }
         @media (max-width: 767px) {
-            .cinema-frame { height: 100%; width: 100%; aspect-ratio: auto; border-radius: 0; }
+            .cinema-frame { height: auto; width: min(calc(100vw - 1.5rem), calc(100svh * 9 / 16)); border-radius: 22px; }
             .cinema-cards { left: 1rem; right: 1rem; width: auto; top: auto; bottom: 1.25rem; transform: none; gap: .6rem; }
             .ccard { padding: .9rem 1rem; }
             .ccard h3 { font-size: 1.1rem; margin-top: .3rem; }
@@ -1741,7 +1743,7 @@
         /* --- Fundo em movimento (só no modo com movimento): as mesmas cores do tema (rosé, vinho e champanhe)
                derivam devagar sobre o fundo noturno. Os blocos se repetem em mosaico, então o deslocamento de um
                bloco inteiro fecha o ciclo sem emenda; o topo e a base somem no fundo para manter as transições. --- */
-        @keyframes bg-drift { to { background-position: 110vmax 110vmax, -90vmax 90vmax, 0 -140vmax; } }
+        @keyframes bg-drift { from { transform: translate3d(-12vmax, 0, 0); } to { transform: translate3d(12vmax, 0, 0); } }
         @keyframes glow-breathe {
             0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
             50% { transform: translate(6vw, 4%) scale(1.12); opacity: .7; }
@@ -1750,19 +1752,19 @@
         html[data-experience="hifi"] .plans-section,
         html[data-experience="hifi"] .story-section,
         html[data-experience="hifi"] .builder-wrap,
-        html[data-experience="hifi"] #contato { position: relative; isolation: isolate; }
+        html[data-experience="hifi"] #contato { position: relative; isolation: isolate; overflow-x: clip; }
         html[data-experience="hifi"] .feed-section::before,
         html[data-experience="hifi"] .plans-section::before,
         html[data-experience="hifi"] .story-section::before,
         html[data-experience="hifi"] .builder-wrap::before,
         html[data-experience="hifi"] #contato::after {
-            content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+            content: ""; position: absolute; top: 0; bottom: 0; left: -12vmax; right: -12vmax; z-index: -1; pointer-events: none; will-change: transform;
             background-image:
                 radial-gradient(circle, rgba(229, 143, 132, .13), transparent 50%),
                 radial-gradient(circle, rgba(109, 47, 87, .32), transparent 55%),
                 radial-gradient(circle, rgba(241, 214, 164, .06), transparent 40%);
             background-size: 110vmax 110vmax, 90vmax 90vmax, 140vmax 140vmax;
-            animation: bg-drift 70s linear infinite;
+            animation: bg-drift 40s ease-in-out infinite alternate;
             -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22vh, #000 calc(100% - 22vh), transparent 100%);
             mask-image: linear-gradient(180deg, transparent 0, #000 22vh, #000 calc(100% - 22vh), transparent 100%);
         }
@@ -1813,6 +1815,8 @@
             animation: pill-flow-ghost 6s linear infinite;
         }
         .pill.ghost::after { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .14), transparent); }
+        /* No celular o degradê dos botões fica parado (só o brilho passa), para a rolagem não engasgar */
+        @media (max-width: 767px) { .pill, .pill.ghost { animation: none; } }
         .pill:disabled, .pill:disabled::after { animation-play-state: paused; }
         /* Movimento desligado: cores paradas */
         html[data-experience="lofi"] .pill { animation: none; }
@@ -2005,13 +2009,14 @@
         <!-- CINEMA: o grupo ao vivo, em vídeo (só com o movimento ligado) -->
         <section class="cinema" id="cinema" aria-label="O grupo ao vivo">
             <div class="cinema-stage">
-                <div class="cinema-bg b1" style="background-image: url('video/grupo-ao-vivo.jpg')" aria-hidden="true"></div>
-                <div class="cinema-bg b2" style="background-image: url('video/vozes.jpg')" aria-hidden="true"></div>
-                <div class="cinema-bg b3" style="background-image: url('video/teclado.jpg')" aria-hidden="true"></div>
+                <div class="cinema-bg b1" style="background-image: url('video/grupo-ao-vivo-fundo.jpg')" aria-hidden="true"></div>
+                <div class="cinema-bg b2" style="background-image: url('video/vozes-fundo.jpg')" aria-hidden="true"></div>
+                <div class="cinema-bg b3" style="background-image: url('video/teclado-fundo.jpg')" aria-hidden="true"></div>
                 <div class="cinema-frame">
                     <video class="cv cv-1" data-src="video/grupo-ao-vivo.mp4" poster="video/grupo-ao-vivo.jpg" muted loop playsinline preload="none" aria-label="O grupo cantando em uma cerimônia"></video>
                     <video class="cv cv-2" data-src="video/vozes.mp4" poster="video/vozes.jpg" muted loop playsinline preload="none" aria-label="Cantores do grupo durante a cerimônia"></video>
                     <video class="cv cv-3" data-src="video/teclado.mp4" poster="video/teclado.jpg" muted loop playsinline preload="none" aria-label="Tecladista do grupo tocando ao vivo"></video>
+                    <div class="cinema-dim" aria-hidden="true"></div>
                 </div>
                 <div class="cinema-copy">
                     <p class="cc cc-1"><span class="eyebrow">Harmonia do Altar</span><strong>A trilha do <em>seu grande dia</em></strong></p>
@@ -4330,7 +4335,7 @@
             });
             // 1) O primeiro vídeo se abre de dentro para fora, a partir de um arco como o da logo
             tl.fromTo('.cinema-frame', { clipPath: 'inset(34% 26% 22% 26% round 999px 999px 24px 24px)' },
-                { clipPath: narrow ? 'inset(0% 0% 0% 0% round 0px 0px 0px 0px)' : 'inset(0% 0% 0% 0% round 28px 28px 28px 28px)', duration: 0.3 }, 0)
+                { clipPath: narrow ? 'inset(0% 0% 0% 0% round 22px 22px 22px 22px)' : 'inset(0% 0% 0% 0% round 28px 28px 28px 28px)', duration: 0.3 }, 0)
               .fromTo('.cv-1', { scale: 1.35 }, { scale: 1, duration: 0.3 }, 0)
               .fromTo('.cc-1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.05 }, 0.18)
             // 2) O segundo vídeo entra pela direita e dá continuidade
@@ -4348,7 +4353,7 @@
               .fromTo('.cc-3', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.05 }, 0.66)
             // 4) Os cards chegam pela direita, um depois do outro
               .to('.cc-3', { opacity: 0, duration: 0.05 }, 0.78)
-              .to('.cinema-frame', { filter: 'brightness(.55)', duration: 0.1 }, 0.78)
+              .to('.cinema-dim', { opacity: 0.45, duration: 0.1 }, 0.78)
               .to('.ccard', { x: 0, duration: 0.1, stagger: 0.05, ease: 'power2.out' }, 0.8);
             if (!narrow) tl.to('.cinema-frame', { xPercent: -45, duration: 0.15 }, 0.78);
         }
