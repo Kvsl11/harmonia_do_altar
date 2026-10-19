@@ -693,7 +693,7 @@
         #navbar > * { pointer-events: auto; }
         #navbar.with-strip { top: 1.85rem; }
         #navbar.navbar-scrolled { top: 0; background: rgba(17, 13, 28, .55); backdrop-filter: blur(14px); padding-block: .7rem; }
-        @media (max-width: 767px) { #navbar.navbar-scrolled { background: rgba(17, 13, 28, .92); backdrop-filter: none; } }
+        @media (max-width: 767px) { #navbar.navbar-scrolled { background: var(--night); backdrop-filter: none; } }
         .brand-mark { display: flex; align-items: center; gap: .6rem; color: #fff; }
         .brand-mark img { height: 2.4rem; width: auto; }
         .brand-mark span { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; }
@@ -1678,6 +1678,11 @@
         .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2, .8, .2, 1); }
         .gallery figure:hover img { transform: scale(1.05); }
         .gallery figure.featured { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+        /* Barra de story embaixo da galeria (só no celular): um traço por foto, que enche conforme as fotos passam */
+        .story-bars { display: none; gap: 6px; margin-top: 1rem; }
+        .story-bars i { flex: 1; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .18); overflow: hidden; }
+        .story-bars i::after { content: ""; display: block; height: 100%; width: 100%; transform-origin: left; transform: scaleX(var(--fill, 0));
+            background: linear-gradient(90deg, var(--champagne), var(--rose)); }
         .gallery figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2.5rem 1rem 1rem; font-weight: 600; font-size: .9rem; color: #fff; background: linear-gradient(180deg, transparent, rgba(17, 13, 28, .88)); }
         .insta-mention { margin-top: 1.6rem; text-align: center; color: var(--muted); font-size: .88rem; }
         .insta-mention a { color: var(--champagne); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(241, 214, 164, .35); }
@@ -1697,6 +1702,10 @@
             .gallery { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 72%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: .5rem; overscroll-behavior-x: contain; }
             .gallery figure { scroll-snap-align: start; }
             .gallery figure.featured { grid-column: auto; grid-row: auto; aspect-ratio: 3 / 4; }
+            .story-bars { display: flex; }
+            .gallery { scrollbar-width: none; }
+            .gallery::-webkit-scrollbar { display: none; }
+            html[data-experience="hifi"] .gallery { overflow: visible; scroll-snap-type: none; }
         }
         @media (max-width: 520px) {
             .steps { grid-template-columns: 1fr; }
@@ -1706,19 +1715,20 @@
            O palco fica preso na tela enquanto a página rola: o vídeo se abre de dentro para fora,
            emenda nos próximos e os cards entram pela direita. A rolagem continua sendo a normal. */
         .cinema { display: none; }
-        html[data-experience="hifi"] .cinema { display: block; position: relative; height: 340vh; background: var(--night); }
-        .cinema-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+        html[data-experience="hifi"] .cinema { display: block; position: relative; height: 440vh; background: var(--night); }
+        .cinema-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; isolation: isolate; background: var(--night); }
+        /* A foto da cena entra só como um tom suave, que some nas bordas: o fundo segue o mesmo degradê do resto do site */
+        .cinema-bgs { position: absolute; inset: 0; opacity: .3;
+            -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%); }
         .cinema-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; will-change: opacity; }
         .cinema-bg.b1 { opacity: 1; }
         .cinema-stage::after { content: ''; position: absolute; inset: 0; pointer-events: none;
             background: radial-gradient(ellipse at center, transparent 40%, rgba(17, 13, 28, .85) 100%); }
-        .cinema-frame { position: relative; z-index: 1; height: min(88vh, 88svh); aspect-ratio: 9 / 16; border-radius: 28px; overflow: hidden;
-            clip-path: inset(34% 26% 22% 26% round 999px 999px 24px 24px); background: #000;
+        .cinema-frame { position: relative; z-index: 1; height: min(88vh, 88svh); aspect-ratio: 9 / 16; border-radius: 28px; overflow: hidden; background: #000;
             box-shadow: 0 60px 120px -40px rgba(0, 0, 0, .9); }
         .cinema-frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
         .cinema-dim { position: absolute; inset: 0; z-index: 1; background: #000; opacity: 0; pointer-events: none; }
-        .cinema-frame .cv-2 { clip-path: inset(0 0 0 100%); }
-        .cinema-frame .cv-3 { clip-path: inset(50% 50% 50% 50% round 999px); }
         .cinema-frame::after { content: ''; position: absolute; inset: 0; pointer-events: none;
             background: linear-gradient(180deg, rgba(17, 13, 28, .1) 40%, rgba(17, 13, 28, .85) 100%); }
         .cinema-copy { position: absolute; z-index: 2; left: 0; right: 0; bottom: clamp(2.5rem, 9vh, 5rem); text-align: center; pointer-events: none; padding: 0 1.25rem; }
@@ -1760,6 +1770,7 @@
         html[data-experience="hifi"] .plans-section::before,
         html[data-experience="hifi"] .story-section::before,
         html[data-experience="hifi"] .builder-wrap::before,
+        html[data-experience="hifi"] .cinema-stage::before,
         html[data-experience="hifi"] #contato::after {
             content: ""; position: absolute; top: 0; bottom: 0; left: -12vmax; right: -12vmax; z-index: -1; pointer-events: none; will-change: transform;
             background-image:
@@ -1781,6 +1792,7 @@
             html[data-experience="hifi"] .plans-section::before,
             html[data-experience="hifi"] .story-section::before,
             html[data-experience="hifi"] .builder-wrap::before,
+            html[data-experience="hifi"] .cinema-stage::before,
             html[data-experience="hifi"] #contato::after,
             html[data-experience="hifi"] #contato::before { animation: none; }
         }
@@ -2012,13 +2024,13 @@
         <!-- CINEMA: o grupo ao vivo, em vídeo (só com o movimento ligado) -->
         <section class="cinema" id="cinema" aria-label="O grupo ao vivo">
             <div class="cinema-stage">
-                <div class="cinema-bg b1" style="background-image: url('video/grupo-ao-vivo-fundo.jpg')" aria-hidden="true"></div>
-                <div class="cinema-bg b2" style="background-image: url('video/vozes-fundo.jpg')" aria-hidden="true"></div>
-                <div class="cinema-bg b3" style="background-image: url('video/teclado-fundo.jpg')" aria-hidden="true"></div>
+                <div class="cinema-bgs" aria-hidden="true">
+                    <div class="cinema-bg b1" style="background-image: url('video/grupo-ao-vivo-fundo.jpg')"></div>
+                    <div class="cinema-bg b2" style="background-image: url('video/vozes-fundo.jpg')"></div>
+                    <div class="cinema-bg b3" style="background-image: url('video/teclado-fundo.jpg')"></div>
+                </div>
                 <div class="cinema-frame">
-                    <video class="cv cv-1" data-src="video/grupo-ao-vivo.mp4" poster="video/grupo-ao-vivo.jpg" muted loop playsinline preload="none" aria-label="O grupo cantando em uma cerimônia"></video>
-                    <video class="cv cv-2" data-src="video/vozes.mp4" poster="video/vozes.jpg" muted loop playsinline preload="none" aria-label="Cantores do grupo durante a cerimônia"></video>
-                    <video class="cv cv-3" data-src="video/teclado.mp4" poster="video/teclado.jpg" muted loop playsinline preload="none" aria-label="Tecladista do grupo tocando ao vivo"></video>
+                    <video class="cv" data-src="video/cena.mp4" poster="video/cena.jpg" muted playsinline preload="none" aria-label="O grupo cantando e tocando ao vivo em cerimônias"></video>
                     <div class="cinema-dim" aria-hidden="true"></div>
                 </div>
                 <div class="cinema-copy">
@@ -2068,6 +2080,7 @@
                     <figure><img src="img/cantor-louvor.jpg" alt="Cantor do grupo durante o louvor na igreja" loading="lazy" decoding="async"><figcaption>Louvor na cerimônia</figcaption></figure>
                     <figure><img src="img/grupo-bastidores.jpg" alt="Integrantes do grupo nos bastidores, prontos para a cerimônia" loading="lazy" decoding="async"><figcaption>Prontos para o grande dia</figcaption></figure>
                 </div>
+                <div class="story-bars" aria-hidden="true"></div>
                 <p class="insta-mention" data-reveal>Mais momentos no Instagram <a href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer">@harmoniadoaltar</a></p>
             </div>
         </section>
@@ -4307,74 +4320,122 @@
         // ---------- Entradas suaves ao rolar (somente no modo completo) ----------
         // A página rola como um feed: nenhuma cena prende a rolagem nem exige arrastar para liberar o conteúdo.
         function buildScrollScenes() {
-            $$('[data-reveal]').forEach((el) => {
-                gsap.from(el, {
-                    x: 70, opacity: 0, duration: 0.9, ease: 'power3.out',
-                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
-                });
-            });
+            $$('[data-reveal]').forEach((el) => revealOnView(el, () => [el], { x: 70, opacity: 0 }, { x: 0, opacity: 1, duration: 0.9 }));
         }
 
-        // ---------- Cena de cinema: vídeos que se abrem, emendam e cards que entram pela direita ----------
+        // ---------- Cena de cinema: o vídeo anda junto com a rolagem (para a frente e para trás) ----------
+        // Como no site do GTA VI: o vídeo não toca sozinho; cada pedaço da rolagem corresponde a um instante dele.
+        // O arquivo é codificado com quadros-chave a cada 4 quadros, para pular para qualquer ponto sem travar.
         const cinema = $('#cinema');
-        const cinemaVideos = cinema ? $$('video', cinema) : [];
-        function playOnly(index) {
-            cinemaVideos.forEach((v, i) => {
-                if (i === index) {
-                    if (!v.src && v.dataset.src) v.src = v.dataset.src;
-                    if (v.paused) v.play().catch(() => {});
-                } else if (!v.paused) v.pause();
-            });
+        const cinemaVideo = cinema ? $('video', cinema) : null;
+        const VIDEO_SHARE = 0.84; // parte da rolagem da cena usada pelo vídeo; o resto é para os cards
+        const scrub = { t: 0 };
+        function primeCinemaVideo() {
+            const v = cinemaVideo;
+            if (!v || v.src) return;
+            v.src = v.dataset.src;
+            v.preload = 'auto';
+            v.load();
+            // iPhone: tocar e pausar uma vez libera o vídeo para mostrar o quadro de cada posição
+            const play = v.play();
+            if (play) play.then(() => v.pause()).catch(() => {});
         }
+        function scrubVideo() {
+            const v = cinemaVideo;
+            if (!v || !v.duration || v.readyState < 1 || v.seeking) return;
+            const time = Math.min(v.duration - 0.05, scrub.t * v.duration);
+            if (Math.abs(v.currentTime - time) > 0.02) v.currentTime = time;
+        }
+        function stopScrub() { gsap.ticker.remove(scrubVideo); }
         function buildCinema() {
             if (!cinema) return;
             const narrow = window.matchMedia('(max-width: 767px)').matches;
+            // O vídeo começa a carregar um pouco antes da cena chegar na tela
+            ScrollTrigger.create({ trigger: cinema, start: 'top 250%', onEnter: primeCinemaVideo });
             const tl = gsap.timeline({
                 defaults: { ease: 'none' },
                 scrollTrigger: {
-                    trigger: cinema, start: 'top top', end: 'bottom bottom', scrub: 0.6,
-                    onUpdate: (self) => playOnly(self.progress < 0.4 ? 0 : self.progress < 0.62 ? 1 : 2),
-                    onLeave: () => playOnly(-1), onLeaveBack: () => playOnly(-1),
-                    onEnter: () => playOnly(0), onEnterBack: () => playOnly(2)
+                    trigger: cinema, start: 'top top', end: 'bottom bottom', scrub: 0.5,
+                    onToggle: (self) => { if (self.isActive) { primeCinemaVideo(); gsap.ticker.add(scrubVideo); } else stopScrub(); }
                 }
             });
-            // 1) O primeiro vídeo se abre de dentro para fora, a partir de um arco como o da logo
-            tl.fromTo('.cinema-frame', { clipPath: 'inset(34% 26% 22% 26% round 999px 999px 24px 24px)' },
-                { clipPath: narrow ? 'inset(0% 0% 0% 0% round 22px 22px 22px 22px)' : 'inset(0% 0% 0% 0% round 28px 28px 28px 28px)', duration: 0.3 }, 0)
-              .fromTo('.cv-1', { scale: 1.35 }, { scale: 1, duration: 0.3 }, 0)
-              .fromTo('.cc-1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.05 }, 0.18)
-            // 2) O segundo vídeo entra pela direita e dá continuidade
-              .to('.cc-1', { opacity: 0, y: -40, duration: 0.06 }, 0.36)
-              .to('.cv-2', { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.12 }, 0.38)
-              .fromTo('.cv-2', { scale: 1.2, xPercent: 12 }, { scale: 1, xPercent: 0, duration: 0.14 }, 0.38)
-              .to('.cv-1', { xPercent: -18, duration: 0.14 }, 0.38)
-              .to('.cinema-bg.b2', { opacity: 1, duration: 0.12 }, 0.38)
-              .fromTo('.cc-2', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.05 }, 0.44)
-            // 3) O terceiro abre do centro para fora
-              .to('.cc-2', { opacity: 0, y: -40, duration: 0.06 }, 0.58)
-              .to('.cv-3', { clipPath: 'inset(0% 0% 0% 0% round 0px)', duration: 0.12 }, 0.6)
-              .fromTo('.cv-3', { scale: 1.4 }, { scale: 1, duration: 0.14 }, 0.6)
-              .to('.cinema-bg.b3', { opacity: 1, duration: 0.12 }, 0.6)
-              .fromTo('.cc-3', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.05 }, 0.66)
-            // 4) Os cards chegam pela direita, um depois do outro
-              .to('.cc-3', { opacity: 0, duration: 0.05 }, 0.78)
-              .to('.cinema-dim', { opacity: 0.45, duration: 0.1 }, 0.78)
-              .to('.ccard', { x: 0, duration: 0.1, stagger: 0.05, ease: 'power2.out' }, 0.8);
-            if (!narrow) tl.to('.cinema-frame', { xPercent: -45, duration: 0.15 }, 0.78);
+            // Cenas do vídeo: grupo (0 a 6,7 s), vozes (6,7 a 13,1 s) e teclado (13,1 a 18,8 s)
+            const at = (seconds) => (seconds / 18.8) * VIDEO_SHARE;
+            tl.to(scrub, { t: 1, duration: VIDEO_SHARE }, 0)
+              .fromTo('.cc-1', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.04 }, 0.02)
+              .to('.cc-1', { opacity: 0, y: -30, duration: 0.04 }, at(5.6))
+              .to('.cinema-bg.b2', { opacity: 1, duration: 0.04 }, at(6.4))
+              .fromTo('.cc-2', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.04 }, at(7.4))
+              .to('.cc-2', { opacity: 0, y: -30, duration: 0.04 }, at(12))
+              .to('.cinema-bg.b3', { opacity: 1, duration: 0.04 }, at(12.8))
+              .fromTo('.cc-3', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.04 }, at(13.8))
+              .to('.cc-3', { opacity: 0, duration: 0.04 }, at(17.6))
+            // No fim do vídeo, os cards chegam pela direita, um depois do outro
+              .to('.cinema-dim', { opacity: 0.45, duration: 0.06 }, VIDEO_SHARE)
+              .to('.ccard', { x: 0, duration: 0.08, stagger: 0.03, ease: 'power2.out' }, VIDEO_SHARE);
+            if (!narrow) tl.to('.cinema-frame', { xPercent: -45, duration: 0.1 }, VIDEO_SHARE);
         }
 
-        // Cards que chegam pela direita, um depois do outro, quando o bloco aparece na tela.
-        // Os itens só são buscados nessa hora (os cards de instrumentos são montados depois) e, até lá, ficam visíveis.
-        // A transição de CSS do hover brigaria com a entrada; volta ao normal quando a entrada termina.
+        // ---------- Galeria no celular: barra de story e fotos que passam para o lado com a rolagem ----------
+        const gallery = $('.gallery');
+        const storyBars = $('.story-bars');
+        if (gallery && storyBars) storyBars.innerHTML = $$('figure', gallery).map(() => '<i></i>').join('');
+        function fillStoryBars(progress) {
+            if (!storyBars) return;
+            const bars = $$('i', storyBars);
+            bars.forEach((bar, i) => bar.style.setProperty('--fill', String(Math.min(1, Math.max(0, progress * bars.length - i)))));
+        }
+        // Sem movimento a galeria é um carrossel de arrastar; a barra acompanha o dedo
+        if (gallery) gallery.addEventListener('scroll', () => {
+            const max = gallery.scrollWidth - gallery.clientWidth;
+            if (max > 0) fillStoryBars(gallery.scrollLeft / max);
+        }, { passive: true });
+        function buildGalleryPin() {
+            if (!gallery || !window.matchMedia('(max-width: 767px)').matches) return false;
+            const section = $('#galeria');
+            const distance = () => Math.max(0, gallery.scrollWidth - gallery.clientWidth);
+            gsap.to(gallery, {
+                x: () => -distance(), ease: 'none',
+                scrollTrigger: {
+                    trigger: section, pin: true, scrub: 0.5, invalidateOnRefresh: true,
+                    start: () => (section.offsetHeight > window.innerHeight ? 'top top' : 'center center'),
+                    end: () => '+=' + Math.round(distance() * 1.6),
+                    onUpdate: (self) => fillStoryBars(self.progress)
+                }
+            });
+            return true;
+        }
+
+        // Entrada que se repete nos dois sentidos: o bloco entra quando aparece na tela (descendo ou subindo)
+        // e volta ao estado escondido quando sai dela, pronto para entrar de novo. Os itens só são buscados na hora
+        // (os cards de instrumentos são montados depois) e, até a primeira entrada, ficam visíveis.
+        // A transição de CSS do hover brigaria com a entrada; ela volta quando a entrada termina.
+        const REVEAL_PROPS = 'transform,opacity,transition,clipPath';
+        function revealOnView(trigger, getItems, hidden, shown) {
+            const el = typeof trigger === 'string' ? $(trigger) : trigger;
+            if (!el) return;
+            let tween = null;
+            const show = () => {
+                const items = getItems();
+                if (!items.length || !ctx) return;
+                if (tween) tween.kill();
+                ctx.add(() => { tween = gsap.fromTo(items, { ...hidden, transition: 'none' },
+                    { ease: 'power3.out', ...shown, clearProps: REVEAL_PROPS }); });
+            };
+            const hide = () => {
+                const items = getItems();
+                if (!items.length) return;
+                if (tween) tween.kill();
+                gsap.set(items, { ...hidden, transition: 'none' });
+            };
+            ScrollTrigger.create({ trigger: el, start: 'top bottom', end: 'bottom top',
+                onEnter: show, onEnterBack: show, onLeave: hide, onLeaveBack: hide });
+        }
+        // Cards que chegam pela direita, um depois do outro
         function enterFromRight(items, trigger) {
-            if (!$(trigger)) return;
-            ScrollTrigger.create({ trigger, start: 'top 98%', once: true, onEnter: () => {
-                const els = $$(items);
-                if (!els.length || !ctx) return;
-                ctx.add(() => gsap.fromTo(els,
-                    { x: () => Math.min(window.innerWidth * 0.6, 420), rotate: 4, opacity: 0, transition: 'none' },
-                    { x: 0, rotate: 0, opacity: 1, duration: 1, stagger: 0.1, ease: 'power3.out', clearProps: 'transform,opacity,transition' }));
-            } });
+            revealOnView(trigger, () => $$(items),
+                { x: () => Math.min(window.innerWidth * 0.6, 420), rotate: 4, opacity: 0 },
+                { x: 0, rotate: 0, opacity: 1, duration: 1, stagger: 0.1 });
         }
 
         // ---------- Simulador: a janela se abre de dentro para fora e cada etapa entra campo a campo ----------
@@ -4406,17 +4467,18 @@
                 gsap.fromTo($('img', photo), { scale: 1.35 }, { scale: 1, ease: 'none',
                     scrollTrigger: { trigger: photo, start: 'top 95%', end: 'bottom 40%', scrub: 0.6 } });
             }
-            [['.gallery figure', '.gallery'], ['.steps > li', '.steps'], ['.plans-grid > .plan-slide', '.plans-grid'],
+            const pinned = buildGalleryPin();
+            [...(pinned ? [] : [['.gallery figure', '.gallery']]), ['.steps > li', '.steps'], ['.plans-grid > .plan-slide', '.plans-grid'],
              ['#custom-plan-builder > .eyebrow, #custom-plan-builder > h2, #custom-plan-builder > p', '#custom-plan-builder'],
              ['.base-row', '.base-row'], ['#band-instrument-options > *', '#band-instrument-options'],
              ['#guest-instrument-options > *', '#guest-instrument-options'], ['.socials a', '.socials']
             ].forEach(([items, trigger]) => enterFromRight(items, trigger));
             // Total da formação e botão de orçamento: abrem de dentro para fora
-            ['#custom-total', '#simulate-btn-custom'].forEach((sel) => {
-                if (!$(sel)) return;
-                ScrollTrigger.create({ trigger: sel, start: 'top 98%', once: true, onEnter: () => ctx && ctx.add(() =>
-                    gsap.fromTo(sel, { clipPath: 'inset(0% 50% 0% 50% round 999px)', opacity: 0 }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', opacity: 1, duration: 0.9, ease: 'power3.inOut', clearProps: 'clipPath,opacity' })) });
-            });
+            ['#custom-total', '#simulate-btn-custom'].forEach((sel) => revealOnView(sel, () => $$(sel),
+                { clipPath: 'inset(0% 50% 0% 50% round 999px)', opacity: 0 },
+                { clipPath: 'inset(0% 0% 0% 0% round 0px)', opacity: 1, duration: 0.9, ease: 'power3.inOut' }));
+            // Ao voltar para o topo, as fotos e o título fazem a entrada de novo
+            if ($('#topo')) ScrollTrigger.create({ trigger: '#topo', start: 'top top', end: 'bottom top', onEnterBack: () => heroEntrance(0) });
         }
 
         function enableMotion() {
@@ -4427,7 +4489,9 @@
         }
         function disableMotion() {
             if (ctx) { ctx.revert(); ctx = null; }
-            playOnly(-1);
+            stopScrub();
+            if (gallery) gsap.set(gallery, { clearProps: 'transform' });
+            fillStoryBars(0);
             stopLenis();
             ScrollTrigger.refresh();
         }
@@ -4453,12 +4517,18 @@
             sw.addEventListener('click', () => setExperience(experience === 'hifi' ? 'lofi' : 'hifi'));
         });
         updateToggles();
+        // Ao girar o celular ou redimensionar entre celular e computador, as cenas são montadas de novo
+        window.matchMedia('(max-width: 767px)').addEventListener('change', () => {
+            if (experience === 'hifi' && ctx) { disableMotion(); enableMotion(); }
+        });
 
         // ---------- Entrada do hero (sem intro ou depois dela) ----------
         function heroEntrance(delay = 0) {
             if (experience !== 'hifi') return;
-            gsap.from('#keyart', { scale: 0.86, opacity: 0, duration: 1.4, ease: 'power3.out', delay });
-            gsap.from(['#hero-title > *', '#hero-meta > *'], { y: 30, opacity: 0, duration: 1, stagger: 0.08, ease: 'power3.out', delay: delay + 0.35 });
+            // Valores de início e fim explícitos: a entrada pode se repetir (ao voltar ao topo) sem herdar um estado no meio
+            gsap.fromTo('#keyart', { scale: 0.86, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.4, ease: 'power3.out', delay, overwrite: true, clearProps: 'transform,opacity' });
+            gsap.fromTo(['#hero-title > *', '#hero-meta > *'], { y: 30, opacity: 0, transition: 'none' },
+                { y: 0, opacity: 1, duration: 1, stagger: 0.08, ease: 'power3.out', delay: delay + 0.35, overwrite: true, clearProps: 'transform,opacity,transition' });
             $$('[data-kenburns]').forEach((img, i) => gsap.fromTo(img, { scale: 1.12 }, { scale: 1, duration: 2.2 + i * 0.15, ease: 'power2.out', delay }));
         }
 
