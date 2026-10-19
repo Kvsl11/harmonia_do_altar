@@ -1698,6 +1698,46 @@
             .steps { grid-template-columns: 1fr; }
             .plans-grid .plan-slide .ps-img { height: 180px; }
         }
+        /* --- Cena de cinema (só com o movimento ligado) ---
+           O palco fica preso na tela enquanto a página rola: o vídeo se abre de dentro para fora,
+           emenda nos próximos e os cards entram pela direita. A rolagem continua sendo a normal. */
+        .cinema { display: none; }
+        html[data-experience="hifi"] .cinema { display: block; position: relative; height: 340vh; background: var(--night); }
+        .cinema-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+        .cinema-bg { position: absolute; inset: -10%; background-size: cover; background-position: center; filter: blur(48px) brightness(.38) saturate(1.2); opacity: 0; }
+        .cinema-bg.b1 { opacity: 1; }
+        .cinema-stage::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(17, 13, 28, .85) 100%); }
+        .cinema-frame { position: relative; z-index: 1; height: min(88vh, 88svh); aspect-ratio: 9 / 16; border-radius: 28px; overflow: hidden;
+            clip-path: inset(34% 26% 22% 26% round 999px 999px 24px 24px); background: #000;
+            box-shadow: 0 60px 120px -40px rgba(0, 0, 0, .9); }
+        .cinema-frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .cinema-frame .cv-2 { clip-path: inset(0 0 0 100%); }
+        .cinema-frame .cv-3 { clip-path: inset(50% 50% 50% 50% round 999px); }
+        .cinema-frame::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(180deg, rgba(17, 13, 28, .1) 40%, rgba(17, 13, 28, .85) 100%); }
+        .cinema-copy { position: absolute; z-index: 2; left: 0; right: 0; bottom: clamp(2.5rem, 9vh, 5rem); text-align: center; pointer-events: none; padding: 0 1.25rem; }
+        .cc { position: absolute; left: 0; right: 0; bottom: 0; opacity: 0; margin: 0; }
+        .cc strong { display: block; font-family: var(--font-display); text-transform: uppercase; font-weight: 600; line-height: .95;
+            font-size: clamp(2.6rem, 7vw, 5.6rem); color: var(--ink); text-shadow: 0 10px 40px rgba(0, 0, 0, .6); margin-top: .5rem; }
+        .cc strong em { font-style: normal; background: linear-gradient(90deg, var(--champagne), var(--rose)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .cinema-cards { position: absolute; z-index: 3; right: clamp(1rem, 5vw, 4rem); top: 50%; transform: translateY(-50%);
+            display: grid; gap: 1rem; width: min(380px, calc(100vw - 2rem)); }
+        .ccard { padding: 1.2rem 1.3rem; border-radius: 20px; background: rgba(23, 17, 38, .72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(241, 214, 164, .18); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .9); transform: translateX(120vw); }
+        .ccard i { color: var(--champagne); font-size: 1.15rem; }
+        .ccard h3 { font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; margin: .5rem 0 .25rem; color: var(--ink); }
+        .ccard p { color: var(--muted); font-size: .92rem; line-height: 1.45; }
+        .ccard .pill { margin-top: .8rem; display: inline-flex; }
+        @media (max-width: 767px) {
+            .cinema-frame { height: 100%; width: 100%; aspect-ratio: auto; border-radius: 0; }
+            .cinema-cards { left: 1rem; right: 1rem; width: auto; top: auto; bottom: 1.25rem; transform: none; gap: .6rem; }
+            .ccard { padding: .9rem 1rem; }
+            .ccard h3 { font-size: 1.1rem; margin-top: .3rem; }
+            .ccard p { font-size: .85rem; }
+            .cinema-copy { bottom: 14vh; bottom: 14svh; }
+        }
+
         /* --- Fundo em movimento (só no modo com movimento): as mesmas cores do tema (rosé, vinho e champanhe)
                derivam devagar sobre o fundo noturno. Os blocos se repetem em mosaico, então o deslocamento de um
                bloco inteiro fecha o ciclo sem emenda; o topo e a base somem no fundo para manter as transições. --- */
@@ -1962,6 +2002,30 @@
     </header>
 
     <main>
+        <!-- CINEMA: o grupo ao vivo, em vídeo (só com o movimento ligado) -->
+        <section class="cinema" id="cinema" aria-label="O grupo ao vivo">
+            <div class="cinema-stage">
+                <div class="cinema-bg b1" style="background-image: url('video/grupo-ao-vivo.jpg')" aria-hidden="true"></div>
+                <div class="cinema-bg b2" style="background-image: url('video/vozes.jpg')" aria-hidden="true"></div>
+                <div class="cinema-bg b3" style="background-image: url('video/teclado.jpg')" aria-hidden="true"></div>
+                <div class="cinema-frame">
+                    <video class="cv cv-1" data-src="video/grupo-ao-vivo.mp4" poster="video/grupo-ao-vivo.jpg" muted loop playsinline preload="none" aria-label="O grupo cantando em uma cerimônia"></video>
+                    <video class="cv cv-2" data-src="video/vozes.mp4" poster="video/vozes.jpg" muted loop playsinline preload="none" aria-label="Cantores do grupo durante a cerimônia"></video>
+                    <video class="cv cv-3" data-src="video/teclado.mp4" poster="video/teclado.jpg" muted loop playsinline preload="none" aria-label="Tecladista do grupo tocando ao vivo"></video>
+                </div>
+                <div class="cinema-copy">
+                    <p class="cc cc-1"><span class="eyebrow">Harmonia do Altar</span><strong>A trilha do <em>seu grande dia</em></strong></p>
+                    <p class="cc cc-2"><span class="eyebrow">Vozes</span><strong>Que fazem <em>emocionar</em></strong></p>
+                    <p class="cc cc-3"><span class="eyebrow">Instrumentos</span><strong>Cada nota <em>no tempo certo</em></strong></p>
+                </div>
+                <div class="cinema-cards">
+                    <article class="ccard"><i class="fas fa-music" aria-hidden="true"></i><h3>Repertório do rito</h3><p>Até 12 músicas da cerimônia, já contando uma entrada especial.</p></article>
+                    <article class="ccard"><i class="fas fa-users" aria-hidden="true"></i><h3>Formação sob medida</h3><p>Escolha o plano com as vozes e os instrumentos que combinam com vocês.</p></article>
+                    <article class="ccard"><i class="fab fa-whatsapp" aria-hidden="true"></i><h3>Orçamento em minutos</h3><p>Preencha os dados do casamento e receba o orçamento pelo WhatsApp.</p><a class="pill" href="#planos" data-scroll-to>Ver planos</a></article>
+                </div>
+            </div>
+        </section>
+
         <!-- QUEM SOMOS -->
         <section id="quem-somos" class="feed-section">
             <div class="feed-wrap about-grid">
@@ -1990,7 +2054,7 @@
                     <h2 class="display">Ao vivo, no altar</h2>
                     <p>Momentos reais do grupo nas cerimônias.</p>
                 </div>
-                <div class="gallery" data-reveal>
+                <div class="gallery">
                     <figure><img src="img/dueto-vozes.jpg" alt="Dois cantores do grupo em dueto durante a cerimônia" loading="lazy" decoding="async"><figcaption>Vozes em dueto</figcaption></figure>
                     <figure><img src="img/voz-e-teclado.jpg" alt="Solista e tecladista durante a cerimônia" loading="lazy" decoding="async"><figcaption>Voz e teclado ao vivo</figcaption></figure>
                     <figure><img src="img/cantor-louvor.jpg" alt="Cantor do grupo durante o louvor na igreja" loading="lazy" decoding="async"><figcaption>Louvor na cerimônia</figcaption></figure>
@@ -2007,7 +2071,7 @@
                     <span class="eyebrow">Como funciona</span>
                     <h2 class="display">Seu orçamento em poucos passos</h2>
                 </div>
-                <ol class="steps" data-reveal>
+                <ol class="steps">
                     <li><span class="step-n">1</span><b>Escolha a formação</b><p>Um dos planos prontos ou o seu plano personalizado.</p></li>
                     <li><span class="step-n">2</span><b>Conte sobre o dia</b><p>Local da cerimônia, data, horário, forma de pagamento e, se quiser, músicas extras.</p></li>
                     <li><span class="step-n">3</span><b>Receba o orçamento</b><p>A equipe responde pelo WhatsApp com os valores e a disponibilidade da data.</p></li>
@@ -4215,7 +4279,7 @@
         }
         function closeMenu() { if (menu && !menu.classList.contains('hidden')) menu.classList.add('hidden'); }
         if (menu) new MutationObserver(syncMenuState).observe(menu, { attributes: true, attributeFilter: ['class'] });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMenu(); closeStory(); } });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMenu(); } });
 
         const navbar = $('#navbar');
         window.addEventListener('scroll', () => {
@@ -4241,14 +4305,79 @@
             });
         }
 
+        // ---------- Cena de cinema: vídeos que se abrem, emendam e cards que entram pela direita ----------
+        const cinema = $('#cinema');
+        const cinemaVideos = cinema ? $$('video', cinema) : [];
+        function playOnly(index) {
+            cinemaVideos.forEach((v, i) => {
+                if (i === index) {
+                    if (!v.src && v.dataset.src) v.src = v.dataset.src;
+                    if (v.paused) v.play().catch(() => {});
+                } else if (!v.paused) v.pause();
+            });
+        }
+        function buildCinema() {
+            if (!cinema) return;
+            const narrow = window.matchMedia('(max-width: 767px)').matches;
+            const tl = gsap.timeline({
+                defaults: { ease: 'none' },
+                scrollTrigger: {
+                    trigger: cinema, start: 'top top', end: 'bottom bottom', scrub: 0.6,
+                    onUpdate: (self) => playOnly(self.progress < 0.4 ? 0 : self.progress < 0.62 ? 1 : 2),
+                    onLeave: () => playOnly(-1), onLeaveBack: () => playOnly(-1),
+                    onEnter: () => playOnly(0), onEnterBack: () => playOnly(2)
+                }
+            });
+            // 1) O primeiro vídeo se abre de dentro para fora, a partir de um arco como o da logo
+            tl.fromTo('.cinema-frame', { clipPath: 'inset(34% 26% 22% 26% round 999px 999px 24px 24px)' },
+                { clipPath: narrow ? 'inset(0% 0% 0% 0% round 0px 0px 0px 0px)' : 'inset(0% 0% 0% 0% round 28px 28px 28px 28px)', duration: 0.3 }, 0)
+              .fromTo('.cv-1', { scale: 1.35 }, { scale: 1, duration: 0.3 }, 0)
+              .fromTo('.cc-1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.05 }, 0.18)
+            // 2) O segundo vídeo entra pela direita e dá continuidade
+              .to('.cc-1', { opacity: 0, y: -40, duration: 0.06 }, 0.36)
+              .to('.cv-2', { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.12 }, 0.38)
+              .fromTo('.cv-2', { scale: 1.2, xPercent: 12 }, { scale: 1, xPercent: 0, duration: 0.14 }, 0.38)
+              .to('.cv-1', { xPercent: -18, duration: 0.14 }, 0.38)
+              .to('.cinema-bg.b2', { opacity: 1, duration: 0.12 }, 0.38)
+              .fromTo('.cc-2', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.05 }, 0.44)
+            // 3) O terceiro abre do centro para fora
+              .to('.cc-2', { opacity: 0, y: -40, duration: 0.06 }, 0.58)
+              .to('.cv-3', { clipPath: 'inset(0% 0% 0% 0% round 0px)', duration: 0.12 }, 0.6)
+              .fromTo('.cv-3', { scale: 1.4 }, { scale: 1, duration: 0.14 }, 0.6)
+              .to('.cinema-bg.b3', { opacity: 1, duration: 0.12 }, 0.6)
+              .fromTo('.cc-3', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.05 }, 0.66)
+            // 4) Os cards chegam pela direita, um depois do outro
+              .to('.cc-3', { opacity: 0, duration: 0.05 }, 0.78)
+              .to('.cinema-frame', { filter: 'brightness(.55)', duration: 0.1 }, 0.78)
+              .to('.ccard', { x: 0, duration: 0.1, stagger: 0.05, ease: 'power2.out' }, 0.8);
+            if (!narrow) tl.to('.cinema-frame', { xPercent: -45, duration: 0.15 }, 0.78);
+        }
+
+        // Fotos que se abrem de dentro para fora e cards que vêm da direita, ao longo do feed
+        function buildFeedMotion() {
+            const photo = $('.about-photo');
+            if (photo) {
+                gsap.fromTo(photo, { clipPath: 'inset(16% 16% 16% 16% round 28px)' }, { clipPath: 'inset(0% 0% 0% 0% round 28px)', ease: 'none',
+                    scrollTrigger: { trigger: photo, start: 'top 95%', end: 'center 55%', scrub: 0.6 } });
+                gsap.fromTo($('img', photo), { scale: 1.35 }, { scale: 1, ease: 'none',
+                    scrollTrigger: { trigger: photo, start: 'top 95%', end: 'bottom 40%', scrub: 0.6 } });
+            }
+            [['.gallery figure', '.gallery'], ['.steps > li', '.steps'], ['.plans-grid > .plan-slide', '.plans-grid']].forEach(([items, trigger]) => {
+                if (!$(trigger)) return;
+                gsap.from(items, { x: () => Math.min(window.innerWidth * 0.6, 420), rotate: 4, opacity: 0, duration: 1, stagger: 0.12, ease: 'power3.out',
+                    scrollTrigger: { trigger, start: 'top 85%', toggleActions: 'play none none none' } });
+            });
+        }
+
         function enableMotion() {
             if (ctx) return;
             startLenis();
-            ctx = gsap.context(buildScrollScenes);
+            ctx = gsap.context(() => { buildScrollScenes(); buildCinema(); buildFeedMotion(); });
             ScrollTrigger.refresh();
         }
         function disableMotion() {
             if (ctx) { ctx.revert(); ctx = null; }
+            playOnly(-1);
             stopLenis();
             ScrollTrigger.refresh();
         }
