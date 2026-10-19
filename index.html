@@ -2454,7 +2454,6 @@
         // Variáveis de Elementos DOM - declaradas globalmente, atribuídas em DOMContentLoaded
         let modalDestinationAddressInput, modalDeslocamentoError, modalDeslocamentoResultsDiv, modalDistanceDisplay, modalCalculatedDeslocamentoDisplay, referenceLocationInput, nextToSummaryBtn, boletoDateWarningModal, warningDueDateSpan, warningCeremonyDateSpan, ceremonyDateInput, ceremonyTimeInput, confirmedAddressDisplay, modalEventDetailsError, paymentMethodRadios, installmentOptionsDiv, installmentsSelect, boletoDueDateOptionsDiv, boletoDueDateSelect, modalBoletoDateError, summaryPlanNameEl, summaryEventDateEl, summaryEventAddressEl, summaryReferenceLocationDisplay, summaryReferenceLocationEl, summaryPaymentMethodEl, summaryInstallmentDetailsDiv, summaryInstallmentsEl, summaryBoletoDueDateDetailsDiv, summaryBoletoDueDateEl, mainSimulationModal, closeMainModalButton, tabButtons, tabContents, simulateBtnCustom, bandOptionsContainer, guestOptionsContainer, boletoNotificationModal, closeBoletoModalButton, okBoletoModalButton, unlockedTabs;
 
-        const CONTRACT_VERSION = 'versão 2.0, out/2026';
         let termsAcceptInput = null;
         const PAYMENT_LABELS = { pix: 'Pix', dinheiro: 'Dinheiro', boleto: 'Boleto', cartao: 'Cartão de crédito' };
 
@@ -2948,7 +2947,7 @@
             if (o.mapsUrl) parts.push(`• *Mapa:* ${o.mapsUrl}`);
             parts.push('', `*PAGAMENTO*`, `• *Forma:* ${o.payment}`, `• *Condição:* ${o.condition}`);
             if (o.boletoDay) parts.push(`• *Vencimento:* ${o.boletoDay}`);
-            parts.push('', `*CONTRATO*`, `• Li e concordo com os termos do contrato de prestação de serviços (${CONTRACT_VERSION}).`);
+            parts.push('', `*CONTRATO*`, `• Li e concordo com os termos do contrato de prestação de serviços.`);
             if (/^https?:/.test(location.protocol)) parts.push(`• *Termos:* ${new URL('contrato.html', location.href).href}`);
             parts.push(
                 line,
@@ -3093,7 +3092,7 @@
                 o.reference ? ['REFERÊNCIA', o.reference] : null,
                 o.distance ? ['DISTÂNCIA', `${o.distance} de Angélica (MS)`] : null,
                 ['PAGAMENTO', `${o.payment} · ${o.condition}${o.boletoDay ? ` · vencimento ${o.boletoDay.toLowerCase()}` : ''}`],
-                o.termsAccepted ? ['CONTRATO', `Termos aceitos em ${new Date().toLocaleDateString('pt-BR')} · ${CONTRACT_VERSION}`] : null
+                o.termsAccepted ? ['CONTRATO', `Termos aceitos em ${new Date().toLocaleDateString('pt-BR')}`] : null
             ].filter(Boolean);
             const cardX = P - 20, cardW = W - (P - 20) * 2, labelW = 230, valueW = cardW - labelW - 64;
             ctx.font = '500 28px Montserrat, sans-serif';
