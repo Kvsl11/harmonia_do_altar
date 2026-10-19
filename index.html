@@ -1656,6 +1656,48 @@
             mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
         }
         .builder-wrap { background: linear-gradient(180deg, var(--night) 0%, #140f22 55%, var(--night) 100%); }
+        /* --- Página em formato de feed: rola de cima até o orçamento, sem prender a rolagem --- */
+        .feed-section { position: relative; padding: clamp(4rem, 9vw, 7rem) 0; background: var(--night); }
+        .feed-wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(1.25rem, 5vw, 2rem); }
+        .feed-head { text-align: center; max-width: 720px; margin: 0 auto 2.5rem; }
+        .feed-head h2 { font-size: clamp(2.2rem, 5.5vw, 4rem); margin-top: .6rem; }
+        .feed-head p { color: var(--muted); margin-top: .8rem; font-size: 1.05rem; }
+        .about-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+        .about-photo { margin: 0; border-radius: 28px; overflow: hidden; aspect-ratio: 4 / 5; box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .9); border: 1px solid rgba(241, 214, 164, .14); }
+        .about-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+        .about-copy h2 { font-size: clamp(2.2rem, 5vw, 3.8rem); margin: .6rem 0 1rem; }
+        .about-copy > p { color: var(--muted); font-size: 1.08rem; line-height: 1.75; }
+        .about-facts { list-style: none; margin: 1.6rem 0 2rem; padding: 0; display: grid; gap: .9rem; }
+        .about-facts li { display: flex; gap: .9rem; align-items: center; color: var(--ink); line-height: 1.5; }
+        .about-facts i { flex: none; width: 2.5rem; height: 2.5rem; border-radius: 999px; display: grid; place-items: center; background: rgba(241, 214, 164, .1); color: var(--champagne); }
+        .about-facts b { color: #fff; }
+        .gallery { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+        .gallery figure { position: relative; margin: 0; border-radius: 22px; overflow: hidden; aspect-ratio: 3 / 4; background: var(--night-2); border: 1px solid rgba(241, 214, 164, .12); }
+        .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2, .8, .2, 1); }
+        .gallery figure:hover img { transform: scale(1.05); }
+        .gallery figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2.5rem 1rem 1rem; font-weight: 600; font-size: .9rem; color: #fff; background: linear-gradient(180deg, transparent, rgba(17, 13, 28, .88)); }
+        .insta-mention { margin-top: 1.6rem; text-align: center; color: var(--muted); font-size: .88rem; }
+        .insta-mention a { color: var(--champagne); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(241, 214, 164, .35); }
+        .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+        .steps li { padding: 1.5rem 1.25rem; border-radius: 22px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .09); }
+        .steps .step-n { width: 2.6rem; height: 2.6rem; border-radius: 999px; display: grid; place-items: center; margin-bottom: 1rem; font: 600 1.1rem var(--font-display); color: #2a1325; background: linear-gradient(135deg, var(--champagne), var(--rose)); }
+        .steps b { display: block; color: #fff; font-size: 1.05rem; margin-bottom: .4rem; }
+        .steps p { color: var(--muted); font-size: .92rem; line-height: 1.55; }
+        .plans-grid { max-width: 1240px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem) clamp(4rem, 8vw, 6rem); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 1.25rem; }
+        .plans-grid .plan-slide { height: auto; flex: none; }
+        .plans-grid .plan-slide .ps-img { height: 210px; }
+        .plans-grid .plan-slide .ps-body { overflow: visible; }
+        @media (max-width: 860px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .about-photo { aspect-ratio: 4 / 3; }
+            .steps { grid-template-columns: 1fr 1fr; }
+            .gallery { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 72%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: .5rem; overscroll-behavior-x: contain; }
+            .gallery figure { scroll-snap-align: start; }
+        }
+        @media (max-width: 520px) {
+            .steps { grid-template-columns: 1fr; }
+            .plans-grid .plan-slide .ps-img { height: 180px; }
+        }
         /* --- Fundo em movimento (só no modo com movimento): as mesmas cores do tema (rosé, vinho e champanhe)
                derivam devagar sobre o fundo noturno. Os blocos se repetem em mosaico, então o deslocamento de um
                bloco inteiro fecha o ciclo sem emenda; o topo e a base somem no fundo para manter as transições. --- */
@@ -1664,12 +1706,12 @@
             0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
             50% { transform: translate(6vw, 4%) scale(1.12); opacity: .7; }
         }
-        html[data-experience="hifi"] .moments,
+        html[data-experience="hifi"] .feed-section,
         html[data-experience="hifi"] .plans-section,
         html[data-experience="hifi"] .story-section,
         html[data-experience="hifi"] .builder-wrap,
         html[data-experience="hifi"] #contato { position: relative; isolation: isolate; }
-        html[data-experience="hifi"] .moments::before,
+        html[data-experience="hifi"] .feed-section::before,
         html[data-experience="hifi"] .plans-section::before,
         html[data-experience="hifi"] .story-section::before,
         html[data-experience="hifi"] .builder-wrap::before,
@@ -1684,17 +1726,13 @@
             -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22vh, #000 calc(100% - 22vh), transparent 100%);
             mask-image: linear-gradient(180deg, transparent 0, #000 22vh, #000 calc(100% - 22vh), transparent 100%);
         }
-        html[data-experience="hifi"] .moments::before {
-            -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent 18vh, #000 40vh, #000 calc(100% - 22vh), transparent 100%);
-            mask-image: linear-gradient(180deg, transparent 0, transparent 18vh, #000 40vh, #000 calc(100% - 22vh), transparent 100%);
-        }
         html[data-experience="hifi"] #contato::after {
             -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22vh);
             mask-image: linear-gradient(180deg, transparent 0, #000 22vh);
         }
         html[data-experience="hifi"] #contato::before { animation: glow-breathe 14s ease-in-out infinite; }
         @media (prefers-reduced-motion: reduce) {
-            html[data-experience="hifi"] .moments::before,
+            html[data-experience="hifi"] .feed-section::before,
             html[data-experience="hifi"] .plans-section::before,
             html[data-experience="hifi"] .story-section::before,
             html[data-experience="hifi"] .builder-wrap::before,
@@ -1778,7 +1816,7 @@
             var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             // Com o movimento ligado, a tela de carregamento sempre aparece; a abertura completa só na 1ª vez da visita
             if (pref === 'lofi' || (!pref && reduce)) h.classList.add('no-intro');
-            else { h.classList.add('js-intro'); if (seen) h.classList.add('intro-seen'); }
+            else h.classList.add('js-intro', 'intro-seen');
         })();
     </script>
 
@@ -1867,11 +1905,11 @@
 
     <!-- Menu em tela cheia -->
     <div id="mobile-menu" class="hidden" role="dialog" aria-label="Menu">
-        <a href="#nosso-som" class="nav-link-mobile" data-scroll-to><small>01</small>Nosso som</a>
-        <a href="#planos" class="nav-link-mobile" data-scroll-to><small>02</small>Planos</a>
-        <a href="#sobre" class="nav-link-mobile" data-scroll-to><small>03</small>Sobre</a>
-        <a href="#custom-plan-builder" class="nav-link-mobile" data-scroll-to><small>04</small>Monte o seu</a>
-        <a href="#contato" class="nav-link-mobile" data-scroll-to><small>05</small>Contato</a>
+        <a href="#quem-somos" class="nav-link-mobile" data-scroll-to><small>01</small>Quem somos</a>
+        <a href="#galeria" class="nav-link-mobile" data-scroll-to><small>02</small>Galeria</a>
+        <a href="#como-funciona" class="nav-link-mobile" data-scroll-to><small>03</small>Como funciona</a>
+        <a href="#planos" class="nav-link-mobile" data-scroll-to><small>04</small>Planos</a>
+        <a href="#custom-plan-builder" class="nav-link-mobile" data-scroll-to><small>05</small>Monte o seu</a>
         <div class="menu-motion">
             <div class="motion-toggle ">
                 <span>Movimento completo</span>
@@ -1882,13 +1920,12 @@
         </div>
         <div class="menu-foot">
             <a class="pill" href="https://wa.me/5567996884226?text=Olá!%20Vi%20o%20site%20do%20Harmonia%20do%20Altar%20e%20gostaria%20de%20um%20orçamento." target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-            <a class="pill ghost" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Instagram</a>
         </div>
         <figure class="menu-art" aria-hidden="true">
-            <img src="img/noivos-ajoelhados-altar.jpg" alt="" decoding="async">
-            <img src="img/velas-igreja.jpg" alt="" decoding="async">
-            <img src="img/aliancas-biblia.jpg" alt="" decoding="async">
-            <img src="img/igreja-corredor-altar.jpg" alt="" decoding="async">
+            <img src="img/sapatos-noiva.jpg" alt="" decoding="async">
+            <img src="img/aliancas-ouro.jpg" alt="" decoding="async">
+            <img src="img/alianca-biblia-coracao.jpg" alt="" decoding="async">
+            <img src="img/corredor-igreja.jpg" alt="" decoding="async">
             <figcaption>
                 <div class="menu-eq"><i></i><i></i><i></i><i></i><i></i></div>
                 <blockquote>“O amor é paciente, o amor é bondoso.”</blockquote>
@@ -1902,11 +1939,11 @@
         <div class="hero-stage">
             <div class="keyart" id="keyart">
                 <div class="keyart-grid">
-                    <figure><img src="img/noivos-ajoelhados-altar.jpg" alt="" data-kenburns style="object-position: 50% 62%"></figure>
+                    <figure><img src="img/grupo-cerimonia-igreja.jpg" alt="Harmonia do Altar tocando em uma cerimônia" data-kenburns style="object-position: 50% 40%"></figure>
                     <figure><img src="img/flores-bancos-igreja.jpg" alt="" data-kenburns></figure>
-                    <figure><img src="img/velas-igreja.jpg" alt="" data-kenburns></figure>
-                    <figure><img src="img/bancos-rosas-brancas.jpg" alt="" data-kenburns></figure>
-                    <figure><img src="img/alianca-biblia-coracao.jpg" alt="" data-kenburns></figure>
+                    <figure><img src="img/cantor-solo.jpg" alt="Solista da Harmonia do Altar cantando na igreja" data-kenburns style="object-position: 50% 30%"></figure>
+                    <figure><img src="img/noivos-ajoelhados-altar.jpg" alt="" data-kenburns style="object-position: 50% 62%"></figure>
+                    <figure><img src="img/teclado-ao-vivo.jpg" alt="Tecladista da Harmonia do Altar tocando ao vivo" data-kenburns style="object-position: 50% 45%"></figure>
                 </div>
                 <div class="keyart-badge"><svg class="logo-svg " viewBox="0 0 160 160" role="img" aria-label="Logo Harmonia do Altar"><use href="#logo-mark"/></svg></div>
             </div>
@@ -1918,69 +1955,78 @@
         </div>
         <div class="hero-meta" id="hero-meta">
             <div class="when">Música ao vivo para<br>cerimônias religiosas</div>
-            <a href="#planos" class="pill lg" data-scroll-to>Simular orçamento</a>
+            <a href="#planos" class="pill lg" data-scroll-to>Pedir orçamento</a>
             <div class="where">Angélica · Ivinhema · MS<br>e região</div>
         </div>
         <span class="scroll-cue" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
     </header>
 
     <main>
-        <!-- NOSSO SOM: revelação por máscara radial + cards que abrem a galeria -->
-        <section id="nosso-som" aria-labelledby="som-title">
-            <div class="reveal-section" id="reveal-section">
-                <div class="reveal-media" id="reveal-media">
-                    <img src="img/igreja-corredor-altar.jpg" alt="Corredor da igreja até o altar">
-                </div>
-                <div class="reveal-copy" id="reveal-copy">
-                    <span class="eyebrow">Ouça</span>
-                    <h2 class="display" id="som-title">Nosso Som</h2>
-                    <a class="play-btn" href="https://www.instagram.com/reel/C8YQSOEsv0-/" target="_blank" rel="noopener noreferrer" aria-label="Assistir a uma apresentação no Instagram"><i class="fas fa-play"></i></a>
-                </div>
-            </div>
-
-            <div class="moments" id="galeria">
-                <div class="moments-grid">
-                    <button class="moment-card" data-story="emocao" data-reveal>
-                        <img src="img/aliancas-ouro.jpg" alt="">
-                        <div class="mc-body"><div class="mc-play"><i class="fas fa-play"></i></div><span class="eyebrow">Assista</span><h3>A Emoção em Cada Nota</h3></div>
-                    </button>
-                    <button class="moment-card" data-story="elegancia" data-reveal>
-                        <img src="img/flores-bancos-igreja.jpg" alt="">
-                        <div class="mc-body"><div class="mc-play"><i class="fas fa-play"></i></div><span class="eyebrow">Assista</span><h3>Elegância e Profissionalismo</h3></div>
-                    </button>
-                    <button class="moment-card" data-story="alegria" data-reveal>
-                        <img src="img/sapatos-noiva.jpg" alt="">
-                        <div class="mc-body"><div class="mc-play"><i class="fas fa-play"></i></div><span class="eyebrow">Assista</span><h3>Alegria e Versatilidade</h3></div>
-                    </button>
+        <!-- QUEM SOMOS -->
+        <section id="quem-somos" class="feed-section">
+            <div class="feed-wrap about-grid">
+                <figure class="about-photo" data-reveal>
+                    <img src="img/grupo-no-altar.jpg" alt="Integrantes da Harmonia do Altar no altar de uma igreja" loading="lazy" decoding="async">
+                </figure>
+                <div class="about-copy" data-reveal>
+                    <span class="eyebrow">Quem somos</span>
+                    <h2 class="display">Música que conta a sua história</h2>
+                    <p>Para nós, cada casamento é a celebração de uma história de amor única, e toda grande história merece uma trilha sonora inesquecível. Somos o Harmonia do Altar, um grupo de músicos apaixonados por transformar cerimônias em momentos que ficam na memória de vocês e de cada convidado.</p>
+                    <ul class="about-facts">
+                        <li><i class="fas fa-microphone-alt"></i><span><b>3 vozes e teclado</b> na formação padrão, com violão, contrabaixo, guitarra, violino ou saxofone, se quiserem.</span></li>
+                        <li><i class="fas fa-church"></i><span><b>Até 12 músicas do ritual</b> da cerimônia, seguindo as orientações da paróquia.</span></li>
+                        <li><i class="fas fa-map-marker-alt"></i><span><b>Angélica e Ivinhema (MS)</b>, e cidades da região.</span></li>
+                    </ul>
+                    <a href="#planos" class="pill lg" data-scroll-to>Ver planos e pedir orçamento <i class="fas fa-arrow-down"></i></a>
                 </div>
             </div>
         </section>
 
-        <!-- Painel em tela cheia com parallax -->
-        <section class="panel" id="panel-planos" aria-hidden="true">
-            <div class="panel-media" data-speed="0.8">
-                <img src="img/corredor-igreja.jpg" alt="">
+        <!-- GALERIA: fotos reais do grupo nos casamentos -->
+        <section id="galeria" class="feed-section">
+            <div class="feed-wrap">
+                <div class="feed-head" data-reveal>
+                    <span class="eyebrow">Nossos casamentos</span>
+                    <h2 class="display">Ao vivo, no altar</h2>
+                    <p>Momentos reais do grupo nas cerimônias.</p>
+                </div>
+                <div class="gallery" data-reveal>
+                    <figure><img src="img/dueto-vozes.jpg" alt="Dois cantores do grupo em dueto durante a cerimônia" loading="lazy" decoding="async"><figcaption>Vozes em dueto</figcaption></figure>
+                    <figure><img src="img/voz-e-teclado.jpg" alt="Solista e tecladista durante a cerimônia" loading="lazy" decoding="async"><figcaption>Voz e teclado ao vivo</figcaption></figure>
+                    <figure><img src="img/cantor-louvor.jpg" alt="Cantor do grupo durante o louvor na igreja" loading="lazy" decoding="async"><figcaption>Louvor na cerimônia</figcaption></figure>
+                    <figure><img src="img/grupo-bastidores.jpg" alt="Integrantes do grupo nos bastidores, prontos para a cerimônia" loading="lazy" decoding="async"><figcaption>Prontos para o grande dia</figcaption></figure>
+                </div>
+                <p class="insta-mention" data-reveal>Mais momentos no Instagram <a href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer">@harmoniadoaltar</a></p>
             </div>
-            <div class="panel-shade"></div>
-            <div class="panel-caption" data-reveal>
-                <span class="eyebrow">Formações</span>
-                <h2 class="display">Escolha a sua <span class="text-sunset">sonoridade</span></h2>
+        </section>
+
+        <!-- COMO FUNCIONA -->
+        <section id="como-funciona" class="feed-section">
+            <div class="feed-wrap">
+                <div class="feed-head" data-reveal>
+                    <span class="eyebrow">Como funciona</span>
+                    <h2 class="display">Seu orçamento em poucos passos</h2>
+                </div>
+                <ol class="steps" data-reveal>
+                    <li><span class="step-n">1</span><b>Escolha a formação</b><p>Um dos planos prontos ou o seu plano personalizado.</p></li>
+                    <li><span class="step-n">2</span><b>Conte sobre o dia</b><p>Local da cerimônia, data, horário, forma de pagamento e, se quiser, músicas extras.</p></li>
+                    <li><span class="step-n">3</span><b>Receba o orçamento</b><p>A equipe responde pelo WhatsApp com os valores e a disponibilidade da data.</p></li>
+                    <li><span class="step-n">4</span><b>Reserve a data</b><p>Assine o contrato e pronto: o seu grande dia já tem trilha sonora.</p></li>
+                </ol>
             </div>
         </section>
 
         <!-- PLANOS: carrossel horizontal guiado pela rolagem -->
         <section id="planos" class="plans-section">
             <div class="plans-intro" data-reveal>
-                <span class="eyebrow">Configurações sugeridas</span>
-                <h2 class="display mt-3">Nossos Planos</h2>
+                <span class="eyebrow">Planos</span>
+                <h2 class="display mt-3">Escolha a sua formação</h2>
                 <p>
                     Nossa formação padrão inclui <strong>3 vozes e teclado</strong>, com a flexibilidade de adicionar outros instrumentos para personalizar sua sonoridade. Escolha a formação, informe o local, a data e a forma de pagamento e <strong>receba o seu orçamento personalizado pelo WhatsApp</strong>. Todos os planos incluem <strong>as músicas do ritual da cerimônia, até 12 músicas</strong>, com uma entrada especial já prevista. Atendemos <strong>Angélica, Ivinhema (MS) e outras localidades</strong>.
                 </p>
             </div>
 
-            <div class="h-scroller" id="h-scroller">
-                <div class="h-pin">
-                    <div class="h-track h-mask" id="h-track">
+            <div class="plans-grid" id="plans-grid">
 
                         <article class="plan-slide">
                             <div class="ps-img"><span class="ps-num">01</span><img src="img/aliancas-sepia.jpg" alt=""></div>
@@ -2052,53 +2098,6 @@
                             </div>
                         </article>
 
-                    </div>
-                    <div class="h-progress" aria-hidden="true"><span id="h-progress"></span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SOBRE: panorama revelado por máscara + texto que acende ao rolar -->
-        <section class="story-section" id="sobre">
-            <div class="pano" id="pano">
-                <div class="pano-media" id="pano-media">
-                    <img src="img/missa-de-casamento.jpg" alt="Missa de casamento vista do alto">
-                </div>
-            </div>
-            <div class="about">
-                <h2 class="text-sunset" data-reveal>Música que Conta a Sua História.</h2>
-                <p class="lede" id="about-lede">Para nós, cada casamento é a celebração de uma história de amor única. E toda grande história merece uma trilha sonora inesquecível. Somos o Harmonia do Altar, um grupo de músicos apaixonados por transformar cerimônias em eventos memoráveis. Nosso propósito é ir além da música: queremos tocar o coração de cada convidado e, principalmente, o de vocês, com arranjos que capturam a essência do seu amor e a solenidade do seu grande dia.</p>
-            </div>
-
-            <!-- Cards de navegação -->
-            <div class="nav-cards">
-                <a class="nav-card" href="#custom-plan-builder" data-scroll-to data-reveal>
-                    <img src="img/noivos-ajoelhados-altar.jpg" alt="">
-                    <div class="nc-body">
-                        <span class="eyebrow">Personalize</span>
-                        <h3>Monte o Seu Plano</h3>
-                        <p>Adicione violão, contrabaixo, guitarra, violino ou saxofone à formação padrão.</p>
-                        <span class="pill">Montar agora <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </a>
-                <a class="nav-card right" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer" data-reveal>
-                    <img src="img/alianca-biblia-coracao.jpg" alt="">
-                    <div class="nc-body">
-                        <span class="eyebrow">Galeria</span>
-                        <h3>Sinta a Nossa Harmonia</h3>
-                        <p>Do clássico ao popular, do sacro ao contemporâneo: veja nossas apresentações.</p>
-                        <span class="pill">Ver no Instagram <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </a>
-                <a class="nav-card" href="#contato" data-scroll-to data-reveal>
-                    <img src="img/aliancas-biblia.jpg" alt="">
-                    <div class="nc-body">
-                        <span class="eyebrow">Contato</span>
-                        <h3>Vamos Conversar?</h3>
-                        <p>Tire suas dúvidas e garanta que cada nota seja exatamente como vocês sonham.</p>
-                        <span class="pill">Falar com a gente <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </a>
             </div>
         </section>
 
@@ -2147,73 +2146,12 @@
             <span class="pill">Chamar no WhatsApp</span>
         </a>
         <div class="socials">
-            <a href="https://www.instagram.com/harmoniadoaltar?utm_source=qr&igsh=cXF5dGJ6cTFobmVr" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             <a href="https://www.facebook.com/share/1CBb9XQqiD/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://wa.me/5567996884226" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
+        <p class="insta-mention">Acompanhe também no Instagram <a href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer">@harmoniadoaltar</a></p>
         <p class="legal">© <span id="year"></span> Harmonia do Altar · Música ao vivo para casamentos · Angélica/Ivinhema – MS</p>
     </footer>
-
-    <!-- Diálogo de galeria (abre a partir dos cards "Nosso Som") -->
-    <div class="story-dialog" id="story-dialog" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="story-title">
-        <div class="story-backdrop" data-story-close></div>
-        <button class="icon-btn story-close" data-story-close aria-label="Fechar galeria"><i class="fas fa-times"></i></button>
-        <div class="story-panel" id="story-panel" tabindex="-1">
-            <div class="story-hero"><img id="story-img" src="" alt=""><div class="story-head story-content"><span class="eyebrow">Sinta a nossa harmonia</span><h3 id="story-title"></h3></div></div>
-            <div class="story-body story-content" id="story-body"></div>
-            <button type="button" class="story-scroll-hint" id="story-scroll-hint" aria-hidden="true" tabindex="-1">Role para ver os vídeos <i class="fas fa-chevron-down"></i></button>
-        </div>
-    </div>
-
-    <!-- Conteúdo das galerias (templates) -->
-    <template id="story-emocao">
-        <p>A música tem o poder de evocar sentimentos profundos. Imagine a entrada da noiva ao som de um violino emocionante, ou a troca de alianças embalada por um piano suave e vozes que se entrelaçam. É essa atmosfera que criamos.</p>
-        <div class="story-embeds">
-            <div class="ig-card">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YQSOEsv0-/" data-instgrm-version="14">
-                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8YQSOEsv0-/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
-                </blockquote>
-            </div>
-            <div class="ig-card">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8V3pPAsYSj/" data-instgrm-version="14">
-                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8V3pPAsYSj/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
-                </blockquote>
-            </div>
-        </div>
-        <a class="pill ghost ig-more" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Ver mais no Instagram</a>
-    </template>
-    <template id="story-elegancia">
-        <p>Acreditamos que a beleza está na harmonia, não só musical, mas também visual. Nossos músicos se apresentam com a sofisticação que a sua cerimônia merece, e nossas performances são um reflexo do nosso compromisso com a excelência.</p>
-        <div class="story-embeds">
-            <div class="ig-card">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C8VlkbksuVZ/" data-instgrm-version="14">
-                    <a class="ig-fallback" href="https://www.instagram.com/p/C8VlkbksuVZ/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
-                </blockquote>
-            </div>
-            <div class="ig-card">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CpBIkGaOdrZ/" data-instgrm-version="14">
-                    <a class="ig-fallback" href="https://www.instagram.com/p/CpBIkGaOdrZ/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
-                </blockquote>
-            </div>
-        </div>
-        <a class="pill ghost ig-more" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Ver mais no Instagram</a>
-    </template>
-    <template id="story-alegria">
-        <p>Seu casamento deve refletir sua personalidade. Do clássico ao popular, do sacro ao contemporâneo, nosso repertório é vasto e adaptável. Celebramos o amor em todos os ritmos, garantindo momentos de pura alegria e emoção.</p>
-        <div class="story-embeds">
-            <div class="ig-card">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8VkPNDsAit/" data-instgrm-version="14">
-                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8VkPNDsAit/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
-                </blockquote>
-            </div>
-            <div class="ig-card">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YEx9mse1O/" data-instgrm-version="14">
-                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8YEx9mse1O/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
-                </blockquote>
-            </div>
-        </div>
-        <a class="pill ghost ig-more" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Ver mais no Instagram</a>
-    </template>
 
     <!-- Modal Principal de Simulação (Unificado com Abas) -->
     <div id="main-simulation-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="sim-plan-name">
@@ -2488,8 +2426,6 @@
         </div>
     </div>
 
-    <!-- Script de Incorporação do Instagram -->
-    <script async src="https://www.instagram.com/embed.js"></script>
     
     <!-- Mapa gratuito: Leaflet + OpenStreetMap (sem chave de API) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -4228,7 +4164,6 @@
         let lenis = null;
         let lenisTick = null;
         let ctx = null;
-        let mm = null;
 
         const yearEl = $('#year');
         if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -4287,196 +4222,34 @@
             if (navbar) navbar.classList.toggle('with-strip', window.scrollY < 30);
         }, { passive: true });
 
-        // ---------- Texto "Sobre": separa em palavras para acender ao rolar ----------
-        const lede = $('#about-lede');
-        if (lede) lede.innerHTML = lede.textContent.trim().split(/\s+/).map((w) => `<span class="w">${w}</span>`).join(' ');
-
-        // ---------- Diálogo de galeria: o card se expande até virar o painel ----------
-        const dialog = $('#story-dialog');
-        const panel = $('#story-panel');
-        const backdrop = dialog ? $('.story-backdrop', dialog) : null;
-        let activeCard = null;
-
-        function cardRectInset(card) {
-            const r = card.getBoundingClientRect();
-            const pr = panel.getBoundingClientRect();
-            return `inset(${r.top - pr.top}px ${pr.right - r.right}px ${pr.bottom - r.bottom}px ${r.left - pr.left}px round 22px)`;
-        }
-        function openStory(card) {
-            const tpl = document.getElementById(`story-${card.dataset.story}`);
-            if (!tpl || !dialog) return;
-            activeCard = card;
-            $('#story-title').textContent = $('h3', card).textContent;
-            $('#story-img').src = $('img', card).currentSrc || $('img', card).src;
-            const body = $('#story-body');
-            body.innerHTML = '';
-            body.appendChild(tpl.content.cloneNode(true));
-            dialog.classList.add('open');
-            panel.scrollTop = 0;
-            updateStoryHint();
-            document.body.style.overflow = 'hidden';
-            if (lenis) lenis.stop();
-            if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
-
-            if (experience !== 'hifi') {
-                gsap.set(panel, { clearProps: 'clipPath' });
-                gsap.set([backdrop, ...$$('.story-content > *', dialog)], { opacity: 1, y: 0 });
-                gsap.set('.story-close', { opacity: 1, y: 0 });
-                panel.focus({ preventScroll: true });
-                return;
-            }
-            gsap.timeline({ defaults: { ease: 'power3.inOut' } })
-                .set(panel, { clipPath: cardRectInset(card) })
-                .to(backdrop, { opacity: 1, duration: 0.5 }, 0)
-                .to(panel, { clipPath: 'inset(0px 0px 0px 0px round 22px)', duration: 0.8 }, 0)
-                .fromTo('#story-img', { scale: 1.25 }, { scale: 1, duration: 1.1, ease: 'power2.out' }, 0)
-                .fromTo($$('.story-content > *', dialog), { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: 0.08, duration: 0.6, ease: 'power2.out' }, 0.45)
-                .fromTo('.story-close', { opacity: 0, y: 0 }, { opacity: 1, y: 0, duration: 0.4 }, 0.5)
-                .add(() => { panel.focus({ preventScroll: true }); updateStoryHint(); });
-        }
-        // "Role para ver os vídeos": aparece enquanto houver conteúdo abaixo
-        function updateStoryHint() {
-            const hint = $('#story-scroll-hint');
-            if (!hint || !panel) return;
-            const remaining = panel.scrollHeight - panel.clientHeight - panel.scrollTop;
-            hint.classList.toggle('hidden-hint', remaining < 40);
-        }
-        if (panel) {
-            panel.addEventListener('scroll', updateStoryHint, { passive: true });
-            // Os players do Instagram mudam de altura ao carregar
-            if (window.ResizeObserver) new ResizeObserver(updateStoryHint).observe($('#story-body'));
-        }
-        $('#story-scroll-hint')?.addEventListener('click', () => panel.scrollBy({ top: panel.clientHeight * 0.8, behavior: 'smooth' }));
-
-        function closeStory() {
-            if (!dialog || !dialog.classList.contains('open')) return;
-            const done = () => {
-                dialog.classList.remove('open');
-                document.body.style.overflow = '';
-                $('#story-body').innerHTML = '';
-                if (lenis) lenis.start();
-                if (activeCard) activeCard.focus({ preventScroll: true });
-            };
-            if (experience !== 'hifi' || !activeCard) return done();
-            gsap.timeline({ defaults: { ease: 'power3.inOut' }, onComplete: done })
-                .to([...$$('.story-content > *', dialog), '.story-close'], { opacity: 0, y: 20, duration: 0.25 }, 0)
-                .to(panel, { clipPath: cardRectInset(activeCard), duration: 0.7 }, 0.1)
-                .to(backdrop, { opacity: 0, duration: 0.5 }, 0.3);
-        }
-        $$('.moment-card').forEach((c) => c.addEventListener('click', () => openStory(c)));
-        if (dialog) $$('[data-story-close]', dialog).forEach((b) => b.addEventListener('click', closeStory));
-
-        // Sem GSAP: página estática, carrossel nativo
+        // Sem GSAP: página estática
         if (!hasGsap) {
-            $('#h-scroller')?.classList.add('h-native');
             $('#intro')?.remove();
             $$('.motion-toggle').forEach((t) => t.remove());
             return;
         }
         gsap.registerPlugin(ScrollTrigger);
 
-        // ---------- Cenas guiadas pela rolagem (somente no modo completo) ----------
+        // ---------- Entradas suaves ao rolar (somente no modo completo) ----------
+        // A página rola como um feed: nenhuma cena prende a rolagem nem exige arrastar para liberar o conteúdo.
         function buildScrollScenes() {
-            mm = gsap.matchMedia();
-
-            // HERO: o cartão recua e o arco da logo "atravessa" a câmera
-            gsap.timeline({
-                scrollTrigger: { trigger: '.hero', start: 'top top', end: '+=90%', scrub: true, pin: true, anticipatePin: 1 }
-            })
-                .to(['#hero-title', '#hero-meta', '.scroll-cue'], { opacity: 0, y: -40, duration: 0.25, ease: 'none' }, 0)
-                .to('#keyart', { scale: 0.7, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power1.in' }, 0)
-                .fromTo('#hero-ghost', { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 0.7, duration: 0.3, ease: 'power1.out' }, 0.2)
-                .to('#hero-ghost', { scale: 9, opacity: 0, duration: 0.5, ease: 'power2.in' }, 0.5);
-
-            // NOSSO SOM: o corredor até o altar se abre num círculo (pin + scrub)
-            const media = '#reveal-media';
-            const circle = (a, b) => `radial-gradient(circle at 50% 45%, #000 ${a}%, transparent ${b}%)`;
-            gsap.fromTo(media, { webkitMaskImage: circle(6, 14), maskImage: circle(6, 14) }, {
-                webkitMaskImage: circle(22, 38), maskImage: circle(22, 38), ease: 'none',
-                scrollTrigger: { trigger: '#reveal-section', start: 'top 85%', end: 'top top', scrub: true }
-            });
-            gsap.timeline({
-                scrollTrigger: { trigger: '#reveal-section', start: 'top top', end: '+=110%', scrub: true, pin: true, anticipatePin: 1 }
-            })
-                .fromTo(media, { webkitMaskImage: circle(22, 38), maskImage: circle(22, 38) },
-                    { immediateRender: false, webkitMaskImage: circle(75, 100), maskImage: circle(75, 100), duration: 0.55, ease: 'power1.inOut' }, 0)
-                .fromTo(`${media} img`, { scale: 1.35 }, { scale: 1.05, duration: 1, ease: 'none' }, 0)
-                .from('#reveal-copy > *', { opacity: 0, y: 40, filter: 'blur(8px)', stagger: 0.06, duration: 0.3 }, 0.25)
-                .to(media, { opacity: 0.35, duration: 0.3 }, 0.75)
-                .to('#reveal-copy', { opacity: 0, y: -60, duration: 0.25 }, 0.8);
-
-            // Parallax por velocidade ([data-speed])
-            $$('[data-speed]').forEach((el) => {
-                const speed = parseFloat(el.dataset.speed || '1');
-                gsap.fromTo(el, { yPercent: -(1 - speed) * 25 }, {
-                    yPercent: (1 - speed) * 25, ease: 'none',
-                    scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true }
-                });
-            });
-
-            // Painel: "cortina" de máscara linear de cima para baixo
-            const curtain = (a, b) => `linear-gradient(180deg, #000 ${a}%, transparent ${b}%)`;
-            gsap.fromTo('#panel-planos .panel-media',
-                { webkitMaskImage: curtain(0, 0), maskImage: curtain(0, 0) },
-                { webkitMaskImage: curtain(100, 130), maskImage: curtain(100, 130), ease: 'none',
-                  scrollTrigger: { trigger: '#panel-planos', start: 'top bottom', end: 'top 15%', scrub: true } });
-
-            // Revelações genéricas
             $$('[data-reveal]').forEach((el) => {
                 gsap.from(el, {
-                    y: 60, opacity: 0, filter: 'blur(10px)', duration: 1.1, ease: 'power3.out',
-                    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' }
+                    y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
+                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
                 });
             });
-
-            // PLANOS: carrossel horizontal preso à rolagem, no computador e no celular (com o movimento desligado vira lista de arrastar)
-            mm.add('all', () => {
-                const track = $('#h-track');
-                const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
-                const tween = gsap.to(track, {
-                    x: () => -distance(), ease: 'none',
-                    scrollTrigger: {
-                        trigger: '#h-scroller', start: 'top top', end: () => `+=${distance()}`,
-                        scrub: 0.6, pin: true, anticipatePin: 1, invalidateOnRefresh: true,
-                        onUpdate: (self) => gsap.set('#h-progress', { scaleX: self.progress })
-                    }
-                });
-                $$('.plan-slide', track).forEach((slide) => {
-                    gsap.fromTo(slide, { scale: 0.92, opacity: 0.55 }, {
-                        scale: 1, opacity: 1, ease: 'none',
-                        scrollTrigger: { trigger: slide, containerAnimation: tween, start: 'left 85%', end: 'left 45%', scrub: true }
-                    });
-                });
-            });
-
-            // SOBRE: panorama revelado por máscara vinda do alto
-            const glow = (w, h, a) => `radial-gradient(${w}% ${h}% at 50% 0%, #000 ${a}%, transparent 100%)`;
-            gsap.fromTo('#pano-media',
-                { webkitMaskImage: glow(60, 40, 0), maskImage: glow(60, 40, 0), opacity: 0.4 },
-                { webkitMaskImage: glow(160, 140, 70), maskImage: glow(160, 140, 70), opacity: 1, ease: 'none',
-                  scrollTrigger: { trigger: '#pano', start: 'top bottom', end: 'top top', scrub: true } });
-            gsap.fromTo('#pano-media img', { scale: 1.2 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '#pano', start: 'top bottom', end: 'bottom top', scrub: true } });
-
-            if (lede) {
-                gsap.fromTo($$('.w', lede), { opacity: 0.18 }, {
-                    opacity: 1, stagger: 0.05, ease: 'none',
-                    scrollTrigger: { trigger: lede, start: 'top 80%', end: 'bottom 45%', scrub: true }
-                });
-            }
         }
 
         function enableMotion() {
             if (ctx) return;
-            $('#h-scroller')?.classList.remove('h-native');
             startLenis();
             ctx = gsap.context(buildScrollScenes);
             ScrollTrigger.refresh();
         }
         function disableMotion() {
-            if (mm) { mm.revert(); mm = null; }
             if (ctx) { ctx.revert(); ctx = null; }
             stopLenis();
-            $('#h-scroller')?.classList.add('h-native');
             ScrollTrigger.refresh();
         }
 
@@ -4513,11 +4286,12 @@
         // ---------- Apresentação: a logo se desenha e a cortina sobe ----------
         // ---------- Carregamento: espera imagens, fontes e a página antes de abrir ----------
         const PRELOAD_MIN_MS = 1200;   // tempo mínimo na tela, para a animação não "piscar"
-        const PRELOAD_MAX_MS = 12000;  // limite de segurança em conexões muito lentas
+        const PRELOAD_MAX_MS = 2500;   // nunca segura a pessoa mais que isso na abertura
 
         function preloadSite(onProgress) {
             const urls = new Set();
-            $$('img').forEach((img) => {
+            // Só a primeira dobra: o resto da página carrega enquanto a pessoa rola
+            $$('#topo img').forEach((img) => {
                 const src = img.currentSrc || img.src;
                 if (src && !src.startsWith('data:') && src !== window.location.href) urls.add(src);
             });
@@ -4536,7 +4310,8 @@
 
         function playIntro() {
             const intro = $('#intro');
-            const seen = !!session.get(INTRO_KEY);
+            // Abertura sempre na versão curta: o site é um funil, a pessoa quer chegar logo no conteúdo
+            const seen = true;
             if (!intro || experience !== 'hifi') {
                 intro?.remove();
                 heroEntrance();
@@ -4567,6 +4342,8 @@
 
             let finished = false;
             let tl = null;
+            let heroShown = false;
+            const showHero = () => { if (!heroShown) { heroShown = true; heroEntrance(0); } };
             const finish = () => {
                 if (finished) return;
                 finished = true;
@@ -4594,10 +4371,20 @@
                 tl.to('.intro-inner', { scale: 0.92, opacity: 0, filter: 'blur(8px)', duration: 0.6, ease: 'power2.in' }, t)
                   .to(intro, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.1, ease: 'power4.inOut' }, t + 0.3);
                 if (atTop) {
-                    tl.add(() => heroEntrance(0), t + 0.45)
+                    tl.add(showHero, t + 0.45)
                       .from('.keyart-grid figure', { scale: 1.35, opacity: 0, duration: 1.3, stagger: { each: 0.08, from: 'center' }, ease: 'power3.out' }, t + 0.5);
                 }
             };
+
+            // Toque, clique, rolagem ou tecla pulam a abertura: ninguém fica preso nela
+            const skip = () => {
+                ['pointerdown', 'wheel', 'touchmove', 'keydown'].forEach((ev) => window.removeEventListener(ev, skip));
+                if (finished) return;
+                if (tl) tl.kill();
+                gsap.to(intro, { opacity: 0, duration: 0.3, onComplete: finish });
+                showHero();
+            };
+            ['pointerdown', 'wheel', 'touchmove', 'keydown'].forEach((ev) => window.addEventListener(ev, skip, { passive: true }));
 
             const started = performance.now();
             preloadSite(setProgress).then(() => {
