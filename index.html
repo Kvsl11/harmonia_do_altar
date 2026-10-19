@@ -1346,6 +1346,12 @@
         .sim-shot { display: flex; align-items: center; gap: 1rem; margin: 0 0 1rem; padding: .8rem; border-radius: 18px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .09); }
         .sim-shot img { flex: none; width: 92px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; background: var(--night-2); box-shadow: 0 10px 24px -10px rgba(0, 0, 0, .7); transition: opacity .3s ease; }
         .sim-shot.is-loading img { opacity: .35; }
+        .sim-sent-body { display: flex; gap: 1rem; align-items: flex-start; margin: .5rem 0 1rem; text-align: left; }
+        .sim-sent-body img { flex: none; width: 96px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; box-shadow: 0 10px 24px -10px rgba(0, 0, 0, .7); }
+        .sim-sent-body .notification-modal-text { margin: 0; }
+        .sim-sent-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+        .sim-sent-actions .pill { flex: 1 1 auto; justify-content: center; padding: .6rem 1rem; font-size: .82rem; }
+        @media (max-width: 480px) { .sim-sent-body { flex-direction: column; align-items: center; text-align: center; } }
         .sim-shot-text { display: flex; flex-direction: column; align-items: flex-start; gap: .3rem; min-width: 0; }
         .sim-shot-text b { color: #fff; font-size: .95rem; }
         .sim-shot-text small { color: var(--muted); font-size: .8rem; line-height: 1.4; }
@@ -2294,7 +2300,7 @@
                         <img id="summary-shot" alt="Imagem do resumo do plano">
                         <div class="sim-shot-text">
                             <b>Imagem do resumo</b>
-                            <small>Salve e anexe na conversa do WhatsApp para deixar tudo registrado.</small>
+                            <small>Ao enviar, a imagem é copiada: na conversa do WhatsApp é só colar. Se preferir, salve aqui.</small>
                             <button type="button" id="summary-shot-btn" class="pill ghost"><i class="fas fa-download"></i> <span>Salvar imagem</span></button>
                         </div>
                     </div>
@@ -2320,6 +2326,23 @@
                 <button type="button" class="sim-map-expand" id="map-expand-btn" aria-pressed="false" aria-label="Ver mapa em tela cheia"><i class="fas fa-expand"></i><span>Tela cheia</span></button>
             </div>
             <button id="confirm-map-location-btn" class="btn-primary pill lg notification-modal-button">Confirmar localização</button>
+        </div>
+    </div>
+
+    <!-- Aviso depois de abrir o WhatsApp: como anexar a imagem do resumo -->
+    <div id="whats-sent-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="whats-sent-title">
+        <div class="notification-modal-content sim-dialog sim-sent">
+            <button type="button" class="close-button modal-close-button icon-btn" id="close-whats-sent-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
+            <h3 class="notification-modal-title info" id="whats-sent-title">Abrindo o WhatsApp…</h3>
+            <div class="sim-sent-body">
+                <img id="whats-sent-shot" class="hidden" alt="Imagem do resumo do plano">
+                <p class="notification-modal-text" id="whats-sent-text"></p>
+            </div>
+            <div class="sim-sent-actions">
+                <button type="button" id="whats-sent-save" class="pill ghost"><i class="fas fa-download"></i> Salvar imagem</button>
+                <button type="button" id="whats-sent-reopen" class="pill ghost"><i class="fab fa-whatsapp"></i> Abrir o WhatsApp de novo</button>
+            </div>
+            <button type="button" id="whats-sent-done" class="btn-primary pill lg notification-modal-button">Concluir</button>
         </div>
     </div>
 
@@ -2841,41 +2864,43 @@
          * Abre o WhatsApp com o pedido de orçamento: todos os dados do plano e do evento, sem valores.
          */
         function sendWhatsAppMessage() {
+            // Sem emojis: no WhatsApp para computador eles chegam pelo link como "�"
             const o = getOrderSummary();
             const line = '━━━━━━━━━━━━━━━';
             const parts = [
-                `*HARMONIA DO ALTAR* 🎶`,
+                `*HARMONIA DO ALTAR*`,
                 `_Pedido de orçamento · ${o.type}_`,
                 line,
-                `Olá! Montei meu plano pelo site e gostaria de receber o orçamento. 💍`,
+                `Olá! Montei meu plano pelo site e gostaria de receber o orçamento.`,
                 '',
-                `🎼 *PLANO*`,
+                `*PLANO*`,
                 `*${o.name}*`,
                 ...o.instruments.map((name) => `• ${name}`),
                 '',
-                `📅 *CERIMÔNIA*`,
+                `*CERIMÔNIA*`,
                 `• *Data:* ${o.date}${o.weekday ? ` (${o.weekday})` : ''}`,
                 `• *Horário:* ${o.time}`,
                 '',
-                `📍 *LOCAL*`,
+                `*LOCAL*`,
                 `• ${o.address}`
             ];
             if (o.reference) parts.push(`• *Referência:* ${o.reference}`);
             if (o.distance) parts.push(`• *Distância de Angélica:* ${o.distance}`);
             if (o.mapsUrl) parts.push(`• *Mapa:* ${o.mapsUrl}`);
-            parts.push('', `💳 *PAGAMENTO*`, `• *Forma:* ${o.payment}`, `• *Condição:* ${o.condition}`);
+            parts.push('', `*PAGAMENTO*`, `• *Forma:* ${o.payment}`, `• *Condição:* ${o.condition}`);
             if (o.boletoDay) parts.push(`• *Vencimento:* ${o.boletoDay}`);
             parts.push(
                 line,
-                `📎 Vou enviar também a imagem com o resumo do plano.`,
+                `Segue a imagem com o resumo do plano.`,
                 '',
-                `Podem me enviar o orçamento e confirmar a disponibilidade da data? Obrigado(a)! 🙏`
+                `Podem me enviar o orçamento e confirmar a disponibilidade da data? Obrigado(a)!`
             );
             window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(parts.join('\n'))}`, '_blank');
         }
 
         // --- Imagem do resumo (um "print" do plano para anexar na conversa) ---
         let summaryShotBlob = null;
+        let summaryShotPromise = null;
         let summaryShotUrl = '';
         let summaryShotSeq = 0;
         const LOGO_PATHS = [
@@ -3057,7 +3082,8 @@
             const img = document.getElementById('summary-shot');
             if (!wrap || !img) return;
             wrap.classList.add('is-loading');
-            const blob = await buildSummaryImage().catch(() => null);
+            summaryShotPromise = buildSummaryImage().catch(() => null);
+            const blob = await summaryShotPromise;
             if (seq !== summaryShotSeq) return;
             wrap.classList.remove('is-loading');
             if (summaryShotUrl) URL.revokeObjectURL(summaryShotUrl);
@@ -3065,6 +3091,50 @@
             summaryShotUrl = blob ? URL.createObjectURL(blob) : '';
             wrap.classList.toggle('hidden', !blob);
             if (blob) img.src = summaryShotUrl;
+        }
+
+        // Copia a imagem do resumo para a área de transferência: na conversa basta colar (Ctrl+V / tocar e segurar → Colar).
+        // Precisa acontecer no clique, antes de abrir o WhatsApp; a imagem pode ainda estar sendo gerada (o navegador espera a promessa).
+        function copySummaryShot() {
+            if (!navigator.clipboard || !navigator.clipboard.write || !window.ClipboardItem) return Promise.resolve(false);
+            const pending = summaryShotBlob || (summaryShotPromise && summaryShotPromise.then((blob) => {
+                if (!blob) throw new Error('imagem indisponível');
+                return blob;
+            }));
+            if (!pending) return Promise.resolve(false);
+            try {
+                return navigator.clipboard.write([new ClipboardItem({ 'image/png': pending })]).then(() => true, () => false);
+            } catch (e) {
+                return Promise.resolve(false);
+            }
+        }
+
+        // Depois de abrir o WhatsApp: explica como anexar a imagem (colar, ou salvar se a cópia não foi possível)
+        async function showSentNotice(copying) {
+            const modal = document.getElementById('whats-sent-modal');
+            const text = document.getElementById('whats-sent-text');
+            const thumb = document.getElementById('whats-sent-shot');
+            const title = document.getElementById('whats-sent-title');
+            if (summaryShotUrl) thumb.src = summaryShotUrl;
+            thumb.classList.toggle('hidden', !summaryShotUrl);
+            title.textContent = 'Abrindo o WhatsApp…';
+            text.textContent = 'Preparando a imagem do resumo.';
+            showAnimatedModal(modal);
+            const copied = await copying;
+            const touch = window.matchMedia('(pointer: coarse)').matches;
+            if (copied) {
+                title.textContent = 'Imagem copiada! Agora é só colar';
+                text.innerHTML = touch
+                    ? 'Na conversa do WhatsApp, <strong>toque e segure no campo de mensagem e escolha “Colar”</strong> para anexar a imagem do resumo. Depois, envie a mensagem que já está escrita.'
+                    : 'Na conversa do WhatsApp, aperte <strong>Ctrl+V</strong> (no Mac, <strong>Cmd+V</strong>) para anexar a imagem do resumo. Depois, envie a mensagem que já está escrita.';
+            } else {
+                title.textContent = 'Falta só anexar a imagem';
+                text.innerHTML = 'Seu navegador não deixou copiar a imagem automaticamente. Toque em <strong>Salvar imagem</strong> e anexe na conversa do WhatsApp.';
+            }
+            if (!summaryShotUrl && summaryShotPromise) {
+                await summaryShotPromise;
+                if (summaryShotUrl) { thumb.src = summaryShotUrl; thumb.classList.remove('hidden'); }
+            }
         }
 
         function summaryShotFileName() {
@@ -3656,8 +3726,19 @@
                     validateBoletoDueDate(); // Re-valida quando a data de vencimento muda
                 });
                 document.getElementById('confirm-simulation-btn').addEventListener('click', () => {
+                    const copying = copySummaryShot();
                     sendWhatsAppMessage();
-                    hideAnimatedModal(mainSimulationModal);
+                    showSentNotice(copying);
+                });
+                const sentModal = document.getElementById('whats-sent-modal');
+                const finishSent = () => { hideAnimatedModal(sentModal); hideAnimatedModal(mainSimulationModal); };
+                document.getElementById('whats-sent-done').addEventListener('click', finishSent);
+                document.getElementById('close-whats-sent-button').addEventListener('click', finishSent);
+                document.getElementById('whats-sent-save').addEventListener('click', saveSummaryShot);
+                document.getElementById('whats-sent-reopen').addEventListener('click', () => {
+                    const copying = copySummaryShot();
+                    sendWhatsAppMessage();
+                    showSentNotice(copying);
                 });
                 document.getElementById('summary-shot-btn').addEventListener('click', saveSummaryShot);
                 modalDestinationAddressInput.addEventListener('input', () => {
