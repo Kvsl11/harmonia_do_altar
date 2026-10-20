@@ -1860,7 +1860,7 @@
            O palco fica preso na tela enquanto a página rola: o vídeo se abre de dentro para fora,
            emenda nos próximos e os cards entram pela direita. A rolagem continua sendo a normal. */
         .cinema { display: none; }
-        html[data-experience="hifi"] .cinema { display: block; position: relative; height: 440vh; background: var(--night); }
+        html[data-experience="hifi"] .cinema { display: block; position: relative; height: 320vh; background: var(--night); }
         .cinema-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; isolation: isolate; background: var(--night); }
         /* A foto da cena entra só como um tom suave, que some nas bordas: o fundo segue o mesmo degradê do resto do site */
         .cinema-bgs { position: absolute; inset: 0; opacity: .3;
@@ -4910,7 +4910,7 @@
         // O arquivo é codificado com quadros-chave a cada 4 quadros, para pular para qualquer ponto sem travar.
         const cinema = $('#cinema');
         const cinemaVideo = cinema ? $('video', cinema) : null;
-        const VIDEO_SHARE = 0.84; // parte da rolagem da cena usada pelo vídeo; o resto é para os cards
+        const VIDEO_SHARE = 0.8; // parte da rolagem da cena usada pelo vídeo; o resto é para os cards
         const scrub = { t: 0 };
         function primeCinemaVideo() {
             const v = cinemaVideo;
