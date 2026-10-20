@@ -218,6 +218,23 @@
             * { scrollbar-color: #e8958a transparent; }
             .sim-main, .story-panel { scrollbar-width: thin; }
         }
+        /* Celular e tablet: a barra nativa fica por cima da página e não aceita cor, então
+           ela é escondida e no lugar entra um indicador com o degradê do site (veja setupTouchScrollbar) */
+        .hda-scrollbar { display: none; }
+        @media (hover: none) and (pointer: coarse) {
+            html, .sim-modal .modal-content.sim-panel { scrollbar-width: none; }
+            html::-webkit-scrollbar, .sim-modal .modal-content.sim-panel::-webkit-scrollbar { display: none; }
+            .hda-scrollbar {
+                display: block; position: fixed; z-index: 10000; right: 2px; width: 4px; pointer-events: none;
+                opacity: 0; transition: opacity .45s ease;
+            }
+            .hda-scrollbar.is-on { opacity: 1; transition-duration: .15s; }
+            .hda-scrollbar i {
+                position: absolute; left: 0; right: 0; top: 0; border-radius: 999px; will-change: transform;
+                background: linear-gradient(180deg, var(--champagne), var(--rose) 55%, var(--peach));
+                box-shadow: 0 0 10px rgba(229, 143, 132, .55);
+            }
+        }
 
         /* Estilos de aba para navegação modal */
         .tab-header {
@@ -698,6 +715,9 @@
         .brand-mark img { height: 2.4rem; width: auto; }
         .brand-mark span { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; }
         .nav-actions { display: flex; align-items: center; gap: .75rem; }
+        /* Um botão de orçamento por vez: o do topo só aparece quando o da abertura sai da tela */
+        .nav-cta { transition: opacity .35s ease, transform .35s ease, visibility 0s linear 0s; }
+        .nav-cta.is-hidden { opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none; transition: opacity .35s ease, transform .35s ease, visibility 0s linear .35s; }
         .pill {
             display: inline-flex; align-items: center; gap: .5rem;
             border-radius: 999px; padding: .55rem 1.15rem;
@@ -1610,7 +1630,21 @@
         .sim-alert-actions { display: flex; gap: .6rem; }
         .sim-alert-actions .pill { flex: 1; justify-content: center; }
         .sim-alert-actions .btn-secondary { flex: .8; }
+        /* Em qualquer tela o aviso é um cartão inteiro, com margem nas laterais, e rola por dentro se a tela for baixa */
+        .sim-modal .notification-modal-content.sim-dialog.sim-alert {
+            width: calc(100% - 2rem); max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem);
+            overflow-y: auto; overscroll-behavior: contain; border-radius: 24px; align-self: center; margin: auto;
+        }
+        @media (max-width: 860px) {
+            .sim-modal .notification-modal-content.sim-dialog.sim-alert { padding: 2.25rem 1.25rem 1.4rem; }
+        }
+        /* No toque, o efeito de "passar o mouse" fica preso no botão e o deixa maior que os outros */
+        @media (hover: none) {
+            .sim-modal .pill:hover { transform: none; }
+        }
         @media (max-width: 480px) {
+            .sim-alert-head { gap: .8rem; margin-right: 2.75rem; }
+            .sim-alert .sim-dialog-icon { width: 2.7rem; height: 2.7rem; font-size: 1rem; }
             .sim-alert-head .notification-modal-title { font-size: 1.2rem; }
             .sim-date-compare { grid-template-columns: 1fr; }
             .sim-date-gap { flex-direction: row; justify-content: center; }
@@ -1860,7 +1894,7 @@
            O palco fica preso na tela enquanto a página rola: o vídeo se abre de dentro para fora,
            emenda nos próximos e os cards entram pela direita. A rolagem continua sendo a normal. */
         .cinema { display: none; }
-        html[data-experience="hifi"] .cinema { display: block; position: relative; height: 440vh; background: var(--night); }
+        html[data-experience="hifi"] .cinema { display: block; position: relative; height: 320vh; background: var(--night); }
         .cinema-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; isolation: isolate; background: var(--night); }
         /* A foto da cena entra só como um tom suave, que some nas bordas: o fundo segue o mesmo degradê do resto do site */
         .cinema-bgs { position: absolute; inset: 0; opacity: .3;
@@ -1888,7 +1922,6 @@
         .ccard i { color: var(--champagne); font-size: 1.15rem; }
         .ccard h3 { font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; margin: .5rem 0 .25rem; color: var(--ink); }
         .ccard p { color: var(--muted); font-size: .92rem; line-height: 1.45; }
-        .ccard .pill { margin-top: .8rem; display: inline-flex; }
         @media (max-width: 767px) {
             .cinema-frame { height: auto; width: min(calc(100vw - 1.5rem), calc(100svh * 9 / 16)); border-radius: 22px; }
             .cinema-cards { left: 1rem; right: 1rem; width: auto; top: auto; bottom: 1.25rem; transform: none; gap: .6rem; }
@@ -1916,10 +1949,14 @@
         /* --- Fundo em movimento (só no modo com movimento): as mesmas cores do tema (rosé, vinho e champanhe)
                derivam devagar sobre o fundo noturno. Os blocos se repetem em mosaico, então o deslocamento de um
                bloco inteiro fecha o ciclo sem emenda; o topo e a base somem no fundo para manter as transições. --- */
-        @keyframes bg-drift { from { transform: translate3d(-12vmax, 0, 0); } to { transform: translate3d(12vmax, 0, 0); } }
+        @keyframes bg-drift {
+            0% { transform: translate3d(-18vmax, -4vh, 0) scale(1); }
+            50% { transform: translate3d(0, 4vh, 0) scale(1.1); }
+            100% { transform: translate3d(18vmax, -4vh, 0) scale(1); }
+        }
         @keyframes glow-breathe {
             0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
-            50% { transform: translate(6vw, 4%) scale(1.12); opacity: .7; }
+            50% { transform: translate(10vw, 7%) scale(1.22); opacity: .65; }
         }
         html[data-experience="hifi"] .feed-section,
         html[data-experience="hifi"] .plans-section,
@@ -1932,13 +1969,13 @@
         html[data-experience="hifi"] .builder-wrap::before,
         html[data-experience="hifi"] .cinema-stage::before,
         html[data-experience="hifi"] #contato::after {
-            content: ""; position: absolute; top: 0; bottom: 0; left: -12vmax; right: -12vmax; z-index: -1; pointer-events: none; will-change: transform;
+            content: ""; position: absolute; top: -6vh; bottom: -6vh; left: -18vmax; right: -18vmax; z-index: -1; pointer-events: none; will-change: transform;
             background-image:
                 radial-gradient(circle, rgba(229, 143, 132, .13), transparent 50%),
                 radial-gradient(circle, rgba(109, 47, 87, .32), transparent 55%),
                 radial-gradient(circle, rgba(241, 214, 164, .06), transparent 40%);
             background-size: 110vmax 110vmax, 90vmax 90vmax, 140vmax 140vmax;
-            animation: bg-drift 40s ease-in-out infinite alternate;
+            animation: bg-drift 28s ease-in-out infinite alternate;
             -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22vh, #000 calc(100% - 22vh), transparent 100%);
             mask-image: linear-gradient(180deg, transparent 0, #000 22vh, #000 calc(100% - 22vh), transparent 100%);
         }
@@ -1946,7 +1983,59 @@
             -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22vh);
             mask-image: linear-gradient(180deg, transparent 0, #000 22vh);
         }
-        html[data-experience="hifi"] #contato::before { animation: glow-breathe 14s ease-in-out infinite; }
+        html[data-experience="hifi"] #contato::before { animation: glow-breathe 11s ease-in-out infinite; }
+
+        /* Cards: um brilho rosé/champanhe passeia devagar por trás do conteúdo */
+        @keyframes card-glow {
+            0% { transform: translate(-30%, -25%) scale(1); }
+            33% { transform: translate(25%, -10%) scale(1.15); }
+            66% { transform: translate(5%, 30%) scale(.95); }
+            100% { transform: translate(-30%, -25%) scale(1); }
+        }
+        html[data-experience="hifi"] .plan-slide,
+        html[data-experience="hifi"] .steps li,
+        html[data-experience="hifi"] .ccard,
+        html[data-experience="hifi"] .contact-pill,
+        html[data-experience="hifi"] .custom-total { position: relative; isolation: isolate; overflow: hidden; }
+        html[data-experience="hifi"] .plan-slide::before,
+        html[data-experience="hifi"] .steps li::before,
+        html[data-experience="hifi"] .ccard::before,
+        html[data-experience="hifi"] .contact-pill::before,
+        html[data-experience="hifi"] .custom-total::before,
+        html[data-experience="hifi"] .inst-card::before {
+            content: ""; position: absolute; z-index: -1; inset: -40%; pointer-events: none; will-change: transform;
+            background:
+                radial-gradient(closest-side at 35% 40%, rgba(229, 143, 132, .22), transparent),
+                radial-gradient(closest-side at 70% 65%, rgba(241, 214, 164, .12), transparent);
+            animation: card-glow 16s ease-in-out infinite;
+        }
+        html[data-experience="hifi"] .plan-slide:nth-child(2n)::before,
+        html[data-experience="hifi"] .steps li:nth-child(2n)::before,
+        html[data-experience="hifi"] .ccard:nth-child(2n)::before,
+        html[data-experience="hifi"] .inst-card:nth-child(2n)::before { animation-duration: 19s; animation-delay: -6s; }
+        html[data-experience="hifi"] .plan-slide:nth-child(3n)::before,
+        html[data-experience="hifi"] .steps li:nth-child(3n)::before,
+        html[data-experience="hifi"] .ccard:nth-child(3n)::before,
+        html[data-experience="hifi"] .inst-card:nth-child(3n)::before { animation-duration: 22s; animation-delay: -11s; }
+        /* A foto do plano fica por cima do brilho */
+        html[data-experience="hifi"] .plan-slide .ps-img { z-index: 0; }
+
+        /* Fundo do menu: as mesmas manchas de cor do site derivando, só enquanto o menu está aberto */
+        @keyframes menu-drift {
+            0% { transform: translate3d(-8%, -6%, 0) scale(1); }
+            50% { transform: translate3d(6%, 5%, 0) scale(1.12); }
+            100% { transform: translate3d(-4%, 8%, 0) scale(1.04); }
+        }
+        html[data-experience="hifi"] #mobile-menu { isolation: isolate; }
+        html[data-experience="hifi"] #mobile-menu::before {
+            content: ""; position: absolute; inset: -20%; z-index: -1; pointer-events: none; will-change: transform;
+            background:
+                radial-gradient(40% 35% at 25% 75%, rgba(109, 47, 87, .55), transparent 70%),
+                radial-gradient(35% 30% at 70% 30%, rgba(229, 143, 132, .22), transparent 70%),
+                radial-gradient(30% 30% at 50% 50%, rgba(241, 214, 164, .08), transparent 70%);
+            animation: menu-drift 18s ease-in-out infinite alternate; animation-play-state: paused;
+        }
+        html[data-experience="hifi"] #mobile-menu:not(.hidden)::before { animation-play-state: running; }
         @media (prefers-reduced-motion: reduce) {
             html[data-experience="hifi"] .feed-section::before,
             html[data-experience="hifi"] .plans-section::before,
@@ -1954,7 +2043,14 @@
             html[data-experience="hifi"] .builder-wrap::before,
             html[data-experience="hifi"] .cinema-stage::before,
             html[data-experience="hifi"] #contato::after,
-            html[data-experience="hifi"] #contato::before { animation: none; }
+            html[data-experience="hifi"] #contato::before,
+            html[data-experience="hifi"] .plan-slide::before,
+            html[data-experience="hifi"] .steps li::before,
+            html[data-experience="hifi"] .ccard::before,
+            html[data-experience="hifi"] .contact-pill::before,
+            html[data-experience="hifi"] .custom-total::before,
+            html[data-experience="hifi"] .inst-card::before,
+            html[data-experience="hifi"] #mobile-menu::before { animation: none; }
         }
         /* --- Botões com cor em movimento --- */
         @keyframes pill-flow { to { background-position: 200% 50%; } }
@@ -2115,7 +2211,7 @@
             <span class="brand-word"><b>HARMONIA</b><i>do Altar</i></span>
         </a>
         <div class="nav-actions">
-            <a href="#planos" class="pill" data-scroll-to>Simular orçamento</a>
+            <a href="#planos" class="pill nav-cta" data-scroll-to>Simular orçamento</a>
             <button id="mobile-menu-button" class="icon-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
                 <span class="burger" aria-hidden="true"></span>
             </button>
@@ -2174,7 +2270,7 @@
         </div>
         <div class="hero-meta" id="hero-meta">
             <div class="when">Música ao vivo para<br>cerimônias religiosas</div>
-            <a href="#planos" class="pill lg" data-scroll-to>Pedir orçamento</a>
+            <a href="#planos" class="pill lg" id="hero-cta" data-scroll-to>Simular orçamento</a>
             <div class="where">Angélica · Ivinhema · MS<br>e região</div>
         </div>
         <span class="scroll-cue" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
@@ -2201,7 +2297,7 @@
                 <div class="cinema-cards">
                     <article class="ccard"><i class="fas fa-music" aria-hidden="true"></i><h3>Repertório do rito</h3><p>Até 12 músicas da cerimônia, já contando uma entrada especial.</p></article>
                     <article class="ccard"><i class="fas fa-users" aria-hidden="true"></i><h3>Formação sob medida</h3><p>Escolha o plano com as vozes e os instrumentos que combinam com vocês.</p></article>
-                    <article class="ccard"><i class="fab fa-whatsapp" aria-hidden="true"></i><h3>Orçamento em minutos</h3><p>Preencha os dados do casamento e receba o orçamento pelo WhatsApp.</p><a class="pill" href="#planos" data-scroll-to>Ver planos</a></article>
+                    <article class="ccard"><i class="fab fa-whatsapp" aria-hidden="true"></i><h3>Orçamento em minutos</h3><p>Preencha os dados do casamento e receba o orçamento pelo WhatsApp.</p></article>
                 </div>
             </div>
         </section>
@@ -2221,7 +2317,6 @@
                         <li><i class="fas fa-church"></i><span><b>Até 12 músicas do ritual</b> da cerimônia, seguindo as orientações da paróquia.</span></li>
                         <li><i class="fas fa-map-marker-alt"></i><span><b>Angélica e Ivinhema (MS)</b>, e cidades da região.</span></li>
                     </ul>
-                    <a href="#planos" class="pill lg" data-scroll-to>Ver planos e pedir orçamento <i class="fas fa-arrow-down"></i></a>
                 </div>
             </div>
         </section>
@@ -2283,7 +2378,7 @@
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
-                                <button onclick="handleSimular('Essência Clássica e Sublime', ['3 Vozes + Teclado/Piano'])" class="pill">Ver orçamento</button>
+                                <button onclick="handleSimular('Essência Clássica e Sublime', ['3 Vozes + Teclado/Piano'])" class="pill">Simular orçamento</button>
                             </div>
                         </article>
 
@@ -2297,7 +2392,7 @@
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
-                                <button onclick="handleSimular('Harmonia Delicada e Acústica', ['3 Vozes + Teclado/Piano', 'Violão'])" class="pill">Ver orçamento</button>
+                                <button onclick="handleSimular('Harmonia Delicada e Acústica', ['3 Vozes + Teclado/Piano', 'Violão'])" class="pill">Simular orçamento</button>
                             </div>
                         </article>
 
@@ -2311,7 +2406,7 @@
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
-                                <button onclick="handleSimular('Sofisticação e Envolvimento', ['3 Vozes + Teclado/Piano', 'Contrabaixo', 'Guitarra'])" class="pill">Ver orçamento</button>
+                                <button onclick="handleSimular('Sofisticação e Envolvimento', ['3 Vozes + Teclado/Piano', 'Contrabaixo', 'Guitarra'])" class="pill">Simular orçamento</button>
                             </div>
                         </article>
 
@@ -2325,7 +2420,7 @@
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
-                                <button onclick="handleSimular('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Violão', 'Contrabaixo'])" class="pill">Ver orçamento</button>
+                                <button onclick="handleSimular('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Violão', 'Contrabaixo'])" class="pill">Simular orçamento</button>
                             </div>
                         </article>
 
@@ -2339,7 +2434,7 @@
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>Até 12 músicas</small>Sob consulta</div>
-                                <button onclick="handleSimular('Versatilidade e Brilho Acústica', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'])" class="pill">Ver orçamento</button>
+                                <button onclick="handleSimular('Versatilidade e Brilho Acústica', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'])" class="pill">Simular orçamento</button>
                             </div>
                         </article>
 
@@ -2372,7 +2467,7 @@
                     <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="ic-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="112"><stop offset="0" stop-color="#f6e2b8"/><stop offset=".55" stop-color="#e8b27a"/><stop offset="1" stop-color="#e8958a"/></linearGradient></defs></svg>
                 </div>
                 <div class="mt-10 max-w-2xl mx-auto pt-8" style="border-top: 1px solid rgba(255,255,255,.1)">
-                    <button id="simulate-btn-custom" class="pill lg w-full justify-center"><i class="fas fa-file-signature"></i> Ver orçamento do meu plano</button>
+                    <button id="simulate-btn-custom" class="pill lg w-full justify-center"><i class="fas fa-file-signature"></i> Simular orçamento do meu plano</button>
                 </div>
             </section>
         </div>
@@ -4910,7 +5005,7 @@
         // O arquivo é codificado com quadros-chave a cada 4 quadros, para pular para qualquer ponto sem travar.
         const cinema = $('#cinema');
         const cinemaVideo = cinema ? $('video', cinema) : null;
-        const VIDEO_SHARE = 0.84; // parte da rolagem da cena usada pelo vídeo; o resto é para os cards
+        const VIDEO_SHARE = 0.8; // parte da rolagem da cena usada pelo vídeo; o resto é para os cards
         const scrub = { t: 0 };
         function primeCinemaVideo() {
             const v = cinemaVideo;
@@ -5272,6 +5367,57 @@
         window.addEventListener('load', () => ScrollTrigger.refresh());
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
     })();
+    </script>
+    <script>
+        // Enquanto o botão de orçamento da abertura está na tela, o do topo fica escondido (evita dois iguais lado a lado)
+        (function setupNavCta() {
+            const heroCta = document.getElementById('hero-cta');
+            const navCta = document.querySelector('.nav-cta');
+            if (!heroCta || !navCta || !('IntersectionObserver' in window)) return;
+            new IntersectionObserver(([entry]) => {
+                navCta.classList.toggle('is-hidden', entry.isIntersecting);
+            }, { rootMargin: '-64px 0px 0px 0px' }).observe(heroCta);
+        })();
+    </script>
+    <script>
+        // Indicador de rolagem com as cores do site no celular e no tablet: acompanha a página
+        // ou a área grande que estiver rolando (como o simulador em tela cheia) e some ao parar.
+        (function setupTouchScrollbar() {
+            if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
+            const bar = document.createElement('div');
+            bar.className = 'hda-scrollbar';
+            bar.setAttribute('aria-hidden', 'true');
+            const thumb = document.createElement('i');
+            bar.appendChild(thumb);
+            document.body.appendChild(bar);
+            let hideTimer = 0, frame = 0, target = null;
+            const draw = () => {
+                frame = 0;
+                const page = !target || target === document.documentElement;
+                const el = page ? document.documentElement : target;
+                const rect = page ? { top: 0, height: window.innerHeight } : el.getBoundingClientRect();
+                const total = el.scrollHeight, view = page ? window.innerHeight : el.clientHeight;
+                const pos = page ? window.scrollY : el.scrollTop;
+                if (total <= view + 1) { bar.classList.remove('is-on'); return; }
+                const pad = 4, track = rect.height - pad * 2;
+                const size = Math.max(36, track * (view / total));
+                const y = (track - size) * Math.min(1, Math.max(0, pos / (total - view)));
+                bar.style.top = `${rect.top + pad}px`;
+                bar.style.height = `${track}px`;
+                thumb.style.height = `${size}px`;
+                thumb.style.transform = `translateY(${y}px)`;
+                bar.classList.add('is-on');
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(() => bar.classList.remove('is-on'), 900);
+            };
+            document.addEventListener('scroll', (e) => {
+                const t = e.target === document ? document.documentElement : e.target;
+                // Só áreas grandes: listas pequenas, carrosséis e a galeria continuam com a barra própria
+                if (t !== document.documentElement && (t.clientHeight < window.innerHeight * 0.6 || t.scrollHeight <= t.clientHeight)) return;
+                target = t;
+                if (!frame) frame = requestAnimationFrame(draw);
+            }, { capture: true, passive: true });
+        })();
     </script>
 </body>
 </html>
