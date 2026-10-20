@@ -1949,10 +1949,14 @@
         /* --- Fundo em movimento (só no modo com movimento): as mesmas cores do tema (rosé, vinho e champanhe)
                derivam devagar sobre o fundo noturno. Os blocos se repetem em mosaico, então o deslocamento de um
                bloco inteiro fecha o ciclo sem emenda; o topo e a base somem no fundo para manter as transições. --- */
-        @keyframes bg-drift { from { transform: translate3d(-12vmax, 0, 0); } to { transform: translate3d(12vmax, 0, 0); } }
+        @keyframes bg-drift {
+            0% { transform: translate3d(-18vmax, -4vh, 0) scale(1); }
+            50% { transform: translate3d(0, 4vh, 0) scale(1.1); }
+            100% { transform: translate3d(18vmax, -4vh, 0) scale(1); }
+        }
         @keyframes glow-breathe {
             0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
-            50% { transform: translate(6vw, 4%) scale(1.12); opacity: .7; }
+            50% { transform: translate(10vw, 7%) scale(1.22); opacity: .65; }
         }
         html[data-experience="hifi"] .feed-section,
         html[data-experience="hifi"] .plans-section,
@@ -1965,13 +1969,13 @@
         html[data-experience="hifi"] .builder-wrap::before,
         html[data-experience="hifi"] .cinema-stage::before,
         html[data-experience="hifi"] #contato::after {
-            content: ""; position: absolute; top: 0; bottom: 0; left: -12vmax; right: -12vmax; z-index: -1; pointer-events: none; will-change: transform;
+            content: ""; position: absolute; top: -6vh; bottom: -6vh; left: -18vmax; right: -18vmax; z-index: -1; pointer-events: none; will-change: transform;
             background-image:
                 radial-gradient(circle, rgba(229, 143, 132, .13), transparent 50%),
                 radial-gradient(circle, rgba(109, 47, 87, .32), transparent 55%),
                 radial-gradient(circle, rgba(241, 214, 164, .06), transparent 40%);
             background-size: 110vmax 110vmax, 90vmax 90vmax, 140vmax 140vmax;
-            animation: bg-drift 40s ease-in-out infinite alternate;
+            animation: bg-drift 28s ease-in-out infinite alternate;
             -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22vh, #000 calc(100% - 22vh), transparent 100%);
             mask-image: linear-gradient(180deg, transparent 0, #000 22vh, #000 calc(100% - 22vh), transparent 100%);
         }
@@ -1979,7 +1983,59 @@
             -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22vh);
             mask-image: linear-gradient(180deg, transparent 0, #000 22vh);
         }
-        html[data-experience="hifi"] #contato::before { animation: glow-breathe 14s ease-in-out infinite; }
+        html[data-experience="hifi"] #contato::before { animation: glow-breathe 11s ease-in-out infinite; }
+
+        /* Cards: um brilho rosé/champanhe passeia devagar por trás do conteúdo */
+        @keyframes card-glow {
+            0% { transform: translate(-30%, -25%) scale(1); }
+            33% { transform: translate(25%, -10%) scale(1.15); }
+            66% { transform: translate(5%, 30%) scale(.95); }
+            100% { transform: translate(-30%, -25%) scale(1); }
+        }
+        html[data-experience="hifi"] .plan-slide,
+        html[data-experience="hifi"] .steps li,
+        html[data-experience="hifi"] .ccard,
+        html[data-experience="hifi"] .contact-pill,
+        html[data-experience="hifi"] .custom-total { position: relative; isolation: isolate; overflow: hidden; }
+        html[data-experience="hifi"] .plan-slide::before,
+        html[data-experience="hifi"] .steps li::before,
+        html[data-experience="hifi"] .ccard::before,
+        html[data-experience="hifi"] .contact-pill::before,
+        html[data-experience="hifi"] .custom-total::before,
+        html[data-experience="hifi"] .inst-card::before {
+            content: ""; position: absolute; z-index: -1; inset: -40%; pointer-events: none; will-change: transform;
+            background:
+                radial-gradient(closest-side at 35% 40%, rgba(229, 143, 132, .22), transparent),
+                radial-gradient(closest-side at 70% 65%, rgba(241, 214, 164, .12), transparent);
+            animation: card-glow 16s ease-in-out infinite;
+        }
+        html[data-experience="hifi"] .plan-slide:nth-child(2n)::before,
+        html[data-experience="hifi"] .steps li:nth-child(2n)::before,
+        html[data-experience="hifi"] .ccard:nth-child(2n)::before,
+        html[data-experience="hifi"] .inst-card:nth-child(2n)::before { animation-duration: 19s; animation-delay: -6s; }
+        html[data-experience="hifi"] .plan-slide:nth-child(3n)::before,
+        html[data-experience="hifi"] .steps li:nth-child(3n)::before,
+        html[data-experience="hifi"] .ccard:nth-child(3n)::before,
+        html[data-experience="hifi"] .inst-card:nth-child(3n)::before { animation-duration: 22s; animation-delay: -11s; }
+        /* A foto do plano fica por cima do brilho */
+        html[data-experience="hifi"] .plan-slide .ps-img { z-index: 0; }
+
+        /* Fundo do menu: as mesmas manchas de cor do site derivando, só enquanto o menu está aberto */
+        @keyframes menu-drift {
+            0% { transform: translate3d(-8%, -6%, 0) scale(1); }
+            50% { transform: translate3d(6%, 5%, 0) scale(1.12); }
+            100% { transform: translate3d(-4%, 8%, 0) scale(1.04); }
+        }
+        html[data-experience="hifi"] #mobile-menu { isolation: isolate; }
+        html[data-experience="hifi"] #mobile-menu::before {
+            content: ""; position: absolute; inset: -20%; z-index: -1; pointer-events: none; will-change: transform;
+            background:
+                radial-gradient(40% 35% at 25% 75%, rgba(109, 47, 87, .55), transparent 70%),
+                radial-gradient(35% 30% at 70% 30%, rgba(229, 143, 132, .22), transparent 70%),
+                radial-gradient(30% 30% at 50% 50%, rgba(241, 214, 164, .08), transparent 70%);
+            animation: menu-drift 18s ease-in-out infinite alternate; animation-play-state: paused;
+        }
+        html[data-experience="hifi"] #mobile-menu:not(.hidden)::before { animation-play-state: running; }
         @media (prefers-reduced-motion: reduce) {
             html[data-experience="hifi"] .feed-section::before,
             html[data-experience="hifi"] .plans-section::before,
@@ -1987,7 +2043,14 @@
             html[data-experience="hifi"] .builder-wrap::before,
             html[data-experience="hifi"] .cinema-stage::before,
             html[data-experience="hifi"] #contato::after,
-            html[data-experience="hifi"] #contato::before { animation: none; }
+            html[data-experience="hifi"] #contato::before,
+            html[data-experience="hifi"] .plan-slide::before,
+            html[data-experience="hifi"] .steps li::before,
+            html[data-experience="hifi"] .ccard::before,
+            html[data-experience="hifi"] .contact-pill::before,
+            html[data-experience="hifi"] .custom-total::before,
+            html[data-experience="hifi"] .inst-card::before,
+            html[data-experience="hifi"] #mobile-menu::before { animation: none; }
         }
         /* --- Botões com cor em movimento --- */
         @keyframes pill-flow { to { background-position: 200% 50%; } }
