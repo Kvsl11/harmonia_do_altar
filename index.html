@@ -769,6 +769,14 @@
         #mobile-menu:not(.hidden) .nav-link-mobile:nth-child(4) { transition-delay: .24s; }
         #mobile-menu:not(.hidden) .nav-link-mobile:nth-child(5) { transition-delay: .32s; }
         .menu-foot { margin-top: 3rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+        /* Redes no menu: só os ícones, no mesmo estilo dos do rodapé */
+        .menu-socials { gap: .8rem; }
+        .menu-socials a {
+            width: 3rem; height: 3rem; border-radius: 999px; display: grid; place-items: center; font-size: 1.2rem;
+            color: var(--champagne); border: 1px solid rgba(241, 214, 164, .3); background: rgba(255, 255, 255, .04);
+            transition: color .3s, border-color .3s, transform .3s, background .3s;
+        }
+        .menu-socials a:hover { color: #fff; border-color: var(--champagne); background: rgba(241, 214, 164, .12); transform: translateY(-3px); }
         /* PC: o lado direito do menu ganha fotos que se revezam com zoom lento */
         .menu-art { display: none; }
         @media (min-width: 1024px) {
@@ -2246,8 +2254,10 @@
             </div>
             <p>Desligue para navegar sem animações de rolagem, pin e efeitos de máscara.</p>
         </div>
-        <div class="menu-foot">
-            <a class="pill" href="https://wa.me/5567996884226?text=Olá!%20Vi%20o%20site%20do%20Harmonia%20do%20Altar%20e%20gostaria%20de%20um%20orçamento." target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <div class="menu-foot menu-socials">
+            <a href="https://wa.me/5567996884226?text=Olá!%20Vi%20o%20site%20do%20Harmonia%20do%20Altar%20e%20gostaria%20de%20um%20orçamento." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer" aria-label="Instagram @harmoniadoaltar"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/share/1CBb9XQqiD/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
         </div>
         <figure class="menu-art" aria-hidden="true">
             <img src="img/sapatos-noiva.jpg" alt="" decoding="async">
@@ -2500,9 +2510,9 @@
             <span class="pill">Chamar no WhatsApp</span>
         </a>
         <div class="socials">
-            <a href="https://www.facebook.com/share/1CBb9XQqiD/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://wa.me/5567996884226" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer" aria-label="Instagram @harmoniadoaltar"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/share/1CBb9XQqiD/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
         </div>
         <p class="legal">© <span id="year"></span> Harmonia do Altar · Música ao vivo para casamentos · Angélica/Ivinhema – MS</p>
     </footer>
