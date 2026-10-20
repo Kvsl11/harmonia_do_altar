@@ -1309,6 +1309,96 @@
         .br-pick:hover { background: rgba(241, 214, 164, .18); }
         .sim-modal .br-input input.br-invalid { border-color: rgba(229, 143, 132, .8); }
         .br-native { position: absolute; right: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; border: 0; padding: 0; }
+        .br-pick[aria-expanded="true"] { background: linear-gradient(135deg, var(--champagne), var(--rose)); color: #2a1325; }
+
+        /* Calendário, relógio e listas de seleção próprios, no lugar dos nativos do navegador */
+        .hda-pop {
+            position: absolute; z-index: 40; top: calc(100% + .55rem); left: 0;
+            width: min(19.5rem, calc(100vw - 2.5rem)); padding: 1rem; border-radius: 20px; color: var(--ink);
+            background: radial-gradient(120% 70% at 100% 0%, rgba(229, 143, 132, .16), transparent 60%), radial-gradient(90% 60% at 0% 100%, rgba(109, 47, 87, .35), transparent 65%), var(--night-2);
+            border: 1px solid rgba(241, 214, 164, .22);
+            box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .9), 0 0 0 1px rgba(255, 255, 255, .03);
+            animation: hda-pop-in .28s cubic-bezier(.2, .8, .2, 1) both;
+        }
+        .hda-pop[hidden] { display: none; }
+        .hda-pop.hda-pop-right { left: auto; right: 0; }
+        @keyframes hda-pop-in { from { opacity: 0; transform: translateY(-8px) scale(.98); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .hda-pop { animation: none; } }
+        html[data-experience="lofi"] .hda-pop { animation: none; }
+        .hda-pop button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+        .hda-pop button:focus-visible, .hda-select-btn:focus-visible { outline: 2px solid var(--champagne); outline-offset: 2px; }
+
+        .hda-cal-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .75rem; }
+        .hda-cal-title { font-family: var(--font-serif); font-size: 1.15rem; color: #fff; text-transform: capitalize; }
+        .hda-cal-title small { font-family: var(--font-display); font-size: .8rem; letter-spacing: .14em; color: var(--champagne); margin-left: .35rem; }
+        .hda-pop .hda-cal-nav {
+            width: 2.1rem; height: 2.1rem; border-radius: 999px; display: grid; place-items: center; color: var(--champagne);
+            border: 1px solid rgba(241, 214, 164, .22); transition: background .25s ease, opacity .25s ease;
+        }
+        .hda-pop .hda-cal-nav:hover:not(:disabled) { background: rgba(241, 214, 164, .14); }
+        .hda-pop .hda-cal-nav:disabled { opacity: .3; cursor: default; }
+        .hda-cal-week, .hda-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .2rem; text-align: center; }
+        .hda-cal-week span { font-size: .62rem; font-weight: 700; letter-spacing: .14em; color: var(--muted); padding: .25rem 0 .45rem; }
+        .hda-pop .hda-cal-day {
+            aspect-ratio: 1; border-radius: 999px; font-size: .88rem; font-weight: 600; display: grid; place-items: center;
+            transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+        }
+        .hda-pop .hda-cal-day:hover:not(:disabled):not(.is-selected) { background: rgba(241, 214, 164, .14); color: #fff; }
+        .hda-pop .hda-cal-day.is-today { box-shadow: inset 0 0 0 1px var(--champagne); color: var(--champagne); }
+        .hda-pop .hda-cal-day.is-weekend:not(:disabled):not(.is-selected) { color: var(--peach); }
+        .hda-pop .hda-cal-day.is-selected { background: linear-gradient(135deg, var(--champagne), var(--rose)); color: #2a1325; box-shadow: 0 8px 20px -8px rgba(229, 143, 132, .8); }
+        .hda-pop .hda-cal-day:disabled { opacity: .25; cursor: default; }
+
+        .hda-time { width: min(16.5rem, calc(100vw - 2.5rem)); }
+        .hda-time-display { text-align: center; font-family: var(--font-display); font-size: 2rem; letter-spacing: .06em; color: #fff; margin-bottom: .6rem; }
+        .hda-time-display span { color: var(--champagne); }
+        .hda-time-cols { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+        .hda-time-col > small { display: block; text-align: center; font-size: .62rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: .4rem; }
+        .hda-time-list {
+            max-height: 12.5rem; overflow-y: auto; overscroll-behavior: contain; display: grid; gap: .2rem; padding: .3rem;
+            border-radius: 14px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08);
+            scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent;
+        }
+        .hda-pop .hda-time-opt, .hda-pop .hda-opt {
+            padding: .5rem .6rem; border-radius: 10px; font-size: .92rem; font-weight: 600; text-align: center;
+            transition: background .2s ease, color .2s ease;
+        }
+        .hda-pop .hda-time-opt:hover:not(.is-selected), .hda-pop .hda-opt:hover:not(.is-selected) { background: rgba(241, 214, 164, .14); color: #fff; }
+        .hda-pop .hda-time-opt.is-selected, .hda-pop .hda-opt.is-selected { background: linear-gradient(135deg, var(--champagne), var(--rose)); color: #2a1325; }
+        .hda-pop .hda-time-done {
+            width: 100%; margin-top: .75rem; padding: .65rem; border-radius: 999px; font-weight: 700; font-size: .78rem;
+            letter-spacing: .16em; text-transform: uppercase; color: #2a1325; background: linear-gradient(135deg, var(--champagne), var(--rose));
+            box-shadow: var(--pill-shadow);
+        }
+
+        .hda-select { position: relative; }
+        .hda-select > select { position: absolute; inset: auto 0 0 auto; width: 1px !important; height: 1px; opacity: 0; pointer-events: none; padding: 0 !important; border: 0 !important; }
+        .hda-select-btn {
+            width: 100%; display: flex; align-items: center; justify-content: space-between; gap: .75rem; text-align: left; cursor: pointer;
+            padding: .95rem 1.1rem; border-radius: 14px; font: inherit; font-size: .98rem; font-weight: 600; color: #fff;
+            background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14);
+            transition: border-color .3s ease, background .3s ease, box-shadow .3s ease;
+        }
+        .hda-select-btn:hover { border-color: rgba(241, 214, 164, .4); }
+        .hda-select-btn[aria-expanded="true"] { border-color: var(--champagne); background: rgba(255, 255, 255, .08); box-shadow: 0 0 0 4px rgba(241, 214, 164, .12); }
+        .hda-select-btn i { color: var(--champagne); transition: transform .3s ease; }
+        .hda-select-btn[aria-expanded="true"] i { transform: rotate(180deg); }
+        .hda-select .hda-pop { width: 100%; padding: .4rem; }
+        .hda-opt-list { max-height: 15rem; overflow-y: auto; overscroll-behavior: contain; display: grid; gap: .15rem; margin: 0; padding: 0; list-style: none; scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent; }
+        .hda-pop .hda-opt { width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; padding: .7rem .9rem; }
+        /* Parcelas e vencimento como pílulas, no estilo dos cartões de pagamento */
+        .hda-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(4.1rem, 1fr)); gap: .5rem; }
+        .hda-chip {
+            padding: .75rem .4rem; border-radius: 14px; font: inherit; font-size: .95rem; font-weight: 700; color: #fff; cursor: pointer; text-align: center;
+            background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .12);
+            transition: border-color .3s ease, background .3s ease, transform .3s ease, color .3s ease, box-shadow .3s ease;
+        }
+        .hda-chip small { display: block; font-size: .6rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: .1rem; }
+        .hda-chip:hover { border-color: rgba(241, 214, 164, .35); transform: translateY(-2px); }
+        .hda-chip[aria-checked="true"] { color: #2a1325; border-color: transparent; background: linear-gradient(135deg, var(--champagne), var(--rose)); box-shadow: var(--pill-shadow); }
+        .hda-chip[aria-checked="true"] small { color: rgba(42, 19, 37, .7); }
+        .hda-chip:focus-visible { outline: 2px solid var(--champagne); outline-offset: 2px; }
+        .hda-pop .hda-opt.is-selected::after { content: "\f00c"; font-family: "Font Awesome 6 Free"; font-weight: 900; font-size: .8rem; }
         .sim-modal input[type="text"], .sim-modal input[type="date"], .sim-modal input[type="time"], .sim-modal select {
             width: 100%; padding: .95rem 1.1rem; border-radius: 14px; font-size: .98rem; color: #fff;
             background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14);
@@ -1472,6 +1562,61 @@
         .sim-dialog-icon.warn { background: linear-gradient(135deg, #f3b98a, #e06b6b); }
         .sim-dialog .notification-modal-text { color: var(--muted); font-size: .95rem; line-height: 1.65; margin-bottom: 1.5rem; text-align: left; }
         .sim-dialog .notification-modal-button { width: 100%; justify-content: center; }
+
+        /* Janelinhas de aviso: faixa de cor no topo, ícone com halo e conteúdo em blocos */
+        .sim-modal .notification-modal-content.sim-alert { overflow: hidden; isolation: isolate; padding-top: 2.5rem; }
+        .sim-alert::before { content: ""; position: absolute; inset: 0 0 auto; height: 4px; background: linear-gradient(90deg, var(--champagne), var(--rose), var(--wine)); }
+        .sim-alert::after {
+            content: "♫"; position: absolute; z-index: -1; right: -.5rem; bottom: -2.5rem; font-size: 11rem; line-height: 1;
+            color: rgba(241, 214, 164, .045); pointer-events: none; transform: rotate(-12deg);
+        }
+        .sim-alert.is-warn::before { background: linear-gradient(90deg, var(--peach), #e06b6b, var(--wine)); }
+        .sim-alert.is-warn { border-color: rgba(229, 143, 132, .3); background: radial-gradient(120% 80% at 100% 0%, rgba(224, 107, 107, .18), transparent 55%), var(--night-2); }
+        .sim-alert-head { display: flex; align-items: center; gap: 1rem; margin: 0 2.5rem 1.25rem 0; }
+        .sim-alert-head .notification-modal-title { margin: .15rem 0 0; font-size: 1.4rem; line-height: 1.2; }
+        .sim-alert-eyebrow { display: block; font-size: .64rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--champagne); }
+        .sim-alert.is-warn .sim-alert-eyebrow { color: var(--peach); }
+        .sim-alert .sim-dialog-icon { position: relative; width: 3.1rem; height: 3.1rem; font-size: 1.15rem; box-shadow: 0 10px 26px -10px rgba(229, 143, 132, .9); }
+        .sim-alert .sim-dialog-icon::after { content: ""; position: absolute; inset: -5px; border-radius: inherit; border: 1px solid rgba(241, 214, 164, .35); animation: sim-halo 2.4s ease-out infinite; }
+        .sim-alert .sim-dialog-icon.warn::after { border-color: rgba(229, 143, 132, .55); }
+        @keyframes sim-halo { from { transform: scale(.9); opacity: 1; } to { transform: scale(1.35); opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) { .sim-alert .sim-dialog-icon::after { animation: none; opacity: .6; } }
+        html[data-experience="lofi"] .sim-alert .sim-dialog-icon::after { animation: none; opacity: .6; }
+
+        .sim-alert-points { display: grid; gap: .6rem; margin: 0 0 1.5rem; padding: 0; list-style: none; }
+        .sim-alert-points li {
+            display: flex; gap: .85rem; align-items: flex-start; padding: .85rem 1rem; border-radius: 14px; font-size: .9rem; line-height: 1.55; color: var(--muted);
+            background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08);
+        }
+        .sim-alert-points li b { color: #fff; font-weight: 600; }
+        .sim-alert-points li > i { flex-shrink: 0; width: 1.9rem; height: 1.9rem; border-radius: 10px; display: grid; place-items: center; font-size: .8rem; color: var(--champagne); background: rgba(241, 214, 164, .1); }
+        .sim-alert-points li.is-warn { border-color: rgba(229, 143, 132, .25); background: rgba(229, 143, 132, .07); }
+        .sim-alert-points li.is-warn > i { color: var(--rose); background: rgba(229, 143, 132, .14); }
+
+        .sim-date-compare { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .6rem; margin-bottom: 1.1rem; }
+        .sim-date-card { position: relative; padding: .9rem 1rem; border-radius: 16px; text-align: center; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .1); }
+        .sim-date-card > i { display: block; font-size: 1rem; margin-bottom: .4rem; }
+        .sim-date-card small { display: block; font-size: .6rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+        .sim-date-card b { display: block; margin-top: .2rem; font-family: var(--font-display); font-size: 1.35rem; font-weight: 500; letter-spacing: .04em; color: #fff; }
+        .sim-date-card > span { display: block; margin-top: .15rem; font-size: .72rem; color: var(--muted); }
+        .sim-date-card.is-ok { border-color: rgba(241, 214, 164, .35); background: linear-gradient(160deg, rgba(241, 214, 164, .12), rgba(255, 255, 255, .02)); }
+        .sim-date-card.is-ok > i { color: var(--champagne); }
+        .sim-date-card.is-late { border-color: rgba(224, 107, 107, .45); background: linear-gradient(160deg, rgba(224, 107, 107, .16), rgba(255, 255, 255, .02)); }
+        .sim-date-card.is-late > i, .sim-date-card.is-late b { color: #ffb0a6; }
+        .sim-date-gap { display: flex; flex-direction: column; align-items: center; gap: .3rem; color: var(--rose); font-size: .85rem; }
+        .sim-date-gap em { font-style: normal; font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; padding: .25rem .5rem; border-radius: 999px; background: rgba(229, 143, 132, .14); color: #ffb0a6; }
+        .sim-alert .notification-modal-text b { color: #fff; }
+        .sim-modal .sim-alert > .notification-modal-button { width: 100%; }
+        .sim-alert-actions { display: flex; gap: .6rem; }
+        .sim-alert-actions .pill { flex: 1; justify-content: center; }
+        .sim-alert-actions .btn-secondary { flex: .8; }
+        @media (max-width: 480px) {
+            .sim-alert-head .notification-modal-title { font-size: 1.2rem; }
+            .sim-date-compare { grid-template-columns: 1fr; }
+            .sim-date-gap { flex-direction: row; justify-content: center; }
+            .sim-date-gap i { rotate: 90deg; }
+            .sim-alert-actions { flex-direction: column-reverse; }
+        }
         .sim-map-dialog { max-width: 920px !important; height: min(84vh, 760px); display: flex; flex-direction: column; }
         .sim-map-wrap { position: relative; flex: 1; min-height: 280px; display: flex; margin-bottom: 1.25rem; }
         .sim-map-canvas { flex: 1; min-height: 280px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, .1); }
@@ -2383,11 +2528,11 @@
                     </div>
                     <div id="installment-options" class="hidden modal-input-group">
                         <label for="installments">Número de parcelas desejado</label>
-                        <select id="installments"></select>
+                        <select id="installments" data-hda="chips"></select>
                     </div>
                     <div id="boleto-due-date-options" class="hidden modal-input-group">
                         <label for="boleto-due-date">Melhor dia para vencimento do boleto</label>
-                        <select id="boleto-due-date">
+                        <select id="boleto-due-date" data-hda="chips">
                             <option value="5">Dia 5</option>
                             <option value="10">Dia 10</option>
                             <option value="15">Dia 15</option>
@@ -2483,9 +2628,15 @@
 
     <!-- Aviso depois de abrir o WhatsApp: como anexar a imagem do resumo -->
     <div id="whats-sent-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="whats-sent-title">
-        <div class="notification-modal-content sim-dialog sim-sent">
+        <div class="notification-modal-content sim-dialog sim-sent sim-alert">
             <button type="button" class="close-button modal-close-button icon-btn" id="close-whats-sent-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
-            <h3 class="notification-modal-title info" id="whats-sent-title">Abrindo o WhatsApp…</h3>
+            <div class="sim-alert-head">
+                <span class="sim-dialog-icon"><i class="fab fa-whatsapp"></i></span>
+                <div>
+                    <span class="sim-alert-eyebrow">Pedido de orçamento</span>
+                    <h3 class="notification-modal-title info" id="whats-sent-title">Abrindo o WhatsApp…</h3>
+                </div>
+            </div>
             <div class="sim-sent-body">
                 <img id="whats-sent-shot" class="hidden" alt="Imagem do resumo do plano">
                 <p class="notification-modal-text" id="whats-sent-text"></p>
@@ -2499,30 +2650,55 @@
     </div>
 
     <!-- Modal de Notificação de Boleto -->
-    <div id="boleto-notification-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true">
-        <div class="notification-modal-content sim-dialog">
+    <div id="boleto-notification-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true" aria-labelledby="boleto-info-title">
+        <div class="notification-modal-content sim-dialog sim-alert">
             <button type="button" class="close-button modal-close-button icon-btn" id="close-boleto-modal-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
-            <h3 class="notification-modal-title info">
-                <span class="sim-dialog-icon"><i class="fas fa-info"></i></span> Pagamento via boleto
-            </h3>
-            <p class="notification-modal-text">
-                Para sua comodidade, o boleto pode ser quitado a qualquer momento antes da data da cerimônia. Lembre-se: o pagamento pontual é essencial! Boletos não pagos podem estar sujeitos a protesto, gerando restrições de crédito.
-            </p>
+            <div class="sim-alert-head">
+                <span class="sim-dialog-icon"><i class="fas fa-barcode"></i></span>
+                <div>
+                    <span class="sim-alert-eyebrow">Boleto bancário</span>
+                    <h3 class="notification-modal-title info" id="boleto-info-title">Como funciona o pagamento</h3>
+                </div>
+            </div>
+            <ul class="sim-alert-points">
+                <li><i class="fas fa-calendar-check"></i><span><b>Pague quando quiser</b>, antes da data da cerimônia. Dá para quitar adiantado.</span></li>
+                <li><i class="fas fa-ring"></i><span><b>Todas as parcelas vencem antes do grande dia.</b> O simulador avisa se alguma passar da data.</span></li>
+                <li class="is-warn"><i class="fas fa-triangle-exclamation"></i><span><b>Pagamento em dia é essencial:</b> boletos não pagos podem ser protestados e gerar restrição de crédito.</span></li>
+            </ul>
             <button id="ok-boleto-modal-button" class="btn-primary pill lg notification-modal-button">Entendi</button>
         </div>
     </div>
 
     <!-- Modal de Notificação de Validação de Data de Boleto -->
-    <div id="boleto-date-warning-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true">
-        <div class="notification-modal-content sim-dialog">
+    <div id="boleto-date-warning-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true" aria-labelledby="boleto-warn-title" aria-describedby="boleto-warn-text">
+        <div class="notification-modal-content sim-dialog sim-alert is-warn">
             <button type="button" class="close-button modal-close-button icon-btn" id="close-boleto-date-warning-modal-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
-            <h3 class="notification-modal-title warning">
-                <span class="sim-dialog-icon warn"><i class="fas fa-exclamation"></i></span> Ajuste a data do boleto
-            </h3>
-            <p class="notification-modal-text">
-                A data da última parcela (dia <span id="warning-due-date"></span>) ultrapassa a data da sua cerimônia (<span id="warning-ceremony-date"></span>). É fundamental que todas as parcelas sejam quitadas antes do evento. Por favor, ajuste as parcelas ou o dia de vencimento.
-            </p>
-            <button id="ok-boleto-date-warning-modal-button" class="btn-primary pill lg notification-modal-button">Entendi</button>
+            <div class="sim-alert-head">
+                <span class="sim-dialog-icon warn"><i class="fas fa-exclamation"></i></span>
+                <div>
+                    <span class="sim-alert-eyebrow">Atenção às datas</span>
+                    <h3 class="notification-modal-title warning" id="boleto-warn-title">A última parcela passa do casamento</h3>
+                </div>
+            </div>
+            <div class="sim-date-compare">
+                <div class="sim-date-card is-ok">
+                    <i class="fas fa-ring"></i>
+                    <small>Cerimônia</small>
+                    <b id="warning-ceremony-date"></b>
+                </div>
+                <span class="sim-date-gap"><i class="fas fa-arrow-right"></i><em id="warning-gap"></em></span>
+                <div class="sim-date-card is-late">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <small>Última parcela</small>
+                    <b id="warning-last-date"></b>
+                    <span>Dia <span id="warning-due-date"></span> · <span id="warning-installments"></span></span>
+                </div>
+            </div>
+            <p class="notification-modal-text" id="boleto-warn-text">Todas as parcelas precisam estar pagas antes do grande dia. <span id="warning-tip"></span></p>
+            <div class="sim-alert-actions">
+                <button type="button" id="ok-boleto-date-warning-modal-button" class="btn-secondary pill ghost lg">Ajustar eu mesmo</button>
+                <button type="button" id="warning-fix-btn" class="btn-primary pill lg"></button>
+            </div>
         </div>
     </div>
 
@@ -3762,13 +3938,296 @@
                 syncDate();
             });
             ceremonyTimeInput.addEventListener('change', () => { timeBr.value = ceremonyTimeInput.value || ''; syncTime(); });
-            document.querySelectorAll('.br-pick').forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const native = document.getElementById(btn.dataset.pick);
-                    if (native.id === 'ceremony-date') native.min = todayIso();
-                    try { native.showPicker(); } catch (e) { native.focus(); native.click(); }
-                });
+            // Calendário e relógio próprios, com as cores do site, no lugar dos seletores nativos
+            const MONTHS = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+            const dateBtn = document.querySelector('.br-pick[data-pick="ceremony-date"]');
+            const timeBtn = document.querySelector('.br-pick[data-pick="ceremony-time"]');
+
+            const calPop = document.createElement('div');
+            calPop.className = 'hda-pop';
+            calPop.hidden = true;
+            calPop.setAttribute('role', 'dialog');
+            calPop.setAttribute('aria-label', 'Escolher a data da cerimônia');
+            dateBtn.parentElement.appendChild(calPop);
+            let view = new Date();
+            const renderCal = () => {
+                const y = view.getFullYear(), m = view.getMonth();
+                const today = todayIso();
+                const first = new Date(y, m, 1).getDay();
+                const days = new Date(y, m + 1, 0).getDate();
+                const now = new Date();
+                const atMin = y === now.getFullYear() && m === now.getMonth();
+                let cells = '';
+                for (let i = 0; i < first; i++) cells += '<span></span>';
+                for (let d = 1; d <= days; d++) {
+                    const iso = `${y}-${pad(m + 1)}-${pad(d)}`;
+                    const dow = (first + d - 1) % 7;
+                    const cls = ['hda-cal-day'];
+                    if (iso === today) cls.push('is-today');
+                    if (iso === ceremonyDateInput.value) cls.push('is-selected');
+                    if (dow === 0 || dow === 6) cls.push('is-weekend');
+                    cells += `<button type="button" class="${cls.join(' ')}" data-iso="${iso}" aria-label="${d} de ${MONTHS[m]} de ${y}"${iso < today ? ' disabled' : ''}>${d}</button>`;
+                }
+                calPop.innerHTML = `
+                    <div class="hda-cal-head">
+                        <button type="button" class="hda-cal-nav" data-step="-1" aria-label="Mês anterior"${atMin ? ' disabled' : ''}><i class="fas fa-chevron-left"></i></button>
+                        <span class="hda-cal-title">${MONTHS[m]}<small>${y}</small></span>
+                        <button type="button" class="hda-cal-nav" data-step="1" aria-label="Próximo mês"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="hda-cal-week"><span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span></div>
+                    <div class="hda-cal-grid">${cells}</div>`;
+            };
+            calPop.addEventListener('click', (e) => {
+                const nav = e.target.closest('.hda-cal-nav');
+                if (nav) {
+                    view = new Date(view.getFullYear(), view.getMonth() + Number(nav.dataset.step), 1);
+                    renderCal();
+                    calPop.querySelector(`.hda-cal-nav[data-step="${nav.dataset.step}"]`)?.focus();
+                    return;
+                }
+                const day = e.target.closest('.hda-cal-day');
+                if (!day || day.disabled) return;
+                const [y, mo, d] = day.dataset.iso.split('-');
+                dateBr.value = `${d}/${mo}/${y}`;
+                syncDate();
+                closePop(true);
             });
+
+            const timePop = document.createElement('div');
+            timePop.className = 'hda-pop hda-time hda-pop-right';
+            timePop.hidden = true;
+            timePop.setAttribute('role', 'dialog');
+            timePop.setAttribute('aria-label', 'Escolher o horário da cerimônia');
+            timeBtn.parentElement.appendChild(timePop);
+            let hh = '', mm = '';
+            const MINUTES = Array.from({ length: 12 }, (_, i) => pad(i * 5));
+            const renderTime = () => {
+                const col = (kind, values, current) => values.map((v) =>
+                    `<button type="button" class="hda-time-opt${v === current ? ' is-selected' : ''}" data-${kind}="${v}">${v}</button>`).join('');
+                timePop.innerHTML = `
+                    <div class="hda-time-display">${hh || '--'}<span>:</span>${mm || '--'}</div>
+                    <div class="hda-time-cols">
+                        <div class="hda-time-col"><small>Hora</small><div class="hda-time-list">${col('h', Array.from({ length: 24 }, (_, i) => pad(i)), hh)}</div></div>
+                        <div class="hda-time-col"><small>Minutos</small><div class="hda-time-list">${col('m', MINUTES, mm)}</div></div>
+                    </div>
+                    <button type="button" class="hda-time-done">Pronto</button>`;
+                timePop.querySelectorAll('.hda-time-opt.is-selected').forEach((el) => { el.parentElement.scrollTop = el.offsetTop - el.parentElement.clientHeight / 2 + el.offsetHeight / 2; });
+            };
+            const applyTime = () => {
+                if (!hh) return;
+                timeBr.value = `${hh}:${mm || '00'}`;
+                syncTime();
+            };
+            timePop.addEventListener('click', (e) => {
+                const opt = e.target.closest('.hda-time-opt');
+                if (opt) {
+                    if (opt.dataset.h) hh = opt.dataset.h;
+                    if (opt.dataset.m) mm = opt.dataset.m;
+                    applyTime();
+                    const lists = [...timePop.querySelectorAll('.hda-time-list')].map((l) => l.scrollTop);
+                    renderTime();
+                    timePop.querySelectorAll('.hda-time-list').forEach((l, i) => { l.scrollTop = lists[i]; });
+                    timePop.querySelector(`.hda-time-opt[data-${opt.dataset.h ? 'h' : 'm'}="${opt.dataset.h || opt.dataset.m}"]`)?.focus();
+                    if (opt.dataset.m && hh) closePop(true);
+                    return;
+                }
+                if (e.target.closest('.hda-time-done')) { applyTime(); closePop(true); }
+            });
+
+            let openPop = null, openBtn = null;
+            const closePop = (refocus) => {
+                if (!openPop) return;
+                openPop.hidden = true;
+                openBtn.setAttribute('aria-expanded', 'false');
+                if (refocus) openBtn.focus();
+                openPop = openBtn = null;
+            };
+            const togglePop = (btn, pop, render) => {
+                if (openPop === pop) { closePop(true); return; }
+                closePop(false);
+                render();
+                pop.hidden = false;
+                btn.setAttribute('aria-expanded', 'true');
+                openPop = pop; openBtn = btn;
+                (pop.querySelector('.is-selected') || pop.querySelector('.is-today:not(:disabled)') || pop.querySelector('button:not(:disabled)'))?.focus({ preventScroll: true });
+            };
+            [dateBtn, timeBtn].forEach((btn) => { btn.setAttribute('aria-haspopup', 'dialog'); btn.setAttribute('aria-expanded', 'false'); });
+            dateBtn.addEventListener('click', () => {
+                const [y, mo] = (ceremonyDateInput.value || '').split('-');
+                view = y ? new Date(+y, +mo - 1, 1) : new Date();
+                togglePop(dateBtn, calPop, renderCal);
+            });
+            timeBtn.addEventListener('click', () => {
+                [hh, mm] = ceremonyTimeInput.value ? ceremonyTimeInput.value.split(':') : ['', ''];
+                togglePop(timeBtn, timePop, renderTime);
+            });
+            document.addEventListener('pointerdown', (e) => {
+                if (openPop && !openPop.contains(e.target) && !openBtn.contains(e.target)) closePop(false);
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && openPop) { e.stopPropagation(); closePop(true); }
+            }, true);
+            document.addEventListener('hda:sim-open', () => closePop(false));
+        }
+
+        // Listas de seleção com o visual do site: o <select> nativo continua sendo a fonte do valor
+        function setupHdaSelects() {
+            document.querySelectorAll('.sim-modal select').forEach((select) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'hda-select';
+                select.parentNode.insertBefore(wrap, select);
+                wrap.appendChild(select);
+                select.tabIndex = -1;
+                select.setAttribute('aria-hidden', 'true');
+                if (select.dataset.hda === 'chips') { setupHdaChips(select, wrap); return; }
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'hda-select-btn';
+                btn.id = `${select.id}-btn`;
+                btn.setAttribute('aria-haspopup', 'listbox');
+                btn.setAttribute('aria-expanded', 'false');
+                const label = document.querySelector(`label[for="${select.id}"]`);
+                if (label) { label.htmlFor = btn.id; btn.setAttribute('aria-label', label.textContent.trim()); }
+                wrap.appendChild(btn);
+
+                const pop = document.createElement('div');
+                pop.className = 'hda-pop';
+                pop.hidden = true;
+                const list = document.createElement('ul');
+                list.className = 'hda-opt-list';
+                list.setAttribute('role', 'listbox');
+                pop.appendChild(list);
+                wrap.appendChild(pop);
+
+                const refresh = () => {
+                    const current = select.options[select.selectedIndex];
+                    btn.innerHTML = `<span></span><i class="fas fa-chevron-down"></i>`;
+                    btn.firstChild.textContent = current ? current.textContent : 'Selecione';
+                };
+                const renderList = () => {
+                    list.innerHTML = '';
+                    [...select.options].forEach((opt) => {
+                        const li = document.createElement('li');
+                        const o = document.createElement('button');
+                        o.type = 'button';
+                        o.className = 'hda-opt' + (opt.value === select.value ? ' is-selected' : '');
+                        o.setAttribute('role', 'option');
+                        o.setAttribute('aria-selected', String(opt.value === select.value));
+                        o.dataset.value = opt.value;
+                        o.textContent = opt.textContent;
+                        li.appendChild(o);
+                        list.appendChild(li);
+                    });
+                };
+                const choose = (value) => {
+                    if (select.value !== value) {
+                        select.value = value;
+                        select.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                    refresh();
+                };
+                const close = (refocus) => {
+                    pop.hidden = true;
+                    btn.setAttribute('aria-expanded', 'false');
+                    if (refocus) btn.focus();
+                };
+                const open = () => {
+                    document.dispatchEvent(new CustomEvent('hda:select-open', { detail: wrap }));
+                    renderList();
+                    pop.hidden = false;
+                    btn.setAttribute('aria-expanded', 'true');
+                    const sel = list.querySelector('.is-selected') || list.querySelector('.hda-opt');
+                    if (sel) { sel.focus({ preventScroll: true }); list.scrollTop = sel.offsetTop - list.clientHeight / 2; }
+                };
+
+                btn.addEventListener('click', () => (pop.hidden ? open() : close(true)));
+                btn.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(); }
+                });
+                list.addEventListener('click', (e) => {
+                    const o = e.target.closest('.hda-opt');
+                    if (!o) return;
+                    choose(o.dataset.value);
+                    close(true);
+                });
+                list.addEventListener('keydown', (e) => {
+                    const opts = [...list.querySelectorAll('.hda-opt')];
+                    const i = opts.indexOf(document.activeElement);
+                    const moves = { ArrowDown: i + 1, ArrowUp: i - 1, Home: 0, End: opts.length - 1 };
+                    if (e.key in moves) {
+                        e.preventDefault();
+                        opts[Math.max(0, Math.min(opts.length - 1, moves[e.key]))]?.focus();
+                    } else if (e.key === 'Escape') {
+                        e.stopPropagation();
+                        close(true);
+                    } else if (e.key === 'Tab') {
+                        close(false);
+                    }
+                });
+                document.addEventListener('pointerdown', (e) => { if (!pop.hidden && !wrap.contains(e.target)) close(false); });
+                document.addEventListener('hda:select-open', (e) => { if (e.detail !== wrap) close(false); });
+                // As opções das parcelas são recriadas pelo simulador; o rótulo acompanha
+                new MutationObserver(refresh).observe(select, { childList: true });
+                select.addEventListener('change', refresh);
+                refresh();
+            });
+        }
+
+        // Poucas opções (parcelas, dia do vencimento) viram pílulas clicáveis em vez de lista
+        function setupHdaChips(select, wrap) {
+            const group = document.createElement('div');
+            group.className = 'hda-chips';
+            group.setAttribute('role', 'radiogroup');
+            const label = document.querySelector(`label[for="${select.id}"]`);
+            if (label) {
+                label.id = label.id || `${select.id}-label`;
+                label.removeAttribute('for');
+                group.setAttribute('aria-labelledby', label.id);
+            }
+            wrap.appendChild(group);
+            const render = () => {
+                group.innerHTML = '';
+                [...select.options].forEach((opt) => {
+                    const chip = document.createElement('button');
+                    chip.type = 'button';
+                    chip.className = 'hda-chip';
+                    chip.setAttribute('role', 'radio');
+                    const on = opt.value === select.value;
+                    chip.setAttribute('aria-checked', String(on));
+                    chip.tabIndex = on ? 0 : -1;
+                    chip.dataset.value = opt.value;
+                    // "Dia 15" vira um rótulo pequeno + o número em destaque
+                    const m = opt.textContent.match(/^(\D+)\s+(\d+)$/);
+                    if (m) chip.innerHTML = `<small>${m[1]}</small>${m[2]}`;
+                    else chip.textContent = opt.textContent;
+                    group.appendChild(chip);
+                });
+            };
+            const choose = (value) => {
+                if (select.value !== value) {
+                    select.value = value;
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                render();
+                group.querySelector(`.hda-chip[data-value="${value}"]`)?.focus();
+            };
+            group.addEventListener('click', (e) => {
+                const chip = e.target.closest('.hda-chip');
+                if (chip) choose(chip.dataset.value);
+            });
+            group.addEventListener('keydown', (e) => {
+                const chips = [...group.querySelectorAll('.hda-chip')];
+                const i = chips.indexOf(document.activeElement);
+                const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+                if (step === undefined || i < 0) return;
+                e.preventDefault();
+                choose(chips[(i + step + chips.length) % chips.length].dataset.value);
+            });
+            // As opções das parcelas são recriadas pelo simulador; as pílulas acompanham
+            new MutationObserver(render).observe(select, { childList: true });
+            select.addEventListener('change', render);
+            render();
         }
 
         function navigateToTab(targetTab) {
@@ -3868,6 +4327,29 @@
                 warningDueDateSpan.textContent = selectedBoletoDueDate;
                 const [year, month, day] = ceremonyDate.split('-');
                 warningCeremonyDateSpan.textContent = `${day}/${month}/${year}`;
+                const fmt = (d) => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+                document.getElementById('warning-last-date').textContent = fmt(lastPaymentDate);
+                document.getElementById('warning-installments').textContent = `${selectedInstallments}x`;
+                const gapDays = Math.round((lastPaymentDate - new Date(+year, +month - 1, +day)) / 86400000);
+                document.getElementById('warning-gap').textContent = gapDays === 1 ? '1 dia depois' : `${gapDays} dias depois`;
+                // Sugere o maior número de parcelas que cabe antes da cerimônia com o mesmo dia de vencimento
+                let maxFit = 0;
+                for (let n = 1; n < selectedInstallments; n++) {
+                    const last = new Date(firstPaymentDate);
+                    last.setMonth(last.getMonth() + n - 1);
+                    if (last <= ceremony) maxFit = n;
+                }
+                const fixBtn = document.getElementById('warning-fix-btn');
+                const tip = document.getElementById('warning-tip');
+                if (maxFit) {
+                    fixBtn.innerHTML = `<i class="fas fa-wand-magic-sparkles"></i> Usar ${maxFit}x`;
+                    fixBtn.dataset.installments = maxFit;
+                    fixBtn.classList.remove('hidden');
+                    tip.innerHTML = `Com vencimento no dia ${selectedBoletoDueDate}, cabem até <b>${maxFit === 1 ? '1 parcela' : `${maxFit} parcelas`}</b>. Você também pode trocar o dia de vencimento.`;
+                } else {
+                    fixBtn.classList.add('hidden');
+                    tip.innerHTML = 'Com a cerimônia tão próxima, nem a primeira parcela vence a tempo. Tente outro dia de vencimento, ou pague com <b>Pix</b> ou <b>cartão</b>.';
+                }
                 showAnimatedModal(boletoDateWarningModal);
                 
                 modalBoletoDateError.textContent = "A data da última parcela não pode ser posterior à data da cerimônia. Por favor, ajuste as parcelas ou a data de vencimento.";
@@ -4049,6 +4531,7 @@
                     navigateToTab('event-details-tab');
                 });
                 setupBrDateTime();
+                setupHdaSelects();
                 setupMoments();
                 document.getElementById('next-to-payment-method-btn').addEventListener('click', () => {
                     ceremonyDate = ceremonyDateInput.value;
@@ -4106,6 +4589,10 @@
                 });
                 document.getElementById('close-boleto-date-warning-modal-button').addEventListener('click', () => hideAnimatedModal(boletoDateWarningModal));
                 document.getElementById('ok-boleto-date-warning-modal-button').addEventListener('click', () => hideAnimatedModal(boletoDateWarningModal));
+                document.getElementById('warning-fix-btn').addEventListener('click', (e) => {
+                    installmentsSelect.value = e.currentTarget.dataset.installments;
+                    installmentsSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                });
                 window.addEventListener('click', (event) => {
                     if (event.target == boletoDateWarningModal) {
                         hideAnimatedModal(boletoDateWarningModal);
