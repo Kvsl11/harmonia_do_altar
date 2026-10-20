@@ -1386,6 +1386,18 @@
         .hda-select .hda-pop { width: 100%; padding: .4rem; }
         .hda-opt-list { max-height: 15rem; overflow-y: auto; overscroll-behavior: contain; display: grid; gap: .15rem; margin: 0; padding: 0; list-style: none; scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent; }
         .hda-pop .hda-opt { width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; padding: .7rem .9rem; }
+        /* Parcelas e vencimento como pílulas, no estilo dos cartões de pagamento */
+        .hda-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(4.1rem, 1fr)); gap: .5rem; }
+        .hda-chip {
+            padding: .75rem .4rem; border-radius: 14px; font: inherit; font-size: .95rem; font-weight: 700; color: #fff; cursor: pointer; text-align: center;
+            background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .12);
+            transition: border-color .3s ease, background .3s ease, transform .3s ease, color .3s ease, box-shadow .3s ease;
+        }
+        .hda-chip small { display: block; font-size: .6rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: .1rem; }
+        .hda-chip:hover { border-color: rgba(241, 214, 164, .35); transform: translateY(-2px); }
+        .hda-chip[aria-checked="true"] { color: #2a1325; border-color: transparent; background: linear-gradient(135deg, var(--champagne), var(--rose)); box-shadow: var(--pill-shadow); }
+        .hda-chip[aria-checked="true"] small { color: rgba(42, 19, 37, .7); }
+        .hda-chip:focus-visible { outline: 2px solid var(--champagne); outline-offset: 2px; }
         .hda-pop .hda-opt.is-selected::after { content: "\f00c"; font-family: "Font Awesome 6 Free"; font-weight: 900; font-size: .8rem; }
         .sim-modal input[type="text"], .sim-modal input[type="date"], .sim-modal input[type="time"], .sim-modal select {
             width: 100%; padding: .95rem 1.1rem; border-radius: 14px; font-size: .98rem; color: #fff;
@@ -2461,11 +2473,11 @@
                     </div>
                     <div id="installment-options" class="hidden modal-input-group">
                         <label for="installments">Número de parcelas desejado</label>
-                        <select id="installments"></select>
+                        <select id="installments" data-hda="chips"></select>
                     </div>
                     <div id="boleto-due-date-options" class="hidden modal-input-group">
                         <label for="boleto-due-date">Melhor dia para vencimento do boleto</label>
-                        <select id="boleto-due-date">
+                        <select id="boleto-due-date" data-hda="chips">
                             <option value="5">Dia 5</option>
                             <option value="10">Dia 10</option>
                             <option value="15">Dia 15</option>
@@ -3981,6 +3993,7 @@
                 wrap.appendChild(select);
                 select.tabIndex = -1;
                 select.setAttribute('aria-hidden', 'true');
+                if (select.dataset.hda === 'chips') { setupHdaChips(select, wrap); return; }
 
                 const btn = document.createElement('button');
                 btn.type = 'button';
@@ -4073,6 +4086,62 @@
                 select.addEventListener('change', refresh);
                 refresh();
             });
+        }
+
+        // Poucas opções (parcelas, dia do vencimento) viram pílulas clicáveis em vez de lista
+        function setupHdaChips(select, wrap) {
+            const group = document.createElement('div');
+            group.className = 'hda-chips';
+            group.setAttribute('role', 'radiogroup');
+            const label = document.querySelector(`label[for="${select.id}"]`);
+            if (label) {
+                label.id = label.id || `${select.id}-label`;
+                label.removeAttribute('for');
+                group.setAttribute('aria-labelledby', label.id);
+            }
+            wrap.appendChild(group);
+            const render = () => {
+                group.innerHTML = '';
+                [...select.options].forEach((opt) => {
+                    const chip = document.createElement('button');
+                    chip.type = 'button';
+                    chip.className = 'hda-chip';
+                    chip.setAttribute('role', 'radio');
+                    const on = opt.value === select.value;
+                    chip.setAttribute('aria-checked', String(on));
+                    chip.tabIndex = on ? 0 : -1;
+                    chip.dataset.value = opt.value;
+                    // "Dia 15" vira um rótulo pequeno + o número em destaque
+                    const m = opt.textContent.match(/^(\D+)\s+(\d+)$/);
+                    if (m) chip.innerHTML = `<small>${m[1]}</small>${m[2]}`;
+                    else chip.textContent = opt.textContent;
+                    group.appendChild(chip);
+                });
+            };
+            const choose = (value) => {
+                if (select.value !== value) {
+                    select.value = value;
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                render();
+                group.querySelector(`.hda-chip[data-value="${value}"]`)?.focus();
+            };
+            group.addEventListener('click', (e) => {
+                const chip = e.target.closest('.hda-chip');
+                if (chip) choose(chip.dataset.value);
+            });
+            group.addEventListener('keydown', (e) => {
+                const chips = [...group.querySelectorAll('.hda-chip')];
+                const i = chips.indexOf(document.activeElement);
+                const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+                if (step === undefined || i < 0) return;
+                e.preventDefault();
+                choose(chips[(i + step + chips.length) % chips.length].dataset.value);
+            });
+            // As opções das parcelas são recriadas pelo simulador; as pílulas acompanham
+            new MutationObserver(render).observe(select, { childList: true });
+            select.addEventListener('change', render);
+            render();
         }
 
         function navigateToTab(targetTab) {
