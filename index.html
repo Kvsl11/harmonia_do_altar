@@ -1562,6 +1562,61 @@
         .sim-dialog-icon.warn { background: linear-gradient(135deg, #f3b98a, #e06b6b); }
         .sim-dialog .notification-modal-text { color: var(--muted); font-size: .95rem; line-height: 1.65; margin-bottom: 1.5rem; text-align: left; }
         .sim-dialog .notification-modal-button { width: 100%; justify-content: center; }
+
+        /* Janelinhas de aviso: faixa de cor no topo, ícone com halo e conteúdo em blocos */
+        .sim-modal .notification-modal-content.sim-alert { overflow: hidden; isolation: isolate; padding-top: 2.5rem; }
+        .sim-alert::before { content: ""; position: absolute; inset: 0 0 auto; height: 4px; background: linear-gradient(90deg, var(--champagne), var(--rose), var(--wine)); }
+        .sim-alert::after {
+            content: "♫"; position: absolute; z-index: -1; right: -.5rem; bottom: -2.5rem; font-size: 11rem; line-height: 1;
+            color: rgba(241, 214, 164, .045); pointer-events: none; transform: rotate(-12deg);
+        }
+        .sim-alert.is-warn::before { background: linear-gradient(90deg, var(--peach), #e06b6b, var(--wine)); }
+        .sim-alert.is-warn { border-color: rgba(229, 143, 132, .3); background: radial-gradient(120% 80% at 100% 0%, rgba(224, 107, 107, .18), transparent 55%), var(--night-2); }
+        .sim-alert-head { display: flex; align-items: center; gap: 1rem; margin: 0 2.5rem 1.25rem 0; }
+        .sim-alert-head .notification-modal-title { margin: .15rem 0 0; font-size: 1.4rem; line-height: 1.2; }
+        .sim-alert-eyebrow { display: block; font-size: .64rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--champagne); }
+        .sim-alert.is-warn .sim-alert-eyebrow { color: var(--peach); }
+        .sim-alert .sim-dialog-icon { position: relative; width: 3.1rem; height: 3.1rem; font-size: 1.15rem; box-shadow: 0 10px 26px -10px rgba(229, 143, 132, .9); }
+        .sim-alert .sim-dialog-icon::after { content: ""; position: absolute; inset: -5px; border-radius: inherit; border: 1px solid rgba(241, 214, 164, .35); animation: sim-halo 2.4s ease-out infinite; }
+        .sim-alert .sim-dialog-icon.warn::after { border-color: rgba(229, 143, 132, .55); }
+        @keyframes sim-halo { from { transform: scale(.9); opacity: 1; } to { transform: scale(1.35); opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) { .sim-alert .sim-dialog-icon::after { animation: none; opacity: .6; } }
+        html[data-experience="lofi"] .sim-alert .sim-dialog-icon::after { animation: none; opacity: .6; }
+
+        .sim-alert-points { display: grid; gap: .6rem; margin: 0 0 1.5rem; padding: 0; list-style: none; }
+        .sim-alert-points li {
+            display: flex; gap: .85rem; align-items: flex-start; padding: .85rem 1rem; border-radius: 14px; font-size: .9rem; line-height: 1.55; color: var(--muted);
+            background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08);
+        }
+        .sim-alert-points li b { color: #fff; font-weight: 600; }
+        .sim-alert-points li > i { flex-shrink: 0; width: 1.9rem; height: 1.9rem; border-radius: 10px; display: grid; place-items: center; font-size: .8rem; color: var(--champagne); background: rgba(241, 214, 164, .1); }
+        .sim-alert-points li.is-warn { border-color: rgba(229, 143, 132, .25); background: rgba(229, 143, 132, .07); }
+        .sim-alert-points li.is-warn > i { color: var(--rose); background: rgba(229, 143, 132, .14); }
+
+        .sim-date-compare { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .6rem; margin-bottom: 1.1rem; }
+        .sim-date-card { position: relative; padding: .9rem 1rem; border-radius: 16px; text-align: center; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .1); }
+        .sim-date-card > i { display: block; font-size: 1rem; margin-bottom: .4rem; }
+        .sim-date-card small { display: block; font-size: .6rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+        .sim-date-card b { display: block; margin-top: .2rem; font-family: var(--font-display); font-size: 1.35rem; font-weight: 500; letter-spacing: .04em; color: #fff; }
+        .sim-date-card > span { display: block; margin-top: .15rem; font-size: .72rem; color: var(--muted); }
+        .sim-date-card.is-ok { border-color: rgba(241, 214, 164, .35); background: linear-gradient(160deg, rgba(241, 214, 164, .12), rgba(255, 255, 255, .02)); }
+        .sim-date-card.is-ok > i { color: var(--champagne); }
+        .sim-date-card.is-late { border-color: rgba(224, 107, 107, .45); background: linear-gradient(160deg, rgba(224, 107, 107, .16), rgba(255, 255, 255, .02)); }
+        .sim-date-card.is-late > i, .sim-date-card.is-late b { color: #ffb0a6; }
+        .sim-date-gap { display: flex; flex-direction: column; align-items: center; gap: .3rem; color: var(--rose); font-size: .85rem; }
+        .sim-date-gap em { font-style: normal; font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; padding: .25rem .5rem; border-radius: 999px; background: rgba(229, 143, 132, .14); color: #ffb0a6; }
+        .sim-alert .notification-modal-text b { color: #fff; }
+        .sim-modal .sim-alert > .notification-modal-button { width: 100%; }
+        .sim-alert-actions { display: flex; gap: .6rem; }
+        .sim-alert-actions .pill { flex: 1; justify-content: center; }
+        .sim-alert-actions .btn-secondary { flex: .8; }
+        @media (max-width: 480px) {
+            .sim-alert-head .notification-modal-title { font-size: 1.2rem; }
+            .sim-date-compare { grid-template-columns: 1fr; }
+            .sim-date-gap { flex-direction: row; justify-content: center; }
+            .sim-date-gap i { rotate: 90deg; }
+            .sim-alert-actions { flex-direction: column-reverse; }
+        }
         .sim-map-dialog { max-width: 920px !important; height: min(84vh, 760px); display: flex; flex-direction: column; }
         .sim-map-wrap { position: relative; flex: 1; min-height: 280px; display: flex; margin-bottom: 1.25rem; }
         .sim-map-canvas { flex: 1; min-height: 280px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, .1); }
@@ -2573,9 +2628,15 @@
 
     <!-- Aviso depois de abrir o WhatsApp: como anexar a imagem do resumo -->
     <div id="whats-sent-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="whats-sent-title">
-        <div class="notification-modal-content sim-dialog sim-sent">
+        <div class="notification-modal-content sim-dialog sim-sent sim-alert">
             <button type="button" class="close-button modal-close-button icon-btn" id="close-whats-sent-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
-            <h3 class="notification-modal-title info" id="whats-sent-title">Abrindo o WhatsApp…</h3>
+            <div class="sim-alert-head">
+                <span class="sim-dialog-icon"><i class="fab fa-whatsapp"></i></span>
+                <div>
+                    <span class="sim-alert-eyebrow">Pedido de orçamento</span>
+                    <h3 class="notification-modal-title info" id="whats-sent-title">Abrindo o WhatsApp…</h3>
+                </div>
+            </div>
             <div class="sim-sent-body">
                 <img id="whats-sent-shot" class="hidden" alt="Imagem do resumo do plano">
                 <p class="notification-modal-text" id="whats-sent-text"></p>
@@ -2589,30 +2650,55 @@
     </div>
 
     <!-- Modal de Notificação de Boleto -->
-    <div id="boleto-notification-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true">
-        <div class="notification-modal-content sim-dialog">
+    <div id="boleto-notification-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true" aria-labelledby="boleto-info-title">
+        <div class="notification-modal-content sim-dialog sim-alert">
             <button type="button" class="close-button modal-close-button icon-btn" id="close-boleto-modal-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
-            <h3 class="notification-modal-title info">
-                <span class="sim-dialog-icon"><i class="fas fa-info"></i></span> Pagamento via boleto
-            </h3>
-            <p class="notification-modal-text">
-                Para sua comodidade, o boleto pode ser quitado a qualquer momento antes da data da cerimônia. Lembre-se: o pagamento pontual é essencial! Boletos não pagos podem estar sujeitos a protesto, gerando restrições de crédito.
-            </p>
+            <div class="sim-alert-head">
+                <span class="sim-dialog-icon"><i class="fas fa-barcode"></i></span>
+                <div>
+                    <span class="sim-alert-eyebrow">Boleto bancário</span>
+                    <h3 class="notification-modal-title info" id="boleto-info-title">Como funciona o pagamento</h3>
+                </div>
+            </div>
+            <ul class="sim-alert-points">
+                <li><i class="fas fa-calendar-check"></i><span><b>Pague quando quiser</b>, antes da data da cerimônia. Dá para quitar adiantado.</span></li>
+                <li><i class="fas fa-ring"></i><span><b>Todas as parcelas vencem antes do grande dia.</b> O simulador avisa se alguma passar da data.</span></li>
+                <li class="is-warn"><i class="fas fa-triangle-exclamation"></i><span><b>Pagamento em dia é essencial:</b> boletos não pagos podem ser protestados e gerar restrição de crédito.</span></li>
+            </ul>
             <button id="ok-boleto-modal-button" class="btn-primary pill lg notification-modal-button">Entendi</button>
         </div>
     </div>
 
     <!-- Modal de Notificação de Validação de Data de Boleto -->
-    <div id="boleto-date-warning-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true">
-        <div class="notification-modal-content sim-dialog">
+    <div id="boleto-date-warning-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true" aria-labelledby="boleto-warn-title" aria-describedby="boleto-warn-text">
+        <div class="notification-modal-content sim-dialog sim-alert is-warn">
             <button type="button" class="close-button modal-close-button icon-btn" id="close-boleto-date-warning-modal-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
-            <h3 class="notification-modal-title warning">
-                <span class="sim-dialog-icon warn"><i class="fas fa-exclamation"></i></span> Ajuste a data do boleto
-            </h3>
-            <p class="notification-modal-text">
-                A data da última parcela (dia <span id="warning-due-date"></span>) ultrapassa a data da sua cerimônia (<span id="warning-ceremony-date"></span>). É fundamental que todas as parcelas sejam quitadas antes do evento. Por favor, ajuste as parcelas ou o dia de vencimento.
-            </p>
-            <button id="ok-boleto-date-warning-modal-button" class="btn-primary pill lg notification-modal-button">Entendi</button>
+            <div class="sim-alert-head">
+                <span class="sim-dialog-icon warn"><i class="fas fa-exclamation"></i></span>
+                <div>
+                    <span class="sim-alert-eyebrow">Atenção às datas</span>
+                    <h3 class="notification-modal-title warning" id="boleto-warn-title">A última parcela passa do casamento</h3>
+                </div>
+            </div>
+            <div class="sim-date-compare">
+                <div class="sim-date-card is-ok">
+                    <i class="fas fa-ring"></i>
+                    <small>Cerimônia</small>
+                    <b id="warning-ceremony-date"></b>
+                </div>
+                <span class="sim-date-gap"><i class="fas fa-arrow-right"></i><em id="warning-gap"></em></span>
+                <div class="sim-date-card is-late">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <small>Última parcela</small>
+                    <b id="warning-last-date"></b>
+                    <span>Dia <span id="warning-due-date"></span> · <span id="warning-installments"></span></span>
+                </div>
+            </div>
+            <p class="notification-modal-text" id="boleto-warn-text">Todas as parcelas precisam estar pagas antes do grande dia. <span id="warning-tip"></span></p>
+            <div class="sim-alert-actions">
+                <button type="button" id="ok-boleto-date-warning-modal-button" class="btn-secondary pill ghost lg">Ajustar eu mesmo</button>
+                <button type="button" id="warning-fix-btn" class="btn-primary pill lg"></button>
+            </div>
         </div>
     </div>
 
@@ -4241,6 +4327,29 @@
                 warningDueDateSpan.textContent = selectedBoletoDueDate;
                 const [year, month, day] = ceremonyDate.split('-');
                 warningCeremonyDateSpan.textContent = `${day}/${month}/${year}`;
+                const fmt = (d) => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+                document.getElementById('warning-last-date').textContent = fmt(lastPaymentDate);
+                document.getElementById('warning-installments').textContent = `${selectedInstallments}x`;
+                const gapDays = Math.round((lastPaymentDate - new Date(+year, +month - 1, +day)) / 86400000);
+                document.getElementById('warning-gap').textContent = gapDays === 1 ? '1 dia depois' : `${gapDays} dias depois`;
+                // Sugere o maior número de parcelas que cabe antes da cerimônia com o mesmo dia de vencimento
+                let maxFit = 0;
+                for (let n = 1; n < selectedInstallments; n++) {
+                    const last = new Date(firstPaymentDate);
+                    last.setMonth(last.getMonth() + n - 1);
+                    if (last <= ceremony) maxFit = n;
+                }
+                const fixBtn = document.getElementById('warning-fix-btn');
+                const tip = document.getElementById('warning-tip');
+                if (maxFit) {
+                    fixBtn.innerHTML = `<i class="fas fa-wand-magic-sparkles"></i> Usar ${maxFit}x`;
+                    fixBtn.dataset.installments = maxFit;
+                    fixBtn.classList.remove('hidden');
+                    tip.innerHTML = `Com vencimento no dia ${selectedBoletoDueDate}, cabem até <b>${maxFit === 1 ? '1 parcela' : `${maxFit} parcelas`}</b>. Você também pode trocar o dia de vencimento.`;
+                } else {
+                    fixBtn.classList.add('hidden');
+                    tip.innerHTML = 'Com a cerimônia tão próxima, nem a primeira parcela vence a tempo. Tente outro dia de vencimento, ou pague com <b>Pix</b> ou <b>cartão</b>.';
+                }
                 showAnimatedModal(boletoDateWarningModal);
                 
                 modalBoletoDateError.textContent = "A data da última parcela não pode ser posterior à data da cerimônia. Por favor, ajuste as parcelas ou a data de vencimento.";
@@ -4480,6 +4589,10 @@
                 });
                 document.getElementById('close-boleto-date-warning-modal-button').addEventListener('click', () => hideAnimatedModal(boletoDateWarningModal));
                 document.getElementById('ok-boleto-date-warning-modal-button').addEventListener('click', () => hideAnimatedModal(boletoDateWarningModal));
+                document.getElementById('warning-fix-btn').addEventListener('click', (e) => {
+                    installmentsSelect.value = e.currentTarget.dataset.installments;
+                    installmentsSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                });
                 window.addEventListener('click', (event) => {
                     if (event.target == boletoDateWarningModal) {
                         hideAnimatedModal(boletoDateWarningModal);
