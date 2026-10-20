@@ -1309,6 +1309,84 @@
         .br-pick:hover { background: rgba(241, 214, 164, .18); }
         .sim-modal .br-input input.br-invalid { border-color: rgba(229, 143, 132, .8); }
         .br-native { position: absolute; right: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; border: 0; padding: 0; }
+        .br-pick[aria-expanded="true"] { background: linear-gradient(135deg, var(--champagne), var(--rose)); color: #2a1325; }
+
+        /* Calendário, relógio e listas de seleção próprios, no lugar dos nativos do navegador */
+        .hda-pop {
+            position: absolute; z-index: 40; top: calc(100% + .55rem); left: 0;
+            width: min(19.5rem, calc(100vw - 2.5rem)); padding: 1rem; border-radius: 20px; color: var(--ink);
+            background: radial-gradient(120% 70% at 100% 0%, rgba(229, 143, 132, .16), transparent 60%), radial-gradient(90% 60% at 0% 100%, rgba(109, 47, 87, .35), transparent 65%), var(--night-2);
+            border: 1px solid rgba(241, 214, 164, .22);
+            box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .9), 0 0 0 1px rgba(255, 255, 255, .03);
+            animation: hda-pop-in .28s cubic-bezier(.2, .8, .2, 1) both;
+        }
+        .hda-pop[hidden] { display: none; }
+        .hda-pop.hda-pop-right { left: auto; right: 0; }
+        @keyframes hda-pop-in { from { opacity: 0; transform: translateY(-8px) scale(.98); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .hda-pop { animation: none; } }
+        html[data-experience="lofi"] .hda-pop { animation: none; }
+        .hda-pop button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+        .hda-pop button:focus-visible, .hda-select-btn:focus-visible { outline: 2px solid var(--champagne); outline-offset: 2px; }
+
+        .hda-cal-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .75rem; }
+        .hda-cal-title { font-family: var(--font-serif); font-size: 1.15rem; color: #fff; text-transform: capitalize; }
+        .hda-cal-title small { font-family: var(--font-display); font-size: .8rem; letter-spacing: .14em; color: var(--champagne); margin-left: .35rem; }
+        .hda-pop .hda-cal-nav {
+            width: 2.1rem; height: 2.1rem; border-radius: 999px; display: grid; place-items: center; color: var(--champagne);
+            border: 1px solid rgba(241, 214, 164, .22); transition: background .25s ease, opacity .25s ease;
+        }
+        .hda-pop .hda-cal-nav:hover:not(:disabled) { background: rgba(241, 214, 164, .14); }
+        .hda-pop .hda-cal-nav:disabled { opacity: .3; cursor: default; }
+        .hda-cal-week, .hda-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .2rem; text-align: center; }
+        .hda-cal-week span { font-size: .62rem; font-weight: 700; letter-spacing: .14em; color: var(--muted); padding: .25rem 0 .45rem; }
+        .hda-pop .hda-cal-day {
+            aspect-ratio: 1; border-radius: 999px; font-size: .88rem; font-weight: 600; display: grid; place-items: center;
+            transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+        }
+        .hda-pop .hda-cal-day:hover:not(:disabled):not(.is-selected) { background: rgba(241, 214, 164, .14); color: #fff; }
+        .hda-pop .hda-cal-day.is-today { box-shadow: inset 0 0 0 1px var(--champagne); color: var(--champagne); }
+        .hda-pop .hda-cal-day.is-weekend:not(:disabled):not(.is-selected) { color: var(--peach); }
+        .hda-pop .hda-cal-day.is-selected { background: linear-gradient(135deg, var(--champagne), var(--rose)); color: #2a1325; box-shadow: 0 8px 20px -8px rgba(229, 143, 132, .8); }
+        .hda-pop .hda-cal-day:disabled { opacity: .25; cursor: default; }
+
+        .hda-time { width: min(16.5rem, calc(100vw - 2.5rem)); }
+        .hda-time-display { text-align: center; font-family: var(--font-display); font-size: 2rem; letter-spacing: .06em; color: #fff; margin-bottom: .6rem; }
+        .hda-time-display span { color: var(--champagne); }
+        .hda-time-cols { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+        .hda-time-col > small { display: block; text-align: center; font-size: .62rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: .4rem; }
+        .hda-time-list {
+            max-height: 12.5rem; overflow-y: auto; overscroll-behavior: contain; display: grid; gap: .2rem; padding: .3rem;
+            border-radius: 14px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08);
+            scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent;
+        }
+        .hda-pop .hda-time-opt, .hda-pop .hda-opt {
+            padding: .5rem .6rem; border-radius: 10px; font-size: .92rem; font-weight: 600; text-align: center;
+            transition: background .2s ease, color .2s ease;
+        }
+        .hda-pop .hda-time-opt:hover:not(.is-selected), .hda-pop .hda-opt:hover:not(.is-selected) { background: rgba(241, 214, 164, .14); color: #fff; }
+        .hda-pop .hda-time-opt.is-selected, .hda-pop .hda-opt.is-selected { background: linear-gradient(135deg, var(--champagne), var(--rose)); color: #2a1325; }
+        .hda-pop .hda-time-done {
+            width: 100%; margin-top: .75rem; padding: .65rem; border-radius: 999px; font-weight: 700; font-size: .78rem;
+            letter-spacing: .16em; text-transform: uppercase; color: #2a1325; background: linear-gradient(135deg, var(--champagne), var(--rose));
+            box-shadow: var(--pill-shadow);
+        }
+
+        .hda-select { position: relative; }
+        .hda-select > select { position: absolute; inset: auto 0 0 auto; width: 1px !important; height: 1px; opacity: 0; pointer-events: none; padding: 0 !important; border: 0 !important; }
+        .hda-select-btn {
+            width: 100%; display: flex; align-items: center; justify-content: space-between; gap: .75rem; text-align: left; cursor: pointer;
+            padding: .95rem 1.1rem; border-radius: 14px; font: inherit; font-size: .98rem; font-weight: 600; color: #fff;
+            background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14);
+            transition: border-color .3s ease, background .3s ease, box-shadow .3s ease;
+        }
+        .hda-select-btn:hover { border-color: rgba(241, 214, 164, .4); }
+        .hda-select-btn[aria-expanded="true"] { border-color: var(--champagne); background: rgba(255, 255, 255, .08); box-shadow: 0 0 0 4px rgba(241, 214, 164, .12); }
+        .hda-select-btn i { color: var(--champagne); transition: transform .3s ease; }
+        .hda-select-btn[aria-expanded="true"] i { transform: rotate(180deg); }
+        .hda-select .hda-pop { width: 100%; padding: .4rem; }
+        .hda-opt-list { max-height: 15rem; overflow-y: auto; overscroll-behavior: contain; display: grid; gap: .15rem; margin: 0; padding: 0; list-style: none; scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent; }
+        .hda-pop .hda-opt { width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; padding: .7rem .9rem; }
+        .hda-pop .hda-opt.is-selected::after { content: "\f00c"; font-family: "Font Awesome 6 Free"; font-weight: 900; font-size: .8rem; }
         .sim-modal input[type="text"], .sim-modal input[type="date"], .sim-modal input[type="time"], .sim-modal select {
             width: 100%; padding: .95rem 1.1rem; border-radius: 14px; font-size: .98rem; color: #fff;
             background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14);
@@ -3762,12 +3840,238 @@
                 syncDate();
             });
             ceremonyTimeInput.addEventListener('change', () => { timeBr.value = ceremonyTimeInput.value || ''; syncTime(); });
-            document.querySelectorAll('.br-pick').forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const native = document.getElementById(btn.dataset.pick);
-                    if (native.id === 'ceremony-date') native.min = todayIso();
-                    try { native.showPicker(); } catch (e) { native.focus(); native.click(); }
+            // Calendário e relógio próprios, com as cores do site, no lugar dos seletores nativos
+            const MONTHS = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+            const dateBtn = document.querySelector('.br-pick[data-pick="ceremony-date"]');
+            const timeBtn = document.querySelector('.br-pick[data-pick="ceremony-time"]');
+
+            const calPop = document.createElement('div');
+            calPop.className = 'hda-pop';
+            calPop.hidden = true;
+            calPop.setAttribute('role', 'dialog');
+            calPop.setAttribute('aria-label', 'Escolher a data da cerimônia');
+            dateBtn.parentElement.appendChild(calPop);
+            let view = new Date();
+            const renderCal = () => {
+                const y = view.getFullYear(), m = view.getMonth();
+                const today = todayIso();
+                const first = new Date(y, m, 1).getDay();
+                const days = new Date(y, m + 1, 0).getDate();
+                const now = new Date();
+                const atMin = y === now.getFullYear() && m === now.getMonth();
+                let cells = '';
+                for (let i = 0; i < first; i++) cells += '<span></span>';
+                for (let d = 1; d <= days; d++) {
+                    const iso = `${y}-${pad(m + 1)}-${pad(d)}`;
+                    const dow = (first + d - 1) % 7;
+                    const cls = ['hda-cal-day'];
+                    if (iso === today) cls.push('is-today');
+                    if (iso === ceremonyDateInput.value) cls.push('is-selected');
+                    if (dow === 0 || dow === 6) cls.push('is-weekend');
+                    cells += `<button type="button" class="${cls.join(' ')}" data-iso="${iso}" aria-label="${d} de ${MONTHS[m]} de ${y}"${iso < today ? ' disabled' : ''}>${d}</button>`;
+                }
+                calPop.innerHTML = `
+                    <div class="hda-cal-head">
+                        <button type="button" class="hda-cal-nav" data-step="-1" aria-label="Mês anterior"${atMin ? ' disabled' : ''}><i class="fas fa-chevron-left"></i></button>
+                        <span class="hda-cal-title">${MONTHS[m]}<small>${y}</small></span>
+                        <button type="button" class="hda-cal-nav" data-step="1" aria-label="Próximo mês"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="hda-cal-week"><span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span></div>
+                    <div class="hda-cal-grid">${cells}</div>`;
+            };
+            calPop.addEventListener('click', (e) => {
+                const nav = e.target.closest('.hda-cal-nav');
+                if (nav) {
+                    view = new Date(view.getFullYear(), view.getMonth() + Number(nav.dataset.step), 1);
+                    renderCal();
+                    calPop.querySelector(`.hda-cal-nav[data-step="${nav.dataset.step}"]`)?.focus();
+                    return;
+                }
+                const day = e.target.closest('.hda-cal-day');
+                if (!day || day.disabled) return;
+                const [y, mo, d] = day.dataset.iso.split('-');
+                dateBr.value = `${d}/${mo}/${y}`;
+                syncDate();
+                closePop(true);
+            });
+
+            const timePop = document.createElement('div');
+            timePop.className = 'hda-pop hda-time hda-pop-right';
+            timePop.hidden = true;
+            timePop.setAttribute('role', 'dialog');
+            timePop.setAttribute('aria-label', 'Escolher o horário da cerimônia');
+            timeBtn.parentElement.appendChild(timePop);
+            let hh = '', mm = '';
+            const MINUTES = Array.from({ length: 12 }, (_, i) => pad(i * 5));
+            const renderTime = () => {
+                const col = (kind, values, current) => values.map((v) =>
+                    `<button type="button" class="hda-time-opt${v === current ? ' is-selected' : ''}" data-${kind}="${v}">${v}</button>`).join('');
+                timePop.innerHTML = `
+                    <div class="hda-time-display">${hh || '--'}<span>:</span>${mm || '--'}</div>
+                    <div class="hda-time-cols">
+                        <div class="hda-time-col"><small>Hora</small><div class="hda-time-list">${col('h', Array.from({ length: 24 }, (_, i) => pad(i)), hh)}</div></div>
+                        <div class="hda-time-col"><small>Minutos</small><div class="hda-time-list">${col('m', MINUTES, mm)}</div></div>
+                    </div>
+                    <button type="button" class="hda-time-done">Pronto</button>`;
+                timePop.querySelectorAll('.hda-time-opt.is-selected').forEach((el) => { el.parentElement.scrollTop = el.offsetTop - el.parentElement.clientHeight / 2 + el.offsetHeight / 2; });
+            };
+            const applyTime = () => {
+                if (!hh) return;
+                timeBr.value = `${hh}:${mm || '00'}`;
+                syncTime();
+            };
+            timePop.addEventListener('click', (e) => {
+                const opt = e.target.closest('.hda-time-opt');
+                if (opt) {
+                    if (opt.dataset.h) hh = opt.dataset.h;
+                    if (opt.dataset.m) mm = opt.dataset.m;
+                    applyTime();
+                    const lists = [...timePop.querySelectorAll('.hda-time-list')].map((l) => l.scrollTop);
+                    renderTime();
+                    timePop.querySelectorAll('.hda-time-list').forEach((l, i) => { l.scrollTop = lists[i]; });
+                    timePop.querySelector(`.hda-time-opt[data-${opt.dataset.h ? 'h' : 'm'}="${opt.dataset.h || opt.dataset.m}"]`)?.focus();
+                    if (opt.dataset.m && hh) closePop(true);
+                    return;
+                }
+                if (e.target.closest('.hda-time-done')) { applyTime(); closePop(true); }
+            });
+
+            let openPop = null, openBtn = null;
+            const closePop = (refocus) => {
+                if (!openPop) return;
+                openPop.hidden = true;
+                openBtn.setAttribute('aria-expanded', 'false');
+                if (refocus) openBtn.focus();
+                openPop = openBtn = null;
+            };
+            const togglePop = (btn, pop, render) => {
+                if (openPop === pop) { closePop(true); return; }
+                closePop(false);
+                render();
+                pop.hidden = false;
+                btn.setAttribute('aria-expanded', 'true');
+                openPop = pop; openBtn = btn;
+                (pop.querySelector('.is-selected') || pop.querySelector('.is-today:not(:disabled)') || pop.querySelector('button:not(:disabled)'))?.focus({ preventScroll: true });
+            };
+            [dateBtn, timeBtn].forEach((btn) => { btn.setAttribute('aria-haspopup', 'dialog'); btn.setAttribute('aria-expanded', 'false'); });
+            dateBtn.addEventListener('click', () => {
+                const [y, mo] = (ceremonyDateInput.value || '').split('-');
+                view = y ? new Date(+y, +mo - 1, 1) : new Date();
+                togglePop(dateBtn, calPop, renderCal);
+            });
+            timeBtn.addEventListener('click', () => {
+                [hh, mm] = ceremonyTimeInput.value ? ceremonyTimeInput.value.split(':') : ['', ''];
+                togglePop(timeBtn, timePop, renderTime);
+            });
+            document.addEventListener('pointerdown', (e) => {
+                if (openPop && !openPop.contains(e.target) && !openBtn.contains(e.target)) closePop(false);
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && openPop) { e.stopPropagation(); closePop(true); }
+            }, true);
+            document.addEventListener('hda:sim-open', () => closePop(false));
+        }
+
+        // Listas de seleção com o visual do site: o <select> nativo continua sendo a fonte do valor
+        function setupHdaSelects() {
+            document.querySelectorAll('.sim-modal select').forEach((select) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'hda-select';
+                select.parentNode.insertBefore(wrap, select);
+                wrap.appendChild(select);
+                select.tabIndex = -1;
+                select.setAttribute('aria-hidden', 'true');
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'hda-select-btn';
+                btn.id = `${select.id}-btn`;
+                btn.setAttribute('aria-haspopup', 'listbox');
+                btn.setAttribute('aria-expanded', 'false');
+                const label = document.querySelector(`label[for="${select.id}"]`);
+                if (label) { label.htmlFor = btn.id; btn.setAttribute('aria-label', label.textContent.trim()); }
+                wrap.appendChild(btn);
+
+                const pop = document.createElement('div');
+                pop.className = 'hda-pop';
+                pop.hidden = true;
+                const list = document.createElement('ul');
+                list.className = 'hda-opt-list';
+                list.setAttribute('role', 'listbox');
+                pop.appendChild(list);
+                wrap.appendChild(pop);
+
+                const refresh = () => {
+                    const current = select.options[select.selectedIndex];
+                    btn.innerHTML = `<span></span><i class="fas fa-chevron-down"></i>`;
+                    btn.firstChild.textContent = current ? current.textContent : 'Selecione';
+                };
+                const renderList = () => {
+                    list.innerHTML = '';
+                    [...select.options].forEach((opt) => {
+                        const li = document.createElement('li');
+                        const o = document.createElement('button');
+                        o.type = 'button';
+                        o.className = 'hda-opt' + (opt.value === select.value ? ' is-selected' : '');
+                        o.setAttribute('role', 'option');
+                        o.setAttribute('aria-selected', String(opt.value === select.value));
+                        o.dataset.value = opt.value;
+                        o.textContent = opt.textContent;
+                        li.appendChild(o);
+                        list.appendChild(li);
+                    });
+                };
+                const choose = (value) => {
+                    if (select.value !== value) {
+                        select.value = value;
+                        select.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                    refresh();
+                };
+                const close = (refocus) => {
+                    pop.hidden = true;
+                    btn.setAttribute('aria-expanded', 'false');
+                    if (refocus) btn.focus();
+                };
+                const open = () => {
+                    document.dispatchEvent(new CustomEvent('hda:select-open', { detail: wrap }));
+                    renderList();
+                    pop.hidden = false;
+                    btn.setAttribute('aria-expanded', 'true');
+                    const sel = list.querySelector('.is-selected') || list.querySelector('.hda-opt');
+                    if (sel) { sel.focus({ preventScroll: true }); list.scrollTop = sel.offsetTop - list.clientHeight / 2; }
+                };
+
+                btn.addEventListener('click', () => (pop.hidden ? open() : close(true)));
+                btn.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(); }
                 });
+                list.addEventListener('click', (e) => {
+                    const o = e.target.closest('.hda-opt');
+                    if (!o) return;
+                    choose(o.dataset.value);
+                    close(true);
+                });
+                list.addEventListener('keydown', (e) => {
+                    const opts = [...list.querySelectorAll('.hda-opt')];
+                    const i = opts.indexOf(document.activeElement);
+                    const moves = { ArrowDown: i + 1, ArrowUp: i - 1, Home: 0, End: opts.length - 1 };
+                    if (e.key in moves) {
+                        e.preventDefault();
+                        opts[Math.max(0, Math.min(opts.length - 1, moves[e.key]))]?.focus();
+                    } else if (e.key === 'Escape') {
+                        e.stopPropagation();
+                        close(true);
+                    } else if (e.key === 'Tab') {
+                        close(false);
+                    }
+                });
+                document.addEventListener('pointerdown', (e) => { if (!pop.hidden && !wrap.contains(e.target)) close(false); });
+                document.addEventListener('hda:select-open', (e) => { if (e.detail !== wrap) close(false); });
+                // As opções das parcelas são recriadas pelo simulador; o rótulo acompanha
+                new MutationObserver(refresh).observe(select, { childList: true });
+                select.addEventListener('change', refresh);
+                refresh();
             });
         }
 
@@ -4049,6 +4353,7 @@
                     navigateToTab('event-details-tab');
                 });
                 setupBrDateTime();
+                setupHdaSelects();
                 setupMoments();
                 document.getElementById('next-to-payment-method-btn').addEventListener('click', () => {
                     ceremonyDate = ceremonyDateInput.value;
