@@ -1239,6 +1239,35 @@
         .menu-motion { margin-top: 2.25rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.1); max-width: 520px; }
         .menu-motion p { margin-top: .6rem; color: var(--muted); font-size: .8rem; letter-spacing: normal; text-transform: none; font-weight: 400; }
 
+        /* Celular e tablet: menu em lista organizada (número em coluna, linhas separando os itens)
+           e as opções agrupadas no fim; as letras continuam iguais */
+        @media (max-width: 1023px) {
+            #mobile-menu {
+                justify-content: flex-start; overflow-y: auto; overscroll-behavior: contain;
+                padding: 6.25rem clamp(1.5rem, 8vw, 7rem) max(1.75rem, env(safe-area-inset-bottom));
+            }
+            #mobile-menu .nav-link-mobile {
+                display: grid; grid-template-columns: 2.4rem 1fr; align-items: center; gap: 0 .6rem;
+                padding: .5rem 0; border-bottom: 1px solid rgba(241, 214, 164, .12);
+            }
+            #mobile-menu .nav-link-mobile:first-child { border-top: 1px solid rgba(241, 214, 164, .12); }
+            #mobile-menu .nav-link-mobile small { line-height: 1; }
+            .menu-motion {
+                margin-top: auto; padding: 1rem 1.1rem; max-width: none; border: 1px solid rgba(255, 255, 255, .1);
+                border-radius: 18px; background: rgba(255, 255, 255, .04);
+            }
+            #mobile-menu .nav-link-mobile:last-of-type { margin-bottom: 2rem; }
+            .menu-motion .motion-toggle {
+                display: grid; grid-template-columns: 1fr auto; grid-template-areas: "label switch" "state switch"; align-items: center; gap: .2rem 1rem;
+            }
+            .menu-motion .motion-toggle > span { grid-area: label; }
+            .menu-motion .motion-toggle > .switch { grid-area: switch; }
+            .menu-motion .motion-toggle > small { grid-area: state; min-width: 0; font-size: .68rem; }
+            .menu-motion p { margin-top: .7rem; padding-top: .7rem; border-top: 1px solid rgba(255, 255, 255, .08); }
+            .menu-foot { margin-top: .9rem; }
+            .menu-foot .pill { flex: 1; justify-content: center; }
+        }
+
         /* ---------- Modo simples (lofi): sem pin, sem máscaras, tudo visível ---------- */
         html[data-experience="lofi"] .about .lede .w { opacity: 1; }
         html[data-experience="lofi"] .hero-ghost { display: none; }
@@ -2028,7 +2057,7 @@
         }
         html[data-experience="hifi"] #mobile-menu { isolation: isolate; }
         html[data-experience="hifi"] #mobile-menu::before {
-            content: ""; position: absolute; inset: -20%; z-index: -1; pointer-events: none; will-change: transform;
+            content: ""; position: fixed; inset: -20%; z-index: -1; pointer-events: none; will-change: transform;
             background:
                 radial-gradient(40% 35% at 25% 75%, rgba(109, 47, 87, .55), transparent 70%),
                 radial-gradient(35% 30% at 70% 30%, rgba(229, 143, 132, .22), transparent 70%),
